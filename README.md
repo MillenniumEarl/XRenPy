@@ -40,10 +40,10 @@ Features to add:
 - audio fades value check (we don't want to type in the word and get an error, do we?)
 - project cleaning - removal of unnecessary resources
 - new project manipulation logic:
-- duplication of frames is primary action, inserting empty frames is secondary;
-- merging of "add" and "insert" to inserting empty frame; all resources have three-state checkboxes;
-- on selection of resource the frames it is shown in are also highlighted;
-- on selection of frame the resources that are shown/played in it are ticked and highlighted, the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
+  - duplication of frames is primary action, inserting empty frames is secondary;
+  - merging of "add" and "insert" to inserting empty frame; all resources have three-state checkboxes;
+  - on selection of resource the frames it is shown in are also highlighted;
+  - on selection of frame the resources that are shown/played in it are ticked and highlighted, the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
 - log system
 - updater service
 
