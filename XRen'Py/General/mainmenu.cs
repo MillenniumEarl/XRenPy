@@ -24,7 +24,8 @@ namespace X_Ren_Py
 		{
 			framecount = 0;
 			projectExpander.IsExpanded = false;
-			for (int i = 1; i < tabControlStruct.Items.Count; i++) tabControlStruct.Items.RemoveAt(i);
+			for(int i=2; i<imagegrid.Children.IndexOf(imageBorder);i++) imagegrid.Children.RemoveAt(i);
+			for (int i = 1; i <=tabControlStruct.Items.Count; i++) tabControlStruct.Items.RemoveAt(i);
 			foreach (TabItem tab in tabControlResources.Items) (tab.Content as ListView).Items.Clear();
 			ImageInFrameProps.Clear(); AudioInFrameProps.Clear();
 		}
@@ -39,7 +40,7 @@ namespace X_Ren_Py
 				{
 					if (File.Exists(selectFolder.SelectedPath.ToString() + script)||(!File.Exists(selectFolder.SelectedPath.ToString() + options)))
 					{						
-						projectFolder = selectFolder.SelectedPath.ToString() + "\\";
+						projectFolder = selectFolder.SelectedPath.ToString() + game;
 						loadProject();
 					}
 
@@ -57,9 +58,10 @@ namespace X_Ren_Py
 			VistaFolderBrowserDialog selectFolder = new VistaFolderBrowserDialog();
 
 			if (selectFolder.ShowDialog() == true)
-				try
-				{	projectFolder = selectFolder.SelectedPath.ToString()+"\\";
-					if (!File.Exists(selectFolder.SelectedPath.ToString() + script) || (!File.Exists(selectFolder.SelectedPath.ToString() + options)))
+				
+				{ string tempFolder = projectFolder;
+				projectFolder = selectFolder.SelectedPath.ToString()+game;
+					if (!(File.Exists(selectFolder.SelectedPath.ToString() + script) || File.Exists(selectFolder.SelectedPath.ToString() + options)))
 					{							
 						saveProject();
 					}
@@ -67,13 +69,15 @@ namespace X_Ren_Py
 					{
 						MessageBoxResult result = MessageBox.Show("Existing project folder! Replace?", "Incorrect folder", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
 						if (result == MessageBoxResult.Yes)
-						{							
-							Directory.Delete(projectFolder);
-							saveProject();
+						{
+						try { Directory.Delete(projectFolder, true); saveProject();}
+						catch (Exception) {
+							MessageBox.Show("Impossible to delete the folder!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+							projectFolder = tempFolder;
+								}							
 						}
 					}
 				}
-				catch (Exception) { MessageBox.Show("Please choose the empty folder!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 
 		private void loadProject()
@@ -81,7 +85,7 @@ namespace X_Ren_Py
 			clearAll();
 			projectExpander.IsExpanded = false;
 			//код для загрузки проекта
-			FileStream fs = new FileStream(projectFolder + "script.rpy", FileMode.Open);
+			FileStream fs = new FileStream(projectFolder+ "script.rpy", FileMode.Open);
 			StreamReader reader = new StreamReader(fs);
 
 			//контент ОЧЕНЬ неоднозначен, потому для его правильного распознания нужен код и в init, и в метках
@@ -106,7 +110,7 @@ namespace X_Ren_Py
 								else if (singleLine.Contains("audio."))
 								{
 									XAudio audio = new XAudio();
-									audio.loadAudio(singleLine, projectFolder);
+									audio.loadAudio(singleLine, projectFolder+game);
 									audioMouseActions(audio);
 									musicListView.Items.Add(audio);
 								}
@@ -115,14 +119,14 @@ namespace X_Ren_Py
 								if (!singleLine.Contains("Movie"))
 								{
 									XImage image = new XImage();
-									image.loadImage(singleLine, projectFolder + "\\images\\");
+									image.loadImage(singleLine, projectFolder+"images\\");
 									imageMouseActions(image);
 									backImageListView.Items.Add(image);
 								}
 								else
 								{
 									XMovie movie = new XMovie();
-									movie.loadMovie(singleLine, projectFolder + "\\images\\");
+									movie.loadMovie(singleLine, projectFolder+"images\\");
 									movieMouseActions(movie);
 									movieListView.Items.Add(movie);
 								}
@@ -130,7 +134,8 @@ namespace X_Ren_Py
 							case "label":
 								{
 									ListView newLabel = createLabel(singleLine.Substring(6, singleLine.Length - 7));
-									XFrame previousSettings = new XFrame(), frame;
+									ImageProperties Background= new ImageProperties();
+									XFrame frame;
 									bool root = true;
 									string readingLine = reader.ReadLine().TrimStart(' ');									
 									while (readingLine != "return")
@@ -152,15 +157,24 @@ namespace X_Ren_Py
 													case "scene":
 														{
 															string[] all = line.Split(' ');
-															frame.BackgroundImg = backImageListView.Items.OfType<XImage>().Where(item => item.Alias == all[1]).Single();
+															frame.BackgroundImage = backImageListView.Items.OfType<XImage>().Where(item => item.Alias == all[1]).Single();
 															if (all.Length > 2) if (all[2] == "with") frame.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
+															Background = frame.BackgroundImageProps;
 															break;
 														}
 													case "hide":
-														{
+														{//only background currently
 															string[] all = line.Split(' ');
-															frame.BackgroundImg = null;
-															if (all.Length > 2) if (all[2] == "with") previousSettings.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
+															if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
+															{
+																frame.BackgroundImage = null;
+																if (all.Length > 2) if (all[2] == "with")
+																		Background.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
+															}
+															//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
+															else
+																if (all.Length > 2) if (all[2] == "with")
+																	ImageInFrameProps.Where(item => item.Image.Alias == all[1]).Single().AnimationOutType= (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
 															break;
 														}
 													case "show":
@@ -209,7 +223,7 @@ namespace X_Ren_Py
 											}
 											else
 											{
-												if (line.IndexOf('"') == 0) { frame.Character = characterListView.Items[0] as XCharacter; frame.Text = line.Replace("\"", " "); }
+												if (line.IndexOf('"') == 0) { frame.Character = characterListView.Items[0] as XCharacter; frame.Text = line.Replace("\"", ""); }
 												else
 												{
 													frame.Character = characterListView.Items.OfType<XCharacter>().Where(item => item.Alias == line.Substring(0, line.IndexOf(' '))).Single();
@@ -235,7 +249,7 @@ namespace X_Ren_Py
 		{
 			projectExpander.IsExpanded = false;
 			createDirectories();
-			FileStream fs = new FileStream(projectFolder+"script.rpy", FileMode.Create);
+			FileStream fs = new FileStream(projectFolder+game+"script.rpy", FileMode.Create);
 			StreamWriter writer = new StreamWriter(fs);
 			//код для сохранения проекта
 			writer.WriteLine(scriptstart + nextLine);
@@ -266,14 +280,14 @@ namespace X_Ren_Py
 			foreach (XAudio audio in soundListView.Items)
 			{
 				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(soundsFolder + audio.Content));
-				contentCollector(audio.Path, projectFolder + musicFolder + audio.Content);
+				contentCollector(audio.Path, projectFolder + soundsFolder + audio.Content);
 			}
 
 			writer.WriteLine(voiceAudio);
 			foreach (XAudio audio in voiceListView.Items)
 			{
 				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(voicesFolder +audio.Content));
-				contentCollector(audio.Path, projectFolder + musicFolder + audio.Content);
+				contentCollector(audio.Path, projectFolder + voicesFolder + audio.Content);
 			}
 
 			writer.WriteLine(Movies);
@@ -282,7 +296,7 @@ namespace X_Ren_Py
 				string mask = "";
 				if (movie.MaskPath != null) mask = ", mask"+equalsQuote(moviesFolder +movie.MaskPath);
 				writer.WriteLine("image " + movie.Alias + "=Movie(play"+equalsQuote(moviesFolder + movie.Content) + mask+")");
-				contentCollector(movie.Path, projectFolder + musicFolder + movie.Content);
+				contentCollector(movie.Path, projectFolder + moviesFolder + movie.Content);
 			}
 
 			writer.WriteLine(Characters);
@@ -311,19 +325,19 @@ namespace X_Ren_Py
 					//все что касается конкретного кадра
 					XFrame chosenFrame = ((tabControlStruct.Items[chosenLabelNumber] as TabItem).Content as ListView).Items[chosenFrameNumber] as XFrame;
 					//background					
-					if (chosenFrame.BackgroundImg != null)
+					if (chosenFrame.BackgroundImage != null)
 					{
 						string animationType = "";
 						if (chosenFrame.AnimationInType!=0) animationType = " with " + animationInTypeComboBox.Items[chosenFrame.AnimationInType];
-						if (previousFrame.BackgroundImg != chosenFrame.BackgroundImg)
-							writer.WriteLine(tab + "scene " + chosenFrame.BackgroundImg.Alias + animationType);
+						if (previousFrame.BackgroundImage != chosenFrame.BackgroundImage)
+							writer.WriteLine(tab + "scene " + chosenFrame.BackgroundImage.Alias + animationType);
 					}
 					else
 					{//когда выбран корневой фрейм, смысла скрывать фон нет - до него фона не было, потому j>0
 						string animationType = "";
 						if (chosenFrame.AnimationOutType != 0) animationType = " with " + animationOutTypeComboBox.Items[chosenFrame.AnimationOutType];
-						if (chosenFrameNumber > 0 && previousFrame.BackgroundImg!=null)
-							writer.WriteLine(tab + "hide " + previousFrame.BackgroundImg.Alias+ animationType);
+						if (chosenFrameNumber > 0 && previousFrame.BackgroundImage!=null)
+							writer.WriteLine(tab + "hide " + previousFrame.BackgroundImage.Alias+ animationType);
 					}
 
 					//images
@@ -342,23 +356,24 @@ namespace X_Ren_Py
 								exportShowImage(writer, property);
 						}
 						else
-						{//в нынешнем нет, а в предыдущем есть
-							if (ImageInFrameProps.Any(img => img.Frame == previousFrame))
-							{//hide картинок предыдущего фрейма
-								foreach (ImageProperties property in ImageInFrameProps.Where(previmg => previmg.Frame == previousFrame))
-								{
-									if (!ImageInFrameProps.Any(img => img.Image == property.Image && img.Frame == currentFrame))
-										exportHideImage(writer, property);
-								}
+						{//если в предыдущем нету ничего, а в нынешнем есть
+							foreach (ImageProperties property in ImageInFrameProps.Where(chosenimg => chosenimg.Frame == chosenFrame))
+							{
+								if (!ImageInFrameProps.Any(img => img.Image == property.Image && img.Frame == previousFrame))
+									exportShowImage(writer, property);
 							}
 						}
 					}
 					else
-					{//если в предыдущем нету ничего, а в нынешнем есть
-						foreach (ImageProperties property in ImageInFrameProps.Where(chosenimg => chosenimg.Frame == chosenFrame))
-						{
-							if (!ImageInFrameProps.Any(img => img.Image == property.Image && img.Frame == previousFrame))
-								exportShowImage(writer, property);
+					{
+						//в нынешнем нет, а в предыдущем есть
+						if (ImageInFrameProps.Any(img => img.Frame == previousFrame))
+						{//hide картинок предыдущего фрейма
+							foreach (ImageProperties property in ImageInFrameProps.Where(previmg => previmg.Frame == previousFrame))
+							{
+								if (!ImageInFrameProps.Any(img => img.Image == property.Image && img.Frame == currentFrame))
+									exportHideImage(writer, property);
+							}
 						}
 					}
 

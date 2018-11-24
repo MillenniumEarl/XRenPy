@@ -10,7 +10,7 @@ namespace X_Ren_Py
     /// </summary>
     public partial class MainWindow : Window
     {
-		private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)//перевірка на ввід цифр
+		private void HeightWidthTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)//перевірка на ввід цифр
 		{
 			if (!char.IsDigit(e.Text, e.Text.Length - 1))
 				e.Handled = true;

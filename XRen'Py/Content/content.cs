@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace X_Ren_Py
 {
@@ -16,9 +17,7 @@ namespace X_Ren_Py
 		private bool _stopAudio = false;
 		public ObservableCollection<XMenuOption> _MenuOptions;
 		private XCharacter _Character;
-		private XImage _BackgroundImg;
-		private byte _AnimationInType;//0-нет анимации
-		private byte _AnimationOutType;//0-нет анимации
+		private ImageProperties _BackgroundImageProps=new ImageProperties();
 		private XMovie _Movie;
 
 		public string Text { get { return _Text; } set { _Text = value; } }
@@ -26,9 +25,11 @@ namespace X_Ren_Py
 		public bool stopAudio { get { return _stopAudio; } set { _stopAudio = value; } }
 		public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
 		public XCharacter Character { get { return _Character; } set { _Character = value; } }
-		public XImage BackgroundImg { get { return _BackgroundImg; } set { _BackgroundImg = value; } }
-		public byte AnimationInType { get { return _AnimationInType; } set { _AnimationInType = value; } }
-		public byte AnimationOutType { get { return _AnimationOutType; } set { _AnimationOutType = value; } }
+
+		public ImageProperties BackgroundImageProps { get { return _BackgroundImageProps; } set { _BackgroundImageProps = value; } }
+		public XImage BackgroundImage { get { return _BackgroundImageProps.Image; } set { _BackgroundImageProps.Image = value; } }
+		public byte AnimationInType { get { return _BackgroundImageProps.AnimationInType; } set { _BackgroundImageProps.AnimationInType = value; } }
+		public byte AnimationOutType { get { return _BackgroundImageProps.AnimationOutType; } set { _BackgroundImageProps.AnimationOutType = value; } }
 		public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
 	}
 	public class XMenuOption : StackPanel
@@ -279,21 +280,26 @@ namespace X_Ren_Py
             HeaderChange inputDialog = new HeaderChange();
             if (inputDialog.ShowDialog() == true && inputDialog.Answer != "")
             {
-                switch (sender.GetType().ToString())
-                {
-                    case "X_Ren_Py.XFrame": (sender as XFrame).Content = inputDialog.Answer; break;
-                    case "System.Windows.Controls.TabItem": (sender as TabItem).Header = inputDialog.Answer; break;
-                    default: return;
-                }
+				menuLabelList.Where(item => item.Content == (sender as TabItem).Header).Single().Content = inputDialog.Answer;
+							(sender as TabItem).Header = inputDialog.Answer;
             }
             else MessageBox.Show("Empty header!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void contentCollector(string currentPath, string projectPath)//збираємо контент докупи
         {
-			if (File.Exists(projectPath) && !Equals(File.ReadAllBytes(projectPath), File.ReadAllBytes(currentPath)))
-			{ File.Delete(projectPath); }
-			File.Copy(currentPath, projectPath);
+			if (File.Exists(projectPath))
+			{
+				if (projectPath != currentPath)
+				{
+					if (!Equals(File.ReadAllBytes(projectPath), File.ReadAllBytes(currentPath)))
+					{
+						File.Delete(projectPath);
+						File.Copy(currentPath, projectPath);
+					}
+				}
+			}
+			else File.Copy(currentPath, projectPath);
 		}
 
         private void resourcesSelectedItem_delete()

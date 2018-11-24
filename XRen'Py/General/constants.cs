@@ -12,11 +12,12 @@ namespace X_Ren_Py
     /// </summary>
     public partial class MainWindow : Window
     {
-        string script = @"\game\script.rpy";
-        string options = @"\game\options.rpy";
-        string screens = @"\game\screens.rpy";
+		static string game = @"\game\";
+        string script = game+@"script.rpy";
+        string options = game + @"options.rpy";
+        string screens = game + @"screens.rpy";
 
-        string projectFolder = Environment.CurrentDirectory+@"\temp\game\";
+        string projectFolder = Environment.CurrentDirectory+@"/temp"+game;
 		string imagesFolder = @"images/";
 		string musicFolder = @"music/";
 		string soundsFolder = @"sounds/";
@@ -44,10 +45,6 @@ namespace X_Ren_Py
 		string Return="return";
 
 		//строки для options.rpy
-		int width = 1280;
-        int height = 720;
-        string strwidth = tab + "config.screen_width = ";
-        string strheight = tab + "config.screen_height = ";
         string strtitle = tab + "config.window_title = ";
         string strdev = tab + "config.developer = ";
 
@@ -89,7 +86,7 @@ namespace X_Ren_Py
 			createDirectories();
 			//contextMenus
 			addTab= new MenuItem() { Header = "Add label" }; addTab.Click += addTab_Click;
-			deleteTab= new MenuItem() { Header = "Delete tab" }; deleteTab.Click += deleteTab_Click;
+			deleteTab= new MenuItem() { Header = "Delete label" }; deleteTab.Click += deleteTab_Click;
 			addFrame = new MenuItem() { Header = "Add frame" }; addFrame.Click += addInsertFrame_Click;			
 			insertFrame = new MenuItem() { Header = "Insert frame" }; insertFrame.Click += addInsertFrame_Click;
 			duplicateFrame = new MenuItem() { Header = "Duplicate frame" }; duplicateFrame.Click += duplicateFrame_Click;

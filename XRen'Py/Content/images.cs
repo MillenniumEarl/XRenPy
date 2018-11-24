@@ -107,7 +107,7 @@ namespace X_Ren_Py
 				if (lastImageChecked != null && lastImageChecked != currentImage) lastImageChecked.IsChecked = false;
 				lastImageChecked = currentImage;
 
-				if (addorselect) currentFrame.BackgroundImg = currentImage;
+				if (addorselect) currentFrame.BackgroundImage = currentImage;
 				imageBackground.Source = imageShow(currentImage.Path.ToString());
 				showImagePropsBackground();
 			}
@@ -141,7 +141,7 @@ namespace X_Ren_Py
             XImage selectedImage = (sender as CheckBox).Parent as XImage;
             if (selectedImage.Parent == backImageListView)
             {
-                if (removeorunselect) currentFrame.BackgroundImg = null;
+                if (removeorunselect) currentFrame.BackgroundImage = null;
                 imageBackground.Source = null;
             }
             else

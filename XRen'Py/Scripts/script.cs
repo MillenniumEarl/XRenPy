@@ -15,17 +15,18 @@ namespace X_Ren_Py
 		private XFrame createFrame(bool root)
 		{
 			XFrame frame;
-			if (!root) { frame = new XFrame() { Content = "Frame " + framecount, ContextMenu = cmFrame, Character = characterListView.Items[0] as XCharacter,AnimationInType=0, AnimationOutType = 0 }; }
-			else { frame = new XFrame() { Content = "Root frame " + framecount, ContextMenu = cmRootframe, Character = characterListView.Items[0] as XCharacter, AnimationInType = 0, AnimationOutType = 0 }; }
+			if (!root) { frame = new XFrame() { Content = "Frame " + framecount + " []", ContextMenu = cmFrame, Character = characterListView.Items[0] as XCharacter,AnimationInType=0, AnimationOutType = 0 }; }
+			else { frame = new XFrame() { Content = "Root frame " + framecount + " []", ContextMenu = cmRootframe, Character = characterListView.Items[0] as XCharacter, AnimationInType = 0, AnimationOutType = 0 }; }
 			frame.Selected += selection_Click;
-			frame.MouseDoubleClick += namechange_DoubleClick;
+			//frame.MouseDoubleClick += namechange_DoubleClick;
 			framecount++;
 			return frame;
 		}
 		private void preSaveCurrentFrame()
 		{
 			//перед выбором фрейма нужно сохранить содержимое нынешнего выбранного фрейма
-			//может случиться, что мы начинаем выбирать другой фрейм без закрытия экспандеров с опциями и персонажем
+			currentFrame.Content = currentFrame.Content.ToString().Substring(0, currentFrame.Content.ToString().IndexOf('['))+'['+textBox.Text+']';			
+				//может случиться, что мы начинаем выбирать другой фрейм без закрытия экспандеров с опциями и персонажем
 			characterExpander.IsExpanded = false;
 		}
 
@@ -51,10 +52,10 @@ namespace X_Ren_Py
 				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions; 				
 			}
 
-			if (currentFrame.BackgroundImg != null)
+			if (currentFrame.BackgroundImage != null)
 			{
-				imageBackground.Source = imageShow(currentFrame.BackgroundImg.Path);
-				(backImageListView.Items[backImageListView.Items.IndexOf(currentFrame.BackgroundImg)] as XImage).IsChecked = true;
+				imageBackground.Source = imageShow(currentFrame.BackgroundImage.Path);
+				(backImageListView.Items[backImageListView.Items.IndexOf(currentFrame.BackgroundImage)] as XImage).IsChecked = true;
 			}
 			else imageBackground.Source = null;
 
@@ -98,7 +99,7 @@ namespace X_Ren_Py
 			duplicate.isMenu = currentFrame.isMenu;
 			duplicate.MenuOptions = currentFrame.MenuOptions;
 			duplicate.Character = currentFrame.Character;
-			duplicate.BackgroundImg = currentFrame.BackgroundImg;
+			duplicate.BackgroundImage = currentFrame.BackgroundImage;
 			duplicate.Movie = currentFrame.Movie;
 
 			List<ImageProperties> newimageprops = new List<ImageProperties>();
