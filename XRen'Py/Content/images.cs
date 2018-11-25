@@ -114,16 +114,8 @@ namespace X_Ren_Py
 			else
 			{
 				if (addorselect)
-				{
-					Image newImage = new Image()
-					{
-						Width = currentImage.Width,
-						Height = currentImage.Height,
-						HorizontalAlignment = HorizontalAlignment.Center,
-						VerticalAlignment = VerticalAlignment.Bottom,
-						Stretch = System.Windows.Media.Stretch.None
-					};
-					ImageInFrameProps.Add(new ImageProperties() { Frame = currentFrame, Image = currentImage, Displayable = newImage });
+				{					
+					ImageInFrameProps.Add(new ImageProperties() { Frame = currentFrame, Image = currentImage, Displayable = newDisplayable() });
 				}
 				Image img = ImageInFrameProps.Where(prop => prop.Frame == currentFrame && prop.Image == currentImage).Single().Displayable;
 				img.Source = imageShow(currentImage.Path.ToString());
@@ -132,6 +124,16 @@ namespace X_Ren_Py
 			}
 			imagePropsPanel.Visibility = Visibility.Visible;
 			show = true;
+		}
+
+		private Image newDisplayable()
+		{
+			return new Image()
+			{
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Bottom,
+				Stretch = System.Windows.Media.Stretch.None
+			};
 		}
 
 		private void image_Unchecked(object sender, RoutedEventArgs e)

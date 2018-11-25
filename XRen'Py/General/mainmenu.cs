@@ -183,7 +183,7 @@ namespace X_Ren_Py
 															XImage image = backImageListView.Items.OfType<XImage>().Where(item => item.Alias == all[1]).Single();
 															backImageListView.Items.Remove(image);
 															imageListView.Items.Add(image);
-															ImageProperties props = new ImageProperties() { Frame = frame, Image = image };
+															ImageProperties props = new ImageProperties() { Frame = frame, Image = image, Displayable=newDisplayable() };
 
 															for (int i = 2; i < all.Length; i++)
 															{
