@@ -26,9 +26,9 @@ Currently released application features:
 - audio fades controls with value check, point or comma inside, up to 9.9 seconds floating point and 999 seconds integer of fade 
 - view block - visual representation of the prototype of the future game, contains six buttons for converting menu to frame and backwards, adding empty frame, inserting empty frame, duplicating current frame and two control buttons to move to next or previous frame
 - view block size customizing
+- mostly working saving, saving as and loading projects
 
 Features to add:
-
 - extend space of any resource for cursor to enter
 - checking of duplicate resources
 - different image and movies sizes ans placement
@@ -37,9 +37,11 @@ Features to add:
 - draggable tabs in structure tab control
 - draggable visual elements in the view block with effect
 - project cleaning - removal of unnecessary resources
+- on loading of another project temporarily save the state of current project/make a transaction while loading so it completes only if everything load fine
 - new project manipulation logic:
   - duplication of frames is primary action, inserting empty frames is secondary;
-  - merging of "add" and "insert" to inserting empty frame; all resources have three-state checkboxes;
+  - merging of "add" and "insert" to inserting empty frame; 
+  - all resources have three-state checkboxes;
   - on selection of resource the frames it is shown in are also highlighted;
   - on selection of frame the resources that are shown/played in it are ticked and highlighted, the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
 - log system
@@ -49,3 +51,8 @@ Things to solve:
 - parasite click on the border of any resource and menu options which can cause an unwanted but not causing problems action
 - unexpected grid behaviour while changing the size of structure and resource blocks
 - strange program fail to start while being transferred to another PC
+
+
+Things to test:
+- design
+- any small project
