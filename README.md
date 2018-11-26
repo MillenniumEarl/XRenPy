@@ -1,9 +1,10 @@
 # XRenPy
-eXtended Ren'Py - visual constructor for Ren'Py (WIP)
+eXtended Ren'Py - visual constructor for Ren'Py 7 (WIP)
 
 - Currently only Windows
 - This application allows developers to create simple Ren'Py game without any knowledge of Python and Ren'Py scripting.
 - Created with Visual Studio 2015, programming language C#, .NET framework, Windows Presentation Foundation, LINQ and XAML.
+- Compatible with Ren'Py 7 projects only.
 
 Now it is possible to intuitively create and export to Ren'Py project:
 - Kinetic novels
@@ -14,7 +15,7 @@ Currently released application features:
 - project structure block with labels containing frames and customizable size
 - project resources block with 6 types of resources and customizable size
 - creating and deletion of labels with editable names
-- creating, duplicating and deletion of frames - each frame name containing the text it shows
+- creating, duplicating and deletion of frames - each frame name contains the text it shows
 - converting frames to menus and backwards
 - menu options - can be viewed as editable structures with actions they have to do or as in-game clickable objects, doing the jump or call of the particular label or passing to the next frame
 - importing images, audio and movies to the novel (no duplicate check)
@@ -27,15 +28,16 @@ Currently released application features:
 - view block - visual representation of the prototype of the future game, contains six buttons for converting menu to frame and backwards, adding empty frame, inserting empty frame, duplicating current frame and two control buttons to move to next or previous frame
 - view block size customizing
 - mostly working saving, saving as and loading projects
+- changing/creating options.rpy with 9 available options
 
 Features to add:
 - extend space of any resource for cursor to enter
 - checking of duplicate resources
 - different image and movies sizes ans placement
 - multiple movies at once (not actually necessary, but who knows)
-- connection to the options.rpy and gui.rpy scripts
+- connection to the gui.rpy scripts
 - draggable tabs in structure tab control
-- draggable visual elements in the view block with effect
+- draggable and resizeable visual elements in the view block with effect
 - project cleaning - removal of unnecessary resources
 - on loading of another project temporarily save the state of current project/make a transaction while loading so it completes only if everything load fine
 - new project manipulation logic:
@@ -46,6 +48,7 @@ Features to add:
   - on selection of frame the resources that are shown/played in it are ticked and highlighted, the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
 - log system
 - updater service
+- including newest Ren'Py version to the project (PyTom, hope you can hear me)
 
 Things to solve:
 - parasite click on the border of any resource and menu options which can cause an unwanted but not causing problems action
