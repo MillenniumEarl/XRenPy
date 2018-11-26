@@ -307,5 +307,17 @@ namespace X_Ren_Py
             ListView selectedList = tabControlResources.SelectedContent as ListView;
             selectedList.Items.Remove(selectedList.SelectedItem);
         }
-    }
+		private void uncheckAll()
+		{
+			removeorunselect = false;
+			foreach (TabItem tab in tabControlResources.Items)
+			{
+				foreach (XContent checkbox in (tab.Content as ListView).Items)
+				{
+					checkbox.IsChecked = false;
+				}
+			}
+			removeorunselect = true;
+		}
+	}
 }

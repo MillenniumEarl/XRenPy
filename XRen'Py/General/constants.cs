@@ -16,8 +16,9 @@ namespace X_Ren_Py
         string script = game+@"script.rpy";
         string options = game + @"options.rpy";
         string screens = game + @"screens.rpy";
+		string gui = game + @"gui.rpy";
 
-        string projectFolder = Environment.CurrentDirectory+@"/temp"+game;
+		string projectFolder = Environment.CurrentDirectory+@"/temp"+game;
 		string imagesFolder = @"images/";
 		string musicFolder = @"music/";
 		string soundsFolder = @"sounds/";
@@ -45,11 +46,24 @@ namespace X_Ren_Py
 		string Return="return";
 
 		//строки для options.rpy
-        string strtitle = tab + "config.window_title = ";
-        string strdev = tab + "config.developer = ";
+
+		//string gameEnterTransition = "define config.enter_transition";
+		//string gameExitTransition = "define config.exit_transition";
+		//string gameIntraTransition = "define config.intra_transition";
+		//string gameLoadTransition = "define config.after_load_transition";
+		//string gameEndTransition = "define config.end_game_transition";
+		//string gameWindowShow= "define config.window";
+		//string gameWindowShowTransition = "define config.window_show_transition";
+		//string gameWindowHideTransition = "define config.window_hide_transition";
+		//string gameSaveDir = "define config.save_directory";
+		//string gameIcon = "define config.window_icon";
+
+		//строки для gui.rpy
+
 
 		//строка-компаратор
-		string[] comparer = {"define", "image", "label", "scene", "show", "hide", "play", "stop", "return"};
+		string[] comparerScript = {"define", "image", "label"};
+		string[] comparerOptions = {"define config.name", "define gui.show_name", "define config.version", "define gui.about", "define build.name", "define config.has_sound", "define config.has_music", "default preferences.text_cps", "default preferences.afm_time" };
 		//ресурсы
 		string imageextensions = "Файлы рисунков (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
         string audioextensions = "Файлы аудио (*.wav, *.ogg, *.mp3, *.opus)|*.wav;*.ogg;*.mp3;*.opus";
@@ -85,8 +99,8 @@ namespace X_Ren_Py
 		{
 			createDirectories();
 			//contextMenus
-			addTab= new MenuItem() { Header = "Add label" }; addTab.Click += addTab_Click;
-			deleteTab= new MenuItem() { Header = "Delete label" }; deleteTab.Click += deleteTab_Click;
+			addTab= new MenuItem() { Header = "Add label" }; addTab.Click += addLabel_Click;
+			deleteTab= new MenuItem() { Header = "Delete label" }; deleteTab.Click += deleteLabel_Click;
 			addFrame = new MenuItem() { Header = "Add frame" }; addFrame.Click += addInsertFrame_Click;			
 			insertFrame = new MenuItem() { Header = "Insert frame" }; insertFrame.Click += addInsertFrame_Click;
 			duplicateFrame = new MenuItem() { Header = "Duplicate frame" }; duplicateFrame.Click += duplicateFrame_Click;
