@@ -32,7 +32,6 @@ Currently released application features:
 - you can add your own icon of project
 
 Features to add:
-- extend space of any resource for cursor to enter
 - checking of duplicate resources
 - different image and movies sizes and placement
 - multiple movies at once (not actually necessary, but who knows)
@@ -42,17 +41,17 @@ Features to add:
 - project cleaning - removal of unnecessary resources
 - on loading of another project temporarily save the state of current project/make a transaction while loading so it completes only if everything load fine
 - new project manipulation logic:
-  - duplication of frames is primary action, inserting empty frames is secondary;
-  - merging of "add" and "insert" to inserting empty frame; 
-  - all resources have three-state checkboxes;
+  (done) duplication of frames is primary action, inserting empty frames is secondary;
+  (done) merging of "add" and "insert" to inserting empty frame; 
+  (done) on selection of frame the resources that are shown/played in it are ticked and highlighted
   - on selection of resource the frames it is shown in are also highlighted;
-  - on selection of frame the resources that are shown/played in it are ticked and highlighted, the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
+  - all resources have three-state checkboxes;    
+  - the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
 - log system
 - updater service
 - including newest Ren'Py version to the project (PyTom, hope you can hear me)
 
 Things to solve:
-- parasite click on the border of any resource and menu options which can cause an unwanted but not causing problems action
 - unexpected grid behaviour while changing the size of structure and resource blocks
 - strange program fail to start while being transferred to another PC
 
