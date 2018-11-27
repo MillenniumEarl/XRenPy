@@ -26,7 +26,7 @@ namespace X_Ren_Py
 				}
             }
 				movieplayer.Source = new Uri((sender as XContent).Path.ToString(), UriKind.Absolute);
-                mediaNameLabel.Content = (sender as XContent).Content;
+                mediaNameLabel.Content = (sender as XContent).Header;
 
             DispatcherTimer disptimer = new DispatcherTimer();
             disptimer.Tick += new EventHandler(mediaCurrentTime_Tick);

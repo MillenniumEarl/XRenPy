@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media;
 
 namespace X_Ren_Py
 {
@@ -62,9 +63,11 @@ namespace X_Ren_Py
 		string imageextensions = "Image files (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
         string audioextensions = "Audio files (*.wav, *.ogg, *.mp3, *.opus)|*.wav;*.ogg;*.mp3;*.opus";
         string vidextensions = "Video files (*.wmv,*.webm, *.mkv, *.avi, *.ogv)|*.wmv;*.webm;*.mkv;*.avi;*.ogv";
+		SolidColorBrush currentFrameResourceColor=new SolidColorBrush(Color.FromArgb(127, 0, 127, 0));
+		SolidColorBrush unusedResourceColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
-        //контекстные меню
-        MenuItem addTab, deleteTab, addFrame, duplicateFrame, duplicateRootframe, deleteFrame, addMenu, addImage, deleteImage, addAudio, deleteAudio, stopAudio, addMovie, deleteMovie;
+		//контекстные меню
+		MenuItem addTab, deleteTab, addFrame, duplicateFrame, duplicateRootframe, deleteFrame, addMenu, addImage, deleteImage, addAudio, deleteAudio, stopAudio, addMovie, deleteMovie;
         ContextMenu cmFrame, cmRootframe, cmLabel, cmImage, cmAudio, cmMovie;
 
         //текст для динамических кнопок

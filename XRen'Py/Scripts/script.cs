@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace X_Ren_Py
 {
@@ -86,40 +87,40 @@ namespace X_Ren_Py
 													case "scene":
 														{
 															string[] all = line.Split(' ');
-															frame.BackgroundImage = backImageListView.Items.OfType<XImage>().Where(item => item.Alias == all[1]).Single();
-															if (all.Length > 2) if (all[2] == "with") frame.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
+															frame.BackgroundImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+															if (all.Length > 2) if (all[2] == "with") frame.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
 															Background = frame.BackgroundImageProps;
-															break;
-														}
-													case "hide":
-														{//only background currently
-															string[] all = line.Split(' ');
-															if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
-															{
-																frame.BackgroundImage = null;
-																if (all.Length > 2) if (all[2] == "with")
-																		Background.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
-															}
-															//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
-															else
-																if (all.Length > 2) if (all[2] == "with")
-																	ImageInFrameProps.Where(item => item.Image.Alias == all[1]).Single().AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().Where(item => item == all[3]).Single());
 															break;
 														}
 													case "show":
 														{
 															string[] all = line.Split(' ');
-															XImage image = backImageListView.Items.OfType<XImage>().Where(item => item.Alias == all[1]).Single();
+															XImage image = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
 															backImageListView.Items.Remove(image);
 															imageListView.Items.Add(image);
 															ImageProperties props = new ImageProperties() { Frame = frame, Image = image, Displayable = newDisplayable() };
 
 															for (int i = 2; i < all.Length; i++)
 															{
-																if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().Where(item => item == all[i + 1]).Single());
-																else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().Where(item => item == all[i + 1]).Single());
+																if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
+																else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
 															}
 															ImageInFrameProps.Add(props);
+															break;
+														}
+													case "hide":
+														{
+															string[] all = line.Split(' ');
+															if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
+															{
+																frame.BackgroundImage = null;
+																if (all.Length > 2) if (all[2] == "with")
+																		Background.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+															}
+															//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
+															else
+																if (all.Length > 2) if (all[2] == "with")
+																	ImageInFrameProps.First(item => item.Image.Alias == all[1]).AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
 															break;
 														}
 													case "stop":
@@ -130,7 +131,7 @@ namespace X_Ren_Py
 													case "play":
 														{
 															string[] all = line.Split(' ');
-															XAudio audio = musicListView.Items.OfType<XAudio>().Where(item => item.Alias == all[2]).Single();
+															XAudio audio = musicListView.Items.OfType<XAudio>().First(item => item.Alias == all[2]);
 															if (all[1] != "music")
 															{
 																musicListView.Items.Remove(audio);
@@ -155,7 +156,7 @@ namespace X_Ren_Py
 												if (line.IndexOf('"') == 0) { frame.Character = characterListView.Items[0] as XCharacter; frame.Text = line.Replace("\"", ""); }
 												else
 												{
-													frame.Character = characterListView.Items.OfType<XCharacter>().Where(item => item.Alias == line.Substring(0, line.IndexOf(' '))).Single();
+													frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' ')));
 													textBox.Text = line.Substring(line.IndexOf(' ')).Replace("\"", " ");
 												}
 											}
@@ -185,36 +186,36 @@ namespace X_Ren_Py
 			writer.WriteLine(backgroundImages);
 			foreach (XImage image in backImageListView.Items)
 			{
-				writer.WriteLine("image " + image.Alias + equalsQuote(image.Content));
-				contentCollector(image.Path, projectFolder + imagesFolder + image.Content);
+				writer.WriteLine("image " + image.Alias + equalsQuote(image.Header));
+				contentCollector(image.Path, projectFolder + imagesFolder + image.Header);
 			}
 
 			writer.WriteLine(characterImages);
 			foreach (XImage image in imageListView.Items)
 			{
-				writer.WriteLine("image " + image.Alias + equalsQuote(image.Content));
-				contentCollector(image.Path, projectFolder + imagesFolder + image.Content);
+				writer.WriteLine("image " + image.Alias + equalsQuote(image.Header));
+				contentCollector(image.Path, projectFolder + imagesFolder + image.Header);
 			}
 
 			writer.WriteLine(musicAudio);
 			foreach (XAudio audio in musicListView.Items)
 			{
-				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(musicFolder + audio.Content));
-				contentCollector(audio.Path, projectFolder + musicFolder + audio.Content);
+				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(musicFolder + audio.Header));
+				contentCollector(audio.Path, projectFolder + musicFolder + audio.Header);
 			}
 
 			writer.WriteLine(soundsAudio);
 			foreach (XAudio audio in soundListView.Items)
 			{
-				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(soundsFolder + audio.Content));
-				contentCollector(audio.Path, projectFolder + soundsFolder + audio.Content);
+				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(soundsFolder + audio.Header));
+				contentCollector(audio.Path, projectFolder + soundsFolder + audio.Header);
 			}
 
 			writer.WriteLine(voiceAudio);
 			foreach (XAudio audio in voiceListView.Items)
 			{
-				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(voicesFolder + audio.Content));
-				contentCollector(audio.Path, projectFolder + voicesFolder + audio.Content);
+				writer.WriteLine(define + "audio." + audio.Alias + equalsQuote(voicesFolder + audio.Header));
+				contentCollector(audio.Path, projectFolder + voicesFolder + audio.Header);
 			}
 
 			writer.WriteLine(Movies);
@@ -222,8 +223,8 @@ namespace X_Ren_Py
 			{
 				string mask = "";
 				if (movie.MaskPath != null) mask = ", mask" + equalsQuote(moviesFolder + movie.MaskPath);
-				writer.WriteLine("image " + movie.Alias + "=Movie(play" + equalsQuote(moviesFolder + movie.Content) + mask + ")");
-				contentCollector(movie.Path, projectFolder + moviesFolder + movie.Content);
+				writer.WriteLine("image " + movie.Alias + "=Movie(play" + equalsQuote(moviesFolder + movie.Header) + mask + ")");
+				contentCollector(movie.Path, projectFolder + moviesFolder + movie.Header);
 			}
 
 			writer.WriteLine(Characters);
@@ -426,17 +427,14 @@ namespace X_Ren_Py
 			characterLabel.Content = currentFrame.Character.Content;
 
 			foreach (ImageProperties imageprops in ImageInFrameProps.Where(frame => frame.Frame == currentFrame))
-			{
-					(imageListView.Items[imageListView.Items.IndexOf(imageprops.Image)] as XImage).IsChecked = true;
+			{ 
+				imageprops.Image.IsChecked = true;
+				imageprops.Image.Background = currentFrameResourceColor;
 			}
-
 			foreach (AudioProperties audprops in AudioInFrameProps.Where(frame => frame.Frame == currentFrame))
 			{
-					if (musicListView.Items.Contains(audprops.Audio))
-						(musicListView.Items[musicListView.Items.IndexOf(audprops.Audio)] as XAudio).IsChecked = true;
-					else if (soundListView.Items.Contains(audprops.Audio))
-						(soundListView.Items[soundListView.Items.IndexOf(audprops.Audio)] as XAudio).IsChecked = true;
-					else (voiceListView.Items[voiceListView.Items.IndexOf(audprops.Audio)] as XAudio).IsChecked = true;
+				audprops.Audio.IsChecked = true;
+				audprops.Audio.Background = currentFrameResourceColor;
 			}
 			
 			if (currentFrame.stopAudio)	stopAudio.IsChecked = true;

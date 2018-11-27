@@ -48,7 +48,7 @@
             <Label Content="Resources" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1" Grid.Column="1" Foreground="#FFF0F0F0"/>
             <TabControl x:Name="tabControlResources" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="4,45,3,40" Grid.Row="1" Grid.Column="1">
                 <TabItem Header="Background">
-                    <ListView x:Name="backImageListView" Background="{x:Null}" >
+                    <ListView x:Name="backImageListView" Background="{x:Null}" SelectionMode="Single" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add image file" Click="imageImport_Click"/>
@@ -57,7 +57,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Images">
-                    <ListView x:Name="imageListView" Background="{x:Null}">
+                    <ListView x:Name="imageListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add image" Click="imageImport_Click"/>
@@ -66,7 +66,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Music">
-                    <ListView x:Name="musicListView" Background="{x:Null}">
+                    <ListView x:Name="musicListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add music" Click="audioImport_Click"/>
@@ -75,7 +75,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Sounds">
-                    <ListView x:Name="soundListView" Background="{x:Null}">
+                    <ListView x:Name="soundListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add sound" Click="audioImport_Click"/>
@@ -84,7 +84,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Voice">
-                    <ListView x:Name="voiceListView" Background="{x:Null}">
+                    <ListView x:Name="voiceListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add voice" Click="audioImport_Click"/>
@@ -93,7 +93,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Movie">
-                    <ListView x:Name="movieListView" Background="{x:Null}">
+                    <ListView x:Name="movieListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add movie" Click="movieImport_Click"/>
@@ -207,24 +207,26 @@
             <TextBox x:Name="projectHeight" Margin="143,10,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectHeight_TextChanged" HorizontalAlignment="Left" Width="47" Text="720" />
         </Grid>
         <Expander x:Name="media" Grid.Column="1" Header="" ExpandDirection="Right" Background="#7F000000" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="hidden" Expanded="media_Expanded" Collapsed="media_Collapsed">
-            <Grid Background="#7FFFFFFF" Width="480" Height="300">
+            <Grid Background="#7F7F7F7F" Width="480" Height="300">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid x:Name="audiomovie">
-                    <Grid.Effect>
-                        <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
-                    </Grid.Effect>
                     <MediaElement x:Name="movieplayer" LoadedBehavior="Manual" MediaOpened="movieplayer_MediaOpened"/>
                     <Image x:Name="coverart" Margin="120,15" Source="Images/Music.png"/>
-                    <Button x:Name="playMovie" Content="&#9199;" HorizontalAlignment="Left" Margin="160,196,0,0" VerticalAlignment="Top" Width="50" Height="50" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" Padding="-1,-4,0,0" Background="{x:Null}" Foreground="#FFF0F0F0"/>
-                    <Button x:Name="pauseMovie" Content="&#9208;" Margin="215,196,215,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="pauseMovie_Click" FontSize="36" Padding="-1,-3,1,1" Background="{x:Null}" Foreground="#FFF0F0F0"/>
-                    <Button x:Name="stopMovie" Content="&#9209;" Margin="270,196,0,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="stopMovie_Click" HorizontalAlignment="Left" Width="50" FontSize="36" Padding="-1,-4,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
-                    <Label x:Name="currentTimeMedia" Content="0:00" Margin="0,204,429,0" Height="37" VerticalAlignment="Top" FontSize="18" Foreground="#FFF0F0F0"/>
-                    <Slider x:Name="volumeSliderMedia" Margin="0,181,0,0" RenderTransformOrigin="0.5,0.5" ValueChanged="movieVolume_ValueChanged" Maximum="100" SmallChange="5" LargeChange="10" TickFrequency="10" Value="100" Background="{x:Null}" Orientation="Vertical" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" HorizontalAlignment="Right" Width="29"/>
-                    <Slider x:Name="currentTimeSliderMedia" Margin="0,246,34,0" VerticalAlignment="Top" TickPlacement="TopLeft" SmallChange="1" TickFrequency="5" ValueChanged="mediaCurrentTime_ValueChanged" LargeChange="10"/>
-                    <Label x:Name="mediaNameLabel" Content="" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
+                    <Grid>
+                        <Grid.Effect>
+                            <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
+                        </Grid.Effect>
+                        <Button x:Name="playMovie" Content="&#9199;" HorizontalAlignment="Left" Margin="160,196,0,0" VerticalAlignment="Top" Width="50" Height="50" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" Padding="-1,-4,0,0" Background="{x:Null}" Foreground="#FFF0F0F0"/>
+                        <Button x:Name="pauseMovie" Content="&#9208;" Margin="215,196,215,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="pauseMovie_Click" FontSize="36" Padding="-1,-3,1,1" Background="{x:Null}" Foreground="#FFF0F0F0"/>
+                        <Button x:Name="stopMovie" Content="&#9209;" Margin="270,196,0,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="stopMovie_Click" HorizontalAlignment="Left" Width="50" FontSize="36" Padding="-1,-4,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
+                        <Label x:Name="currentTimeMedia" Content="0:00" Margin="0,204,429,0" Height="37" VerticalAlignment="Top" FontSize="18" Foreground="#FFF0F0F0"/>
+                        <Slider x:Name="volumeSliderMedia" Margin="0,181,0,0" RenderTransformOrigin="0.5,0.5" ValueChanged="movieVolume_ValueChanged" Maximum="100" SmallChange="5" LargeChange="10" TickFrequency="10" Value="100" Background="{x:Null}" Orientation="Vertical" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" HorizontalAlignment="Right" Width="29"/>
+                        <Slider x:Name="currentTimeSliderMedia" Margin="0,246,34,0" VerticalAlignment="Top" TickPlacement="TopLeft" SmallChange="1" TickFrequency="5" ValueChanged="mediaCurrentTime_ValueChanged" LargeChange="10"/>
+                        <Label x:Name="mediaNameLabel" Content="" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
+                    </Grid>
                 </Grid>
                 <Image x:Name="imageViewer"/>
                 <StackPanel x:Name="imagePropsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Row="1" Visibility="Hidden">

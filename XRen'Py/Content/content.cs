@@ -33,7 +33,7 @@ namespace X_Ren_Py
 		public byte AnimationOutType { get { return _BackgroundImageProps.AnimationOutType; } set { _BackgroundImageProps.AnimationOutType = value; } }
 		public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
 	}
-	public class XMenuOption : StackPanel
+	public class XMenuOption : ListViewItem
 	{
 		private Label _Href = new Label() { Width = 540, FontSize = 22, Padding = new Thickness(5), HorizontalAlignment = HorizontalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, Visibility = Visibility.Collapsed };
 		private TextBox _Choice = new TextBox() { Width = 300, FontSize = 22, Text = "Menu option", Padding = new Thickness(5) };
@@ -48,21 +48,23 @@ namespace X_Ren_Py
 
 		public XMenuOption()
 		{
-			Margin = new Thickness(5);
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			Orientation = Orientation.Horizontal;
+			StackPanel stack = new StackPanel();
+			stack.Margin = new Thickness(5);
+			stack.HorizontalAlignment = HorizontalAlignment.Stretch;
+			stack.Orientation = Orientation.Horizontal;
 			MenuAction.SelectionChanged += MenuAction_SelectionChanged;
 			Edit.Click += Edit_Click;
-			Children.Add(Edit);
-			Children.Add(_Href);
-			Children.Add(_Choice);
-			Children.Add(_Action);
-			Children.Add(ActionLabel);
-			Children.Add(Delete);
+			stack.Children.Add(Edit);
+			stack.Children.Add(_Href);
+			stack.Children.Add(_Choice);
+			stack.Children.Add(_Action);
+			stack.Children.Add(ActionLabel);
+			stack.Children.Add(Delete);
+			Content = stack;
 		}
 
 		private void Edit_Click(object sender, RoutedEventArgs e)
-		{
+		{			
 			if (Edit.Background == Brushes.LightBlue)
 			{
 				Edit.Background = Brushes.WhiteSmoke;
@@ -132,7 +134,7 @@ namespace X_Ren_Py
 
 }
 
-    public class XContent:StackPanel
+    public class XContent:ListViewItem
     {
 		protected string _Alias;
 		protected string _Path;
@@ -145,13 +147,14 @@ namespace X_Ren_Py
 
 		public bool? IsChecked { get { return _CheckBox.IsChecked; } set { _CheckBox.IsChecked = value; } }
         public CheckBox Checkbox { get { return _CheckBox; } set { _CheckBox = value; } }
-        public string Content { get { return _Label.Content.ToString(); } set { _Label.Content = value; _Alias = value.ToLower().Substring(0, value.LastIndexOf('.')).Replace(" ","").Replace("-", ""); } }
-
+        public string Header { get { return _Label.Content.ToString(); } set { _Label.Content = value; _Alias = value.ToLower().Substring(0, value.LastIndexOf('.')).Replace(" ","").Replace("-", ""); } }
+		
 		protected void createContent()
-        {
-            Orientation = Orientation.Horizontal;
-            Children.Add(_CheckBox);
-            Children.Add(_Label);            
+		{			
+			StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal};
+			stack.Children.Add(_CheckBox);
+			stack.Children.Add(_Label);
+			Content = stack;       
         }     
     }
 
@@ -163,7 +166,7 @@ namespace X_Ren_Py
 			{
 				int firstquote = singleLine.IndexOf('"') + 1;
 				Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
-				Content = Path.Replace(folder, "").Substring(singleLine.LastIndexOf('/') + 1);
+				Header = Path.Replace(folder, "").Substring(singleLine.LastIndexOf('/') + 1);
 				Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
 			}
 			catch (Exception) { MessageBox.Show("Error: Image loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -185,7 +188,7 @@ namespace X_Ren_Py
 			{
 				int firstquote = singleLine.IndexOf('"') + 1;
 				Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
-				Content = Path.Substring(singleLine.LastIndexOf('/') + 1);
+				Header = Path.Substring(singleLine.LastIndexOf('/') + 1);
 				Alias = singleLine.Substring(13, singleLine.IndexOf('=') - 13).TrimEnd(' ');
 			}
 			catch (Exception) { MessageBox.Show("Error: Audio loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -212,7 +215,7 @@ namespace X_Ren_Py
 					if (all[prop].StartsWith("play")) Path = all[prop].Substring(5);
 					else if (all[prop].StartsWith("mask")) MaskPath = all[prop].Substring(5);
 				}
-				Content = Path.Substring(singleLine.LastIndexOf('/') + 1);
+				Header = Path.Substring(singleLine.LastIndexOf('/') + 1);
 				Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
 			}
 			catch (Exception) { MessageBox.Show("Error: Movie loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -259,16 +262,12 @@ namespace X_Ren_Py
     {
         private void selectCheckedItem(object sender)
         {
-            (((sender as CheckBox).Parent as XContent).Parent as ListView).SelectedItem = (sender as CheckBox).Parent;
-        }
-        private static void selectItem(object sender)
-        {
-            ((sender as XContent).Parent as ListView).SelectedItem = sender;
+            (((sender as CheckBox).Parent as StackPanel).Parent as XContent).IsSelected = true;
         }
 		
-		protected void content_MouseUp(object sender, MouseButtonEventArgs e)  
+		protected void content_Selected(object sender, RoutedEventArgs e)  
         {
-            selectItem(sender);
+            //selectItem(sender);
             show = true;
 
             switch (sender.GetType().ToString())
@@ -276,13 +275,13 @@ namespace X_Ren_Py
                 case "X_Ren_Py.XImage":                    
                     {
                         currentImage = sender as XImage;
-                        if ((sender as XImage).IsChecked == true && ((sender as XImage).Parent as ListView) == imageListView) getImageProperties(currentFrame, sender as XImage);
+                        if ((sender as XImage).IsChecked == true && ((sender as XImage).Parent as ListView) == imageListView) if(!addorselect) getImageProperties(currentFrame, sender as XImage);
                     };
                     break;
                 case "X_Ren_Py.XAudio":                    
                     {
                         currentAudio = sender as XAudio;
-                        if ((sender as XAudio).IsChecked == true) getAudioProperties(currentFrame, sender as XAudio);
+                        if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(currentFrame, sender as XAudio);
                     };
                     break;
                 case "X_Ren_Py.XMovie":
@@ -297,7 +296,7 @@ namespace X_Ren_Py
             HeaderChange inputDialog = new HeaderChange();
             if (inputDialog.ShowDialog() == true && inputDialog.Answer != "")
             {
-				menuLabelList.Where(item => item.Content == (sender as TabItem).Header).Single().Content = inputDialog.Answer;
+				menuLabelList.First(item => item.Content == (sender as TabItem).Header).Content = inputDialog.Answer;
 							(sender as TabItem).Header = inputDialog.Answer;
             }
             else MessageBox.Show("Empty header!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -329,9 +328,10 @@ namespace X_Ren_Py
 			removeorunselect = false;
 			foreach (TabItem tab in tabControlResources.Items)
 			{
-				foreach (XContent checkbox in (tab.Content as ListView).Items)
+				foreach (XContent resource in (tab.Content as ListView).Items)
 				{
-					checkbox.IsChecked = false;
+					resource.IsChecked = false;
+					resource.Background = unusedResourceColor;
 				}
 			}
 			removeorunselect = true;

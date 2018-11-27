@@ -20,7 +20,7 @@ namespace X_Ren_Py
 						string name = vidDialog.SafeFileNames[file];
 						string currentPath = vidDialog.FileNames[file];
 
-						XMovie newmovie = new XMovie() { Content = name, Path = currentPath};
+						XMovie newmovie = new XMovie() { Header = name, Path = currentPath};
 						movieMouseActions(newmovie);
 						movieListView.Items.Add(newmovie);
 					}
@@ -31,7 +31,7 @@ namespace X_Ren_Py
 		private void movieMouseActions(XMovie newmovie)
 		{
 			newmovie.ContextMenu = cmMovie;
-			newmovie.MouseUp += content_MouseUp;
+			newmovie.Selected += content_Selected;
 			newmovie.MouseLeave += movie_MouseLeave;
 			newmovie.MouseEnter += audiomovie_Enter;
 			newmovie.Checkbox.Checked += movie_Checked;
@@ -48,27 +48,27 @@ namespace X_Ren_Py
 				imagePropsPanel.Visibility = Visibility.Collapsed;
 				if (currentMovie != null)
 				{	
-					mediaNameLabel.Content = currentMovie.Content;
+					mediaNameLabel.Content = currentMovie.Header;
 					movieplayer.Source = new Uri(currentMovie.Path.ToString(), UriKind.Absolute);
 				}
 			}
 		}
 
 		private void movie_Checked(object sender, RoutedEventArgs e)
-        {
-            selectCheckedItem(sender);
-			            
-			currentMovie= (sender as CheckBox).Parent as XMovie;
+        {			            
+			currentMovie= ((sender as CheckBox).Parent as StackPanel).Parent as XMovie;
 
 			if (lastMovieChecked != null && lastMovieChecked != currentMovie) lastMovieChecked.IsChecked = false;
 			lastMovieChecked = currentMovie;
 
 			if (addorselect) currentFrame.Movie = currentMovie;
             movieBackground.Source = new Uri(currentMovie.Path.ToString());
+			show = true;
+			if (addorselect) selectCheckedItem(sender);
         }
         private void movie_Unchecked(object sender, RoutedEventArgs e)
         {
-            selectCheckedItem(sender); 
+			if (addorselect) selectCheckedItem(sender); 
 
             XMovie selectedMovie = (sender as CheckBox).Parent as XMovie;
             if (removeorunselect) currentFrame.Movie = null;

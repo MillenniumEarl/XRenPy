@@ -25,7 +25,7 @@ namespace X_Ren_Py
 						string name = imageDialog.SafeFileNames[file];
 						string currentPath = imageDialog.FileNames[file];
 
-						XImage newimage = new XImage() { Content = name, Path = currentPath};
+						XImage newimage = new XImage() { Header = name, Path = currentPath};
 						imageMouseActions(newimage);
 
 						if (tabControlResources.SelectedContent == backImageListView) { backImageListView.Items.Add(newimage); }
@@ -38,7 +38,7 @@ namespace X_Ren_Py
 		private void imageMouseActions(XImage newimage)
 		{
 			newimage.ContextMenu = cmImage;
-			newimage.MouseUp += content_MouseUp;
+			newimage.Selected += content_Selected;
 			newimage.MouseLeave += image_MouseLeave;
 			newimage.MouseEnter += image_Enter;
 			newimage.Checkbox.Checked += image_Checked;
@@ -56,7 +56,7 @@ namespace X_Ren_Py
 				if (currentImage != null)
 				{
 					imageViewer.Source = imageShow(currentImage.Path.ToString());
-					mediaNameLabel.Content = currentImage.Content;
+					mediaNameLabel.Content = currentImage.Header;
 					if (currentImage.IsChecked == true)
 					{
 						imagePropsPanel.Visibility = Visibility.Visible;
@@ -99,8 +99,8 @@ namespace X_Ren_Py
 
 		private void image_Checked(object sender, RoutedEventArgs e)
 		{
-			selectCheckedItem(sender);
-			currentImage = (sender as CheckBox).Parent as XImage;
+			
+			currentImage = ((sender as CheckBox).Parent as StackPanel).Parent as XImage;
 			
 			if (currentImage.Parent == backImageListView)
 			{				
@@ -117,13 +117,14 @@ namespace X_Ren_Py
 				{					
 					ImageInFrameProps.Add(new ImageProperties() { Frame = currentFrame, Image = currentImage, Displayable = newDisplayable() });
 				}
-				Image img = ImageInFrameProps.Where(prop => prop.Frame == currentFrame && prop.Image == currentImage).Single().Displayable;
+				Image img = ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage).Displayable;
 				img.Source = imageShow(currentImage.Path.ToString());
 				imagegrid.Children.Insert(imagegrid.Children.IndexOf(imageBorder), img);
 				showImagePropsCharacter(currentImage);
 			}
-			imagePropsPanel.Visibility = Visibility.Visible;
+			imagePropsPanel.Visibility = Visibility.Visible;			
 			show = true;
+			if (addorselect) selectCheckedItem(sender);
 		}
 
 		private Image newDisplayable()
@@ -138,9 +139,8 @@ namespace X_Ren_Py
 
 		private void image_Unchecked(object sender, RoutedEventArgs e)
         {
-            selectCheckedItem(sender);
-
-            XImage selectedImage = (sender as CheckBox).Parent as XImage;
+			if (addorselect) selectCheckedItem(sender);
+            XImage selectedImage = ((sender as CheckBox).Parent as StackPanel).Parent as XImage;
             if (selectedImage.Parent == backImageListView)
             {
                 if (removeorunselect) currentFrame.BackgroundImage = null;
@@ -149,7 +149,7 @@ namespace X_Ren_Py
             else
             {
                 string source = new Uri(selectedImage.Path).ToString();
-				ImageProperties imgtoremove = ImageInFrameProps.Where(i => i.Frame == currentFrame && i.Image == selectedImage).Single();
+				ImageProperties imgtoremove = ImageInFrameProps.Find(i => i.Frame == currentFrame && i.Image == selectedImage);
 				if (removeorunselect) ImageInFrameProps.Remove(imgtoremove); 
 				imagegrid.Children.Remove(imgtoremove.Displayable);
             }
@@ -174,7 +174,7 @@ namespace X_Ren_Py
 
 		public void getImageProperties(XFrame frame, XImage image)
 		{
-			ImageProperties property = ImageInFrameProps.Where(prop => prop.Frame == frame && prop.Image == image).Single();
+			ImageProperties property = ImageInFrameProps.Find(prop => prop.Frame == frame && prop.Image == image);
 			alignComboBox.SelectedIndex = property.Align;
 			animationInTypeComboBox.SelectedIndex = property.AnimationInType;
 			animationOutTypeComboBox.SelectedIndex = property.AnimationOutType;
@@ -197,7 +197,7 @@ namespace X_Ren_Py
 		}
 		private void alignComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-				ImageProperties img = ImageInFrameProps.Where(prop => prop.Frame == currentFrame && prop.Image == currentImage).Single();
+				ImageProperties img = ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage);
 				img.Align = (byte)alignComboBox.SelectedIndex;
 				switch (alignComboBox.SelectedIndex)
 				{
@@ -211,12 +211,12 @@ namespace X_Ren_Py
 			if (sender == animationInTypeComboBox)
 			{
 				if (tabControlResources.SelectedContent == backImageListView) { currentFrame.AnimationInType = (byte)animationInTypeComboBox.SelectedIndex; }
-				else { ImageInFrameProps.Where(prop => prop.Frame == currentFrame && prop.Image == currentImage).Single().AnimationInType = (byte)animationInTypeComboBox.SelectedIndex; }
+				else { ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage).AnimationInType = (byte)animationInTypeComboBox.SelectedIndex; }
 			}
 			else
 			{
 				if (tabControlResources.SelectedContent == backImageListView) { currentFrame.AnimationOutType = (byte)animationOutTypeComboBox.SelectedIndex; }
-				else { ImageInFrameProps.Where(prop => prop.Frame == currentFrame && prop.Image == currentImage).Single().AnimationOutType = (byte)animationOutTypeComboBox.SelectedIndex; }
+				else { ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage).AnimationOutType = (byte)animationOutTypeComboBox.SelectedIndex; }
 			}
 		}
 	}

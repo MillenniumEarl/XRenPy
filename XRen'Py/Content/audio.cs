@@ -21,7 +21,7 @@ namespace X_Ren_Py
 						string name = musDialog.SafeFileNames[file];
 						string currentPath = musDialog.FileNames[file];
 
-						XAudio newaudio = new XAudio() { Content = name, Path = currentPath};
+						XAudio newaudio = new XAudio() { Header = name, Path = currentPath};
 						audioMouseActions(newaudio);
 
 						if (tabControlResources.SelectedContent == musicListView) { newaudio.Type = "music "; musicListView.Items.Add(newaudio); }
@@ -35,7 +35,7 @@ namespace X_Ren_Py
 		private void audioMouseActions(XAudio newaudio)
 		{
 			newaudio.ContextMenu = cmAudio;
-			newaudio.MouseUp += content_MouseUp;
+			newaudio.Selected += content_Selected;
 			newaudio.MouseLeave += audio_MouseLeave;
 			newaudio.MouseEnter += audiomovie_Enter;
 			newaudio.Checkbox.Checked += audio_Checked;
@@ -53,7 +53,7 @@ namespace X_Ren_Py
 				if (currentAudio != null)
 				{					
 					movieplayer.Source = new Uri(currentAudio.Path.ToString(), UriKind.Absolute);
-					mediaNameLabel.Content = currentAudio.Content;
+					mediaNameLabel.Content = currentAudio.Header;
 					coverartShow(currentAudio.Path.ToString());
 					if (currentAudio.IsChecked == true)
 					{
@@ -66,24 +66,24 @@ namespace X_Ren_Py
 		}
 
 		private void audio_Checked(object sender, RoutedEventArgs e)
-        {
-            selectCheckedItem(sender);
+        {			
 			bool isLooped=false;
-            currentAudio = (sender as CheckBox).Parent as XAudio;
+            currentAudio = ((sender as CheckBox).Parent as StackPanel).Parent as XAudio;
 			//аудиослой для таймлайна должен будет быть тут. Если таймлайн вообще будет
 			if (currentAudio.Type == "music ") isLooped = true;
 				if (addorselect) AudioInFrameProps.Add(new AudioProperties() { Frame = currentFrame, Audio = currentAudio, Loop=isLooped });
             getAudioProperties(currentFrame, currentAudio);
 			audioPropsPanel.Visibility = Visibility.Visible;
-			show = true;         
+			show = true;
+			if (addorselect) selectCheckedItem(sender);        
 		}
         private void audio_Unchecked(object sender, RoutedEventArgs e)
         {
-            selectCheckedItem(sender);
+			if (addorselect) selectCheckedItem(sender);
 
-            XAudio selectedAudio = (sender as CheckBox).Parent as XAudio;
+            XAudio selectedAudio = ((sender as CheckBox).Parent as StackPanel).Parent as XAudio;
             string source = new Uri(selectedAudio.Path).ToString();
-            if (removeorunselect) AudioInFrameProps.Remove(AudioInFrameProps.Where(i => i.Frame == currentFrame && i.Audio == selectedAudio).Single());
+            if (removeorunselect) AudioInFrameProps.Remove(AudioInFrameProps.Find(i => i.Frame == currentFrame && i.Audio == selectedAudio));
             media.IsExpanded = false;
 			show = false;
 		}
@@ -101,7 +101,7 @@ namespace X_Ren_Py
 		}
 		public void getAudioProperties(XFrame frame, XAudio audio)
 		{
-			AudioProperties property = AudioInFrameProps.Where(prop => prop.Frame == frame && prop.Audio == audio).Single();
+			AudioProperties property = AudioInFrameProps.Find(prop => prop.Frame == frame && prop.Audio == audio);
 			fadeinTextBox.Text = property.FadeIn.ToString();
 			fadeoutTextBox.Text = property.FadeOut.ToString();
 			//queueCheckBox.IsChecked = property.Queue;
