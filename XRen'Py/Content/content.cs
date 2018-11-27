@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System;
 
 namespace X_Ren_Py
 {
@@ -110,19 +111,23 @@ namespace X_Ren_Py
 
 		public void loadCharacter(string singleLine)
 		{
-			int firstquote = singleLine.IndexOf('"') + 1;
-			Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
-			Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
-			string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
-			for (int prop = 0; prop < all.Length; prop++)
+			try
 			{
-				if (all[prop].StartsWith("color")) NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
-				else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) NameIsBold = true;
-				else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) NameIsItalic = true;
-				else if (all[prop].StartsWith("what_color")) TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
-				else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) TextIsBold = true;
-				else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) TextIsItalic = true;
+				int firstquote = singleLine.IndexOf('"') + 1;
+				Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
+				Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
+				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
+				for (int prop = 0; prop < all.Length; prop++)
+				{
+					if (all[prop].StartsWith("color")) NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
+					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) NameIsBold = true;
+					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) NameIsItalic = true;
+					else if (all[prop].StartsWith("what_color")) TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
+					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) TextIsBold = true;
+					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) TextIsItalic = true;
+				}
 			}
+			catch (Exception) { MessageBox.Show("Error: Character loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 
 }
@@ -154,10 +159,14 @@ namespace X_Ren_Py
     {
 		public void loadImage(string singleLine, string folder)
 		{
-			int firstquote = singleLine.IndexOf('"') + 1;
-			Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
-			Content = Path.Replace(folder, "").Substring(singleLine.LastIndexOf('/') + 1);
-			Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');			
+			try
+			{
+				int firstquote = singleLine.IndexOf('"') + 1;
+				Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
+				Content = Path.Replace(folder, "").Substring(singleLine.LastIndexOf('/') + 1);
+				Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
+			}
+			catch (Exception) { MessageBox.Show("Error: Image loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 
 		public XImage()
@@ -172,10 +181,14 @@ namespace X_Ren_Py
 
 		public void loadAudio(string singleLine, string folder)
 		{
-			int firstquote = singleLine.IndexOf('"') + 1;
-			Path = folder+singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
-			Content = Path.Substring(singleLine.LastIndexOf('/') + 1);
-			Alias = singleLine.Substring(13, singleLine.IndexOf('=') - 13).TrimEnd(' ');
+			try
+			{
+				int firstquote = singleLine.IndexOf('"') + 1;
+				Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
+				Content = Path.Substring(singleLine.LastIndexOf('/') + 1);
+				Alias = singleLine.Substring(13, singleLine.IndexOf('=') - 13).TrimEnd(' ');
+			}
+			catch (Exception) { MessageBox.Show("Error: Audio loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 		public XAudio()
         {
@@ -189,16 +202,20 @@ namespace X_Ren_Py
         public string MaskPath { get { return _MaskPath; } set { _MaskPath = value; } }
 		public void loadMovie(string singleLine, string folder)
 		{
-			int firstquote = singleLine.IndexOf('"') + 1;
-
-			string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
-			for (int prop = 0; prop < all.Length; prop++)
+			try
 			{
-				if (all[prop].StartsWith("play")) Path = all[prop].Substring(5);
-				else if (all[prop].StartsWith("mask")) MaskPath = all[prop].Substring(5);
+				int firstquote = singleLine.IndexOf('"') + 1;
+
+				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
+				for (int prop = 0; prop < all.Length; prop++)
+				{
+					if (all[prop].StartsWith("play")) Path = all[prop].Substring(5);
+					else if (all[prop].StartsWith("mask")) MaskPath = all[prop].Substring(5);
+				}
+				Content = Path.Substring(singleLine.LastIndexOf('/') + 1);
+				Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
 			}
-			Content = Path.Substring(singleLine.LastIndexOf('/') + 1);
-			Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
+			catch (Exception) { MessageBox.Show("Error: Movie loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
         public XMovie()
         {

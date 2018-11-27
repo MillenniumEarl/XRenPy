@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace X_Ren_Py
 {
@@ -12,7 +15,6 @@ namespace X_Ren_Py
             InitializeComponent();
             initializeAll();
         }
-
 
 		//string correctChecker(string text)
 		//{   //перенос строки

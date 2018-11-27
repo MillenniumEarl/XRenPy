@@ -26,29 +26,25 @@ namespace X_Ren_Py
 			clearAll();
 			//код загрузки нового проекта
 		}
-				
+
 		private void LoadProject_Click(object sender, RoutedEventArgs e)
 		{
 			VistaFolderBrowserDialog selectFolder = new VistaFolderBrowserDialog();
 
 			if (selectFolder.ShowDialog() == true)
-				try
-				{
-					if (File.Exists(selectFolder.SelectedPath.ToString() + script) &&
-					File.Exists(selectFolder.SelectedPath.ToString() + options) &&
-					File.Exists(selectFolder.SelectedPath.ToString() + gui))
-					{						
-						projectFolder = selectFolder.SelectedPath.ToString() + game;
-						clearAll();
-						projectExpander.IsExpanded = false;
-						loadScript();
-						loadOptions();
-						loadGUI();
-					}
 
-					else MessageBox.Show("Not a project folder or some files are missing!", "Incorrect folder", MessageBoxButton.OK, MessageBoxImage.Error);
+				if (File.Exists(selectFolder.SelectedPath.ToString() + script) &&
+				File.Exists(selectFolder.SelectedPath.ToString() + options) &&
+				File.Exists(selectFolder.SelectedPath.ToString() + gui))
+				{
+					projectExpander.IsExpanded = false;
+					projectFolder = selectFolder.SelectedPath.ToString() + game;
+					clearAll();					
+					loadScript();
+					loadOptions();
+					loadGUI();
 				}
-				catch (Exception) { MessageBox.Show("Please choose the folder!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);	}			
+				else MessageBox.Show("Not a project folder or some files are missing!", "Incorrect folder", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 		
 		private void SaveProject_Click(object sender, RoutedEventArgs e)

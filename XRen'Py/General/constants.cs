@@ -12,7 +12,7 @@ namespace X_Ren_Py
     /// </summary>
     public partial class MainWindow : Window
     {
-		static string game = @"\game\";
+		static string game = @"/game/";
         string script = game+@"script.rpy";
         string options = game + @"options.rpy";
         string screens = game + @"screens.rpy";
@@ -24,6 +24,7 @@ namespace X_Ren_Py
 		string soundsFolder = @"sounds/";
 		string voicesFolder = @"voices/";
 		string moviesFolder = @"movies/";
+		string guiFolder = @"gui/";
 
 		static string tab = "    ";
 		static string nextLine = "\r\n";
@@ -47,27 +48,29 @@ namespace X_Ren_Py
 
 		//строки для options.rpy
 
-		//string gameEnterTransition = "define config.enter_transition";
-		//string gameExitTransition = "define config.exit_transition";
+		//string gameEnterTransition = 
+		//string gameExitTransition = ;
 		//string gameIntraTransition = "define config.intra_transition";
-		//string gameLoadTransition = "define config.after_load_transition";
-		//string gameEndTransition = "define config.end_game_transition";
+		//string gameLoadTransition = ;
+		//string gameEndTransition = ;
 		//string gameWindowShow= "define config.window";
 		//string gameWindowShowTransition = "define config.window_show_transition";
 		//string gameWindowHideTransition = "define config.window_hide_transition";
 		//string gameSaveDir = "define config.save_directory";
-		//string gameIcon = "define config.window_icon";
+		//string gameIcon = ;
 
 		//строки для gui.rpy
 
 
 		//строка-компаратор
 		string[] comparerScript = {"define", "image", "label"};
-		string[] comparerOptions = {"define config.name", "define gui.show_name", "define config.version", "define gui.about", "define build.name", "define config.has_sound", "define config.has_music", "default preferences.text_cps", "default preferences.afm_time" };
+		string[] comparerOptions = {"define config.name","define gui.show_name","define config.version","define gui.about",
+			"define build.name","define config.has_sound","define config.has_music","define config.has_voice", "default preferences.text_cps", "default preferences.afm_time",
+"define config.enter_transition","define config.exit_transition","define config.after_load_transition","define config.end_game_transition","define config.window_icon"};
 		//ресурсы
-		string imageextensions = "Файлы рисунков (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
-        string audioextensions = "Файлы аудио (*.wav, *.ogg, *.mp3, *.opus)|*.wav;*.ogg;*.mp3;*.opus";
-        string vidextensions = "Файлы видео (*.wmv,*.webm, *.mkv, *.avi, *.ogv)|*.wmv;*.webm;*.mkv;*.avi;*.ogv";
+		string imageextensions = "Image files (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
+        string audioextensions = "Audio files (*.wav, *.ogg, *.mp3, *.opus)|*.wav;*.ogg;*.mp3;*.opus";
+        string vidextensions = "Video files (*.wmv,*.webm, *.mkv, *.avi, *.ogv)|*.wmv;*.webm;*.mkv;*.avi;*.ogv";
 
         //контекстные меню
         MenuItem addTab, deleteTab, addFrame, insertFrame, duplicateFrame, duplicateRootframe, deleteFrame, addMenu, addImage, deleteImage, addAudio, deleteAudio, stopAudio, addMovie, deleteMovie;
@@ -86,7 +89,12 @@ namespace X_Ren_Py
         XAudio currentAudio;
         XMovie currentMovie;
 		List<ComboBoxItem> menuActions= new List<ComboBoxItem> { };
-		ObservableCollection<ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
+		List<string> animationIn = new List<string> {"None","dissolve","fade","pixellate","move","moveinright","moveinleft","moveintop","moveinbottom","easeinright","easeinleft","easeintop","easeinbottom",
+		"zoomin","zoominout","vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideleft","slideright","slideup","slidedown","pushright","pushleft","pushtop","pushbottom","irisin"};
+		List<string> animationOut = new List<string>
+		{"None","dissolve","fade","pixellate","move","moveoutright","moveoutleft","moveouttop","moveoutbottom","easeoutright","easeoutleft","easeouttop","easeoutbottom",
+		"zoomout","zoominout","vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideawayleft","slideawayright","slideawayup","slideawaydown","pushright","pushleft","pushtop","pushbottom","irisout" };
+			ObservableCollection <ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
         List<ImageProperties> ImageInFrameProps = new List<ImageProperties> { };
         List<AudioProperties> AudioInFrameProps = new List<AudioProperties> { };
         bool removeorunselect=true;//переключатель удаления взаимосвязей выделенных ресурсов. При выборе фрейма их не надо удалять, потому 0, при снятии галочки вручную - 1
@@ -132,8 +140,12 @@ namespace X_Ren_Py
 			menuActions.Add(passAction);
 			menuLabelList.Add(emptyLabel);
 
+			//image animations
+			animationInTypeComboBox.ItemsSource = animationIn;
+			animationOutTypeComboBox.ItemsSource = animationOut;
+
 			//start
-			ListView startListView=createLabel("start");
+			ListView startListView =createLabel("start");
 			startListView.Items.Add(createFrame(true));
 			currentFrame = startListView.Items[0] as XFrame;
 			(startListView.Items[0] as XFrame).IsSelected = true;			
@@ -141,6 +153,11 @@ namespace X_Ren_Py
 			//options
 			projectWidth.Text = "1280";
 			projectHeight.Text = "720";
+			title.Text = "default";
+			gameOpenTransition.ItemsSource = animationIn; gameOpenTransition.SelectedIndex = 1;
+			gameExitTransition.ItemsSource = animationOut; gameExitTransition.SelectedIndex = 1;
+			gameStartTransition.ItemsSource = animationIn; gameStartTransition.SelectedIndex = 0;
+			gameEndTransition.ItemsSource = animationOut; gameEndTransition.SelectedIndex = 0;
 		}
 		
 		private void createDirectories()
@@ -150,6 +167,7 @@ namespace X_Ren_Py
 			Directory.CreateDirectory(projectFolder + soundsFolder);
 			Directory.CreateDirectory(projectFolder + voicesFolder);
 			Directory.CreateDirectory(projectFolder + moviesFolder);
+			Directory.CreateDirectory(projectFolder + guiFolder);
 		}
 	}
 }                

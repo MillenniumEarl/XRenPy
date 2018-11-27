@@ -97,30 +97,39 @@
             </TabControl>
             <GridSplitter x:Name="gridSplitter1" Grid.Row="1" Cursor="SizeWE" Background="#FF7F7F7F" Width="2" HorizontalAlignment="Left" Grid.Column="1" Margin="0,40"/>
             <Expander x:Name="optionsExpander" Header="Options" FontSize="24" Height="Auto" VerticalAlignment="Top" FlowDirection="RightToLeft" Expanded="mainexp_Expanded" Grid.ColumnSpan="2" Grid.RowSpan="2" HorizontalAlignment="Right" Width="Auto" Foreground="#FFF0F0F0">
-                <Grid Background="#7FFFFFFF" Height="400" VerticalAlignment="Top" FlowDirection="LeftToRight" Width="200">
+                <Grid Background="#7FFFFFFF" Height="500" VerticalAlignment="Top" FlowDirection="LeftToRight" Width="200">
                     <Rectangle Fill="White" Stroke="Black" Margin="5"/>
-                    <Label Content="Width" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="10,10,0,0"/>
-                    <TextBox x:Name="projectWidth" Margin="52,10,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectWidth_TextChanged" />
-                    <Label Content="Height" HorizontalAlignment="Left" Margin="97,10,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBox x:Name="projectHeight" Margin="143,10,10,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="26" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectHeight_TextChanged" />
-                    <Label Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,41,0,0" FontSize="12"/>
-                    <TextBox x:Name="title" Margin="52,41,10,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" Height="26" VerticalAlignment="Top" FontSize="12" TextChanged="title_TextChanged" VerticalContentAlignment="Center" />
+                    <Label Content="Width" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="10,10,0,0" VerticalContentAlignment="Center" Padding="5,0" Height="20"/>
+                    <TextBox x:Name="projectWidth" Margin="52,10,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectWidth_TextChanged" />
+                    <Label Content="Height" HorizontalAlignment="Left" Margin="97,10,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="projectHeight" Margin="143,10,10,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectHeight_TextChanged" />
+                    <Label Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,35,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
+                    <TextBox x:Name="title" Margin="52,35,10,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" Height="20" VerticalAlignment="Top" FontSize="12" TextChanged="title_TextChanged" VerticalContentAlignment="Center" />
                     <!--<CheckBox x:Name="cyrillicchckbx" Content="Title contains cyrillic symbols" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="180" FontSize="12"/>-->
-                    <Label Content="Build name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,67,0,0" FontSize="10" Height="16" Width="64" Padding="5,0" Foreground="#FF7F7F7F"/>
-                    <Label x:Name="buildName"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,67,0,0" FontSize="10" Height="16" Width="116" Padding="5,0" Foreground="#FF7F7F7F"/>
-                    <CheckBox x:Name="titleVisible" Content="Name visible" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
-                    <Label Content="Version" HorizontalAlignment="Left" Margin="101,88,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBox x:Name="version" Margin="150,88,10,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="26" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectHeight_TextChanged" Text="1.0" />
-                    <CheckBox x:Name="containsMusic" Content="Enable music mixer" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
-                    <CheckBox x:Name="containsSound" Content="Enable sound mixer" HorizontalAlignment="Left" Margin="10,129,0,0" VerticalAlignment="Top" FontSize="12" />
-                    <CheckBox x:Name="containsVoice" Content="Enable voice mixer" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" FontSize="12" />
-                    <Label Content="Text showing speed" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,164,0,0" FontSize="12"/>
-                    <TextBox x:Name="textShowSpeed" Margin="129,164,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
-                    <Label Content="Auto reader latency" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" FontSize="12"/>
-                    <TextBox x:Name="autoReaderLatency" Margin="129,195,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="10" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
-                    <xctk:WatermarkTextBox x:Name="about" Watermark="About this game" Margin="10,226,10,10" FontSize="12"/>
-
-
+                    <Label Content="Build name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,55,0,0" FontSize="10" Height="16" Width="64" Padding="5,0" Foreground="#FF7F7F7F"/>
+                    <Label x:Name="buildName"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,55,0,0" FontSize="10" Height="16" Width="116" Padding="5,0" Foreground="#FF7F7F7F"/>
+                    <CheckBox x:Name="titleVisible" Content="Show name" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
+                    <Label Content="Version" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" Padding="5,0" Height="20"/>
+                    <TextBox x:Name="version" Margin="59,104,63,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectHeight_TextChanged" Text="1.0" />
+                    <CheckBox x:Name="containsMusic" Content="Enable music mixer" HorizontalAlignment="Left" Margin="10,129,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
+                    <CheckBox x:Name="containsSound" Content="Enable sound mixer" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" FontSize="12" />
+                    <CheckBox x:Name="containsVoice" Content="Enable voice mixer" HorizontalAlignment="Left" Margin="10,159,0,0" VerticalAlignment="Top" FontSize="12" />
+                    <Label Content="Text showing speed" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,179,0,0" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
+                    <TextBox x:Name="textShowSpeed" Margin="150,179,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
+                    <Label Content="Auto reader latency" HorizontalAlignment="Left" Margin="10,204,0,0" VerticalAlignment="Top" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
+                    <TextBox x:Name="autoReaderLatency" Margin="150,204,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="10" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
+                    <xctk:WatermarkTextBox x:Name="about" Watermark="About this game" Margin="10,350,10,10" FontSize="12"/>
+                    <Label Content="Transitions" HorizontalAlignment="Left" Margin="10,229,0,0" VerticalAlignment="Top" FontSize="12" Height="16" Padding="10,0,5,0" FontStyle="Italic"/>
+                    <Label Content="On opening" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameOpenTransition" HorizontalAlignment="Left" Margin="101,250,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="On exit" HorizontalAlignment="Left" Margin="10,275,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameExitTransition" HorizontalAlignment="Left" Margin="101,275,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="On game start" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameStartTransition" HorizontalAlignment="Left" Margin="101,300,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="On game end" HorizontalAlignment="Left" Margin="10,325,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameEndTransition" HorizontalAlignment="Left" Margin="101,325,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <xctk:IconButton x:Name="icon" HorizontalAlignment="Left" Margin="142,76,0,0" VerticalAlignment="Top" Width="48" Height="48" Background="{x:Null}" Click="icon_Click"/>
+                    <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="109,76,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
                 </Grid>
             </Expander>
             <Expander x:Name="projectExpander" Header="Project" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Expanded="mainexp_Expanded" Height="Auto" Width="Auto" Grid.ColumnSpan="2" Grid.RowSpan="2">
@@ -188,43 +197,18 @@
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid x:Name="audiomovie">
+                    <Grid.Effect>
+                        <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
+                    </Grid.Effect>
                     <MediaElement x:Name="movieplayer" LoadedBehavior="Manual" MediaOpened="movieplayer_MediaOpened"/>
                     <Image x:Name="coverart" Margin="120,15" Source="Images/Music.png"/>
-                    <Button x:Name="playMovie" Content="&#9199;" HorizontalAlignment="Left" Margin="160,196,0,0" VerticalAlignment="Top" Width="50" Height="50" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" Padding="-1,-4,0,0" Background="{x:Null}">
-                        <Button.Effect>
-                            <DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="10"/>
-                        </Button.Effect>
-                    </Button>
-                    <Button x:Name="pauseMovie" Content="&#9208;" Margin="215,196,215,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="pauseMovie_Click" FontSize="36" Padding="-1,-3,1,1" Background="{x:Null}">
-                        <Button.Effect>
-                            <DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="10"/>
-                        </Button.Effect>
-                    </Button>
-                    <Button x:Name="stopMovie" Content="&#9209;" Margin="270,196,0,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="stopMovie_Click" HorizontalAlignment="Left" Width="50" FontSize="36" Padding="-1,-4,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                        <Button.Effect>
-                            <DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="10"/>
-                        </Button.Effect>
-                    </Button>
-                    <Label x:Name="currentTimeMedia" Content="0:00" Margin="0,204,429,0" Height="37" VerticalAlignment="Top" FontSize="18">
-                        <Label.Effect>
-                            <DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="10"/>
-                        </Label.Effect>
-                    </Label>
-                    <Slider x:Name="volumeSliderMedia" Margin="0,181,0,0" RenderTransformOrigin="0.5,0.5" ValueChanged="movieVolume_ValueChanged" Maximum="100" SmallChange="5" LargeChange="10" TickFrequency="10" Value="100" Background="{x:Null}" Orientation="Vertical" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" HorizontalAlignment="Right" Width="29">
-                        <Slider.Effect>
-                            <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
-                        </Slider.Effect>
-                    </Slider>
-                    <Slider x:Name="currentTimeSliderMedia" Margin="0,246,34,0" VerticalAlignment="Top" TickPlacement="TopLeft" SmallChange="1" TickFrequency="5" ValueChanged="mediaCurrentTime_ValueChanged" LargeChange="10">
-                        <Slider.Effect>
-                            <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
-                        </Slider.Effect>
-                    </Slider>
-                    <Label x:Name="mediaNameLabel" Content="" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                        <Label.Effect>
-                            <DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="10"/>
-                        </Label.Effect>
-                    </Label>
+                    <Button x:Name="playMovie" Content="&#9199;" HorizontalAlignment="Left" Margin="160,196,0,0" VerticalAlignment="Top" Width="50" Height="50" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" Padding="-1,-4,0,0" Background="{x:Null}" Foreground="#FFF0F0F0"/>
+                    <Button x:Name="pauseMovie" Content="&#9208;" Margin="215,196,215,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="pauseMovie_Click" FontSize="36" Padding="-1,-3,1,1" Background="{x:Null}" Foreground="#FFF0F0F0"/>
+                    <Button x:Name="stopMovie" Content="&#9209;" Margin="270,196,0,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="stopMovie_Click" HorizontalAlignment="Left" Width="50" FontSize="36" Padding="-1,-4,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
+                    <Label x:Name="currentTimeMedia" Content="0:00" Margin="0,204,429,0" Height="37" VerticalAlignment="Top" FontSize="18" Foreground="#FFF0F0F0"/>
+                    <Slider x:Name="volumeSliderMedia" Margin="0,181,0,0" RenderTransformOrigin="0.5,0.5" ValueChanged="movieVolume_ValueChanged" Maximum="100" SmallChange="5" LargeChange="10" TickFrequency="10" Value="100" Background="{x:Null}" Orientation="Vertical" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" HorizontalAlignment="Right" Width="29"/>
+                    <Slider x:Name="currentTimeSliderMedia" Margin="0,246,34,0" VerticalAlignment="Top" TickPlacement="TopLeft" SmallChange="1" TickFrequency="5" ValueChanged="mediaCurrentTime_ValueChanged" LargeChange="10"/>
+                    <Label x:Name="mediaNameLabel" Content="" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
                 </Grid>
                 <Image x:Name="imageViewer"/>
                 <StackPanel x:Name="imagePropsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Row="1" Visibility="Hidden">
@@ -235,75 +219,9 @@
                         <System:String>right</System:String>
                     </ComboBox>
                     <Label Content="Animation In"/>
-                    <ComboBox x:Name="animationInTypeComboBox" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" VerticalContentAlignment="Center" SelectionChanged="animationTypeComboBox_SelectionChanged">
-                        <System:String>none</System:String>
-                        <System:String>dissolve</System:String>
-                        <System:String>fade</System:String>
-                        <System:String>pixellate</System:String>
-                        <System:String>move</System:String>
-                        <System:String>moveinright</System:String>
-                        <System:String>moveinleft</System:String>
-                        <System:String>moveintop</System:String>
-                        <System:String>moveinbottom</System:String>
-                        <System:String>easeinright</System:String>
-                        <System:String>easeinleft</System:String>
-                        <System:String>easeintop</System:String>
-                        <System:String>easeinbottom</System:String>
-                        <System:String>zoomin</System:String>
-                        <System:String>zoominout</System:String>
-                        <System:String>vpunch</System:String>
-                        <System:String>hpunch</System:String>
-                        <System:String>blinds</System:String>
-                        <System:String>squares</System:String>
-                        <System:String>wipeleft</System:String>
-                        <System:String>wiperight</System:String>
-                        <System:String>wipeup</System:String>
-                        <System:String>wipedown</System:String>
-                        <System:String>slideleft</System:String>
-                        <System:String>slideright</System:String>
-                        <System:String>slideup</System:String>
-                        <System:String>slidedown</System:String>
-                        <System:String>pushright</System:String>
-                        <System:String>pushleft</System:String>
-                        <System:String>pushtop</System:String>
-                        <System:String>pushbottom</System:String>
-                        <System:String>irisin</System:String>
-                    </ComboBox>
+                    <ComboBox x:Name="animationInTypeComboBox" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" VerticalContentAlignment="Center" SelectionChanged="animationTypeComboBox_SelectionChanged"/>
                     <Label Content="Animation Out"/>
-                    <ComboBox x:Name="animationOutTypeComboBox" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" VerticalContentAlignment="Center" SelectionChanged="animationTypeComboBox_SelectionChanged">
-                        <System:String>none</System:String>
-                        <System:String>dissolve</System:String>
-                        <System:String>fade</System:String>
-                        <System:String>pixellate</System:String>
-                        <System:String>move</System:String>
-                        <System:String>moveoutright</System:String>
-                        <System:String>moveoutleft</System:String>
-                        <System:String>moveouttop</System:String>
-                        <System:String>moveoutbottom</System:String>
-                        <System:String>easeoutright</System:String>
-                        <System:String>easeoutleft</System:String>
-                        <System:String>easeouttop</System:String>
-                        <System:String>easeoutbottom</System:String>
-                        <System:String>zoomout</System:String>
-                        <System:String>zoominout</System:String>
-                        <System:String>vpunch</System:String>
-                        <System:String>hpunch</System:String>
-                        <System:String>blinds</System:String>
-                        <System:String>squares</System:String>
-                        <System:String>wipeleft</System:String>
-                        <System:String>wiperight</System:String>
-                        <System:String>wipeup</System:String>
-                        <System:String>wipedown</System:String>
-                        <System:String>slideawayleft</System:String>
-                        <System:String>slideawayright</System:String>
-                        <System:String>slideawayup</System:String>
-                        <System:String>slideawaydown</System:String>
-                        <System:String>pushright</System:String>
-                        <System:String>pushleft</System:String>
-                        <System:String>pushtop</System:String>
-                        <System:String>pushbottom</System:String>
-                        <System:String>irisout</System:String>
-                    </ComboBox>
+                    <ComboBox x:Name="animationOutTypeComboBox" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" VerticalContentAlignment="Center" SelectionChanged="animationTypeComboBox_SelectionChanged"/>
                 </StackPanel>
                 <StackPanel x:Name="audioPropsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Row="1" Visibility="Hidden">
                     <Label Content="Fade in"/>
