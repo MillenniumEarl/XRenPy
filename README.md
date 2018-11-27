@@ -25,10 +25,10 @@ Currently released application features:
 - media preview - if cursor is above any resource, the media preview window shows up, on leave it closes, on click freezes in opened state and, if the resource is present in currently selected frame, shows the parameters of this resource below it. Contains image viewer, music player with cover art and controls and movie player with the same controls
 - images alignment and animation controls
 - audio fades controls with value check, point or comma inside, up to 9.9 seconds floating point and 999 seconds integer of fade 
-- view block - visual representation of the prototype of the future game, contains six buttons for converting menu to frame and backwards, adding empty frame, inserting empty frame, duplicating current frame and two control buttons to move to next or previous frame
+- view block - visual representation of the prototype of the future game, contains six buttons for converting menu to frame and backwards, adding next empty frame, duplicating current frame, GUI control and two control buttons to move to next or previous frame
 - view block and project block size customizing, 
 - mostly working saving, saving as and loading projects
-- changing/creating options.rpy with all available except build options
+- changing/creating options.rpy with all available options except build options
 - you can add your own icon of project
 
 Features to add:
