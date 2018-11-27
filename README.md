@@ -26,16 +26,17 @@ Currently released application features:
 - images alignment and animation controls
 - audio fades controls with value check, point or comma inside, up to 9.9 seconds floating point and 999 seconds integer of fade 
 - view block - visual representation of the prototype of the future game, contains six buttons for converting menu to frame and backwards, adding empty frame, inserting empty frame, duplicating current frame and two control buttons to move to next or previous frame
-- view block size customizing
+- view block and project block size customizing, 
 - mostly working saving, saving as and loading projects
-- changing/creating options.rpy with 9 available options
+- changing/creating options.rpy with all available except build options
+- you can add your own icon of project
 
 Features to add:
 - extend space of any resource for cursor to enter
 - checking of duplicate resources
-- different image and movies sizes ans placement
+- different image and movies sizes and placement
 - multiple movies at once (not actually necessary, but who knows)
-- connection to the gui.rpy scripts
+- connection to the gui.rpy script
 - draggable tabs in structure tab control
 - draggable and resizeable visual elements in the view block with effect
 - project cleaning - removal of unnecessary resources
@@ -54,7 +55,6 @@ Things to solve:
 - parasite click on the border of any resource and menu options which can cause an unwanted but not causing problems action
 - unexpected grid behaviour while changing the size of structure and resource blocks
 - strange program fail to start while being transferred to another PC
-
 
 Things to test:
 - design
