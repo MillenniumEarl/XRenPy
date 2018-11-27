@@ -444,14 +444,19 @@ namespace X_Ren_Py
 
 		addorselect = true;
 		}
-		private void addInsertFrame_Click(object sender, RoutedEventArgs e)
+		private void addNextFrame_Click(object sender, RoutedEventArgs e)
 		{
 			preSaveCurrentFrame();
 			XFrame frame = createFrame(false);
 			ListView selectedList = getSelectedList();
-			if (sender == addFrame || sender == ANFbttn) { selectedList.Items.Add(frame); }
-			else if (sender == insertFrame || sender == IPFbttn) { selectedList.Items.Insert(selectedList.Items.IndexOf(selectedList.SelectedItem), frame); }
-			else if (sender == addMenu) { frame.isMenu = true; frame.MenuOptions = new ObservableCollection<XMenuOption> { createMenuOption(true) }; selectedList.Items.Add(frame); }
+
+			if (sender == addMenu)
+			{
+				frame.isMenu = true;
+				frame.MenuOptions = new ObservableCollection<XMenuOption> { createMenuOption(true) };
+			}
+
+			selectedList.Items.Insert(selectedList.Items.IndexOf(selectedList.SelectedItem)+1, frame);
 			frame.IsSelected = true;
 		}
 		private void duplicateFrame_Click(object sender, RoutedEventArgs e)

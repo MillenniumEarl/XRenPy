@@ -52,9 +52,8 @@ namespace X_Ren_Py
         {
             character.Content = characterName.Text;
 			character.ContentToAlias();
-            //character.Alias = characterName.Text;
-            character.NameColor = (Color)charName_colorPicker.SelectedColor;
-            character.TextColor = (Color)charText_colorPicker.SelectedColor;
+			try	{ character.NameColor = (Color)charName_colorPicker.SelectedColor; } catch (Exception) { };
+			try { character.TextColor = (Color)charText_colorPicker.SelectedColor; } catch (Exception) { };
             if (characterNameBold.IsChecked == true) character.NameIsBold = true;
             else character.NameIsBold = false;
             if (characterNameItalic.IsChecked == true) character.NameIsItalic = true;
@@ -63,7 +62,7 @@ namespace X_Ren_Py
             else character.TextIsBold = false;
             if (characterTextItalic.IsChecked == true) character.TextIsItalic = true;
             else character.TextIsItalic = false;
-            character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor);
+			character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor);
             character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor);
         }
 

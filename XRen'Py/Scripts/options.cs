@@ -26,31 +26,31 @@ namespace X_Ren_Py
 				for (int compare = 0; compare < comparerOptions.Length; compare++)
 				{
 					if (singleLine.StartsWith(comparerOptions[compare]))
+					{
 						switch (comparerOptions[compare])
 						{
 							case "define config.name": title.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1)); break;
 							case "define gui.show_name": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") titleVisible.IsChecked = true; else titleVisible.IsChecked = false; break;
 							case "define config.version": version.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1)); break;
 							case "define gui.about": about.Text = singleLine.Substring(singleLine.IndexOf("\"\"\"") + 3); break;
-							case "define build.name": buildName.Content = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1)); break;
+							case "define build.name": buildName.Content = singleLine.Substring(singleLine.IndexOf('"')).Replace("\"",""); break;
 							case "define config.has_sound": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsSound.IsChecked = true; else containsSound.IsChecked = false; break;
 							case "define config.has_music": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsMusic.IsChecked = true; else containsMusic.IsChecked = false; break;
 							case "define config.has_voice": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice.IsChecked = true; else containsVoice.IsChecked = false; break;
 							case "default preferences.text_cps": textShowSpeed.Text = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
 							case "default preferences.afm_time": autoReaderLatency.Text = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.enter_transition":	gameOpenTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
+							case "define config.enter_transition": gameOpenTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
+							case "define config.intra_transition": gameIntraTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
 							case "define config.exit_transition": gameExitTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
 							case "define config.after_load_transition": gameStartTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
 							case "define config.end_game_transition": gameEndTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.window_icon":
-								//try
-								//{
-									icon.Icon = new Image { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) }; 
-								//}
-								//catch(Exception) { MessageBox.Show("Error: Icon loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-					break;
+							case "define config.window_show_transition": dialogShowTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
+							case "define config.window_hide_transition": dialogHideTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
+							case "define config.window_icon": icon.Icon = new Image { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) }; break;
 							default: break;
 						}
+						break;
+					}
 				}
 			}
 		}
@@ -76,78 +76,37 @@ namespace X_Ren_Py
 							found = true;
 							switch (comparerOptions[compare])
 							{
-								case "define config.name":
-									{
-										builder.Add("define config.name = _(" + quote(title.Text) + ')');
-										break;
-									}
+								case "define config.name":builder.Add("define config.name = _(" + quote(title.Text) + ')');	break;
 								case "define gui.show_name":
-									{
 										string show = "True";
 										if (titleVisible.IsChecked == false) show = "False";
-										builder.Add("define gui.show_name = " + show);
-										break;
-									}
-								case "define config.version":
-									{
-										builder.Add("define config.version = " + quote(version.Text));
-										break;
-									}
-								case "define gui.about":
-									{
-										builder.Add("define gui.about = _p(\"\"\"" + about.Text);
-										break;
-									}
-								case "define build.name":
-									{
-										builder.Add("define build.name = " + buildName.Content);
-										break;
-									}
+										builder.Add("define gui.show_name = " + show);	break;									
+								case "define config.version":builder.Add("define config.version = " + quote(version.Text));break;									
+								case "define gui.about":builder.Add("define gui.about = _p(\"\"\"" + about.Text);break;							
+								case "define build.name":builder.Add("define build.name = " + quote(buildName.Content.ToString()));break;
 								case "define config.has_sound":
-									{
 										string sound = "True";
 										if (containsSound.IsChecked == false) sound = "False";
-										builder.Add("define config.has_sound = " + sound);
-										break;
-									}
+										builder.Add("define config.has_sound = " + sound); break;
 								case "define config.has_music":
-									{
 										string music = "True";
 										if (containsMusic.IsChecked == false) music = "False";
-										builder.Add("define config.has_music = " + music);
-										break;
-									}
+										builder.Add("define config.has_music = " + music); break;
 								case "define config.has_voice":
-									{
 										string voice = "True";
 										if (containsVoice.IsChecked == false) voice = "False";
-										builder.Add("define config.has_voice = " + voice);
-										break;
-									}
-								case "default preferences.text_cps":
-									{
-										builder.Add("default preferences.text_cps = " + textShowSpeed.Text);
-										break;
-									}
-								case "default preferences.afm_time":
-									{
-										builder.Add("default preferences.afm_time" + autoReaderLatency.Text);
-										break;
-									}
+										builder.Add("define config.has_voice = " + voice); break;
+								case "default preferences.text_cps": builder.Add("default preferences.text_cps = " + textShowSpeed.Text); break;
+								case "default preferences.afm_time":builder.Add("default preferences.afm_time = " + autoReaderLatency.Text);break;
 								case "define config.enter_transition": builder.Add("define config.enter_transition = " + gameOpenTransition.SelectedItem); break;
+								case "define config.intra_transition": builder.Add("define config.intra_transition = "+gameIntraTransition.SelectedItem); break;
 								case "define config.exit_transition": builder.Add("define config.exit_transition = " + gameExitTransition.SelectedItem); break;
 								case "define config.after_load_transition": builder.Add("define config.after_load_transition = " + gameStartTransition.SelectedItem); break;
 								case "define config.end_game_transition": builder.Add("define config.end_game_transition = " + gameEndTransition.SelectedItem); break;
-								case "define config.window_icon":
-									{
-										try
-										{
-											string iconPath = icon.Icon.Source.ToString();
-											builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));
-										}
-										catch (Exception) { builder.Add(singleLine); };
-										break;
-									}
+								case "define config.window_show_transition": builder.Add("define config.window_show_transition = "+dialogShowTransition.SelectedItem); break;
+								case "define config.window_hide_transition": builder.Add("define config.window_hide_transition = "+dialogHideTransition.SelectedItem); break;
+								case "define config.window_icon": try{string iconPath = icon.Icon.Source.ToString();builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));}
+										catch (Exception) { builder.Add(singleLine); };	break;
 								default: break;
 							}
 						}
@@ -172,11 +131,17 @@ namespace X_Ren_Py
 				builder.Add("default preferences.text_cps = " + textShowSpeed.Text);
 				builder.Add("default preferences.afm_time = " + autoReaderLatency.Text);
 				builder.Add("define config.enter_transition = " + gameOpenTransition.SelectedItem);
+				builder.Add("define config.intra_transition = " + gameIntraTransition.SelectedItem);
 				builder.Add("define config.exit_transition = " + gameExitTransition.SelectedItem);
 				builder.Add("define config.after_load_transition = " + gameStartTransition.SelectedItem);
 				builder.Add("define config.end_game_transition = " + gameEndTransition.SelectedItem);
-				string iconPath = icon.Icon.Source.ToString();
+				builder.Add("define config.window_show_transition = " + dialogShowTransition.SelectedItem);
+				builder.Add("define config.window_hide_transition = " + dialogHideTransition.SelectedItem);
+				try
+				{ string iconPath = icon.Icon.Source.ToString();
 				builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));
+				}
+				catch (Exception) { };
 			}			
 			File.WriteAllLines(projectFolder + "options.rpy", builder);
 		}

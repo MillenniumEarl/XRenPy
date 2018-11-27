@@ -13,8 +13,14 @@ namespace X_Ren_Py
         public MainWindow()
         {
             InitializeComponent();
-            initializeAll();
+			createDirectories();
+			initializeAll();
         }
+
+		private void GUIButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 
 		//string correctChecker(string text)
 		//{   //перенос строки
