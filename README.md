@@ -29,13 +29,13 @@ Currently released application features:
 - view block and project block size customizing, 
 - mostly working saving, saving as and loading projects
 - changing/creating options.rpy with all available options except build options
+- changing/creating gui.rpy with colors and fonts available (connection as default is in process)
 - you can add your own icon of project
 
 Features to add:
 - checking of duplicate resources
 - different image and movies sizes and placement
 - multiple movies at once (not actually necessary, but who knows)
-- connection to the gui.rpy script
 - draggable tabs in structure tab control
 - draggable and resizeable visual elements in the view block with effect
 - project cleaning - removal of unnecessary resources
