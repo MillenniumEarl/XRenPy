@@ -98,10 +98,8 @@ namespace X_Ren_Py
         }
 
 		private void image_Checked(object sender, RoutedEventArgs e)
-		{
-			
-			currentImage = ((sender as CheckBox).Parent as StackPanel).Parent as XImage;
-			
+		{			
+			currentImage = ((sender as CheckBox).Parent as StackPanel).Parent as XImage;			
 			if (currentImage.Parent == backImageListView)
 			{				
 				if (lastImageChecked != null && lastImageChecked != currentImage) lastImageChecked.IsChecked = false;
@@ -124,22 +122,12 @@ namespace X_Ren_Py
 			}
 			imagePropsPanel.Visibility = Visibility.Visible;			
 			show = true;
-			if (addorselect) selectCheckedItem(sender);
 		}
 
-		private Image newDisplayable()
-		{
-			return new Image()
-			{
-				HorizontalAlignment = HorizontalAlignment.Center,
-				VerticalAlignment = VerticalAlignment.Bottom,
-				Stretch = System.Windows.Media.Stretch.None
-			};
-		}
+
 
 		private void image_Unchecked(object sender, RoutedEventArgs e)
         {
-			if (addorselect) selectCheckedItem(sender);
             XImage selectedImage = ((sender as CheckBox).Parent as StackPanel).Parent as XImage;
             if (selectedImage.Parent == backImageListView)
             {
@@ -156,7 +144,15 @@ namespace X_Ren_Py
 			imagePropsPanel.Visibility = Visibility.Hidden;
 			show = false;
         }
-               
+        private Image newDisplayable()
+		{
+			return new Image()
+			{
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Bottom,
+				Stretch = System.Windows.Media.Stretch.None
+			};
+		}   
         private void imageDeleteFromList_Click(object sender, RoutedEventArgs e)
         {
             foreach (ImageProperties image in ImageInFrameProps.Where(image=>image.Image==sender)) ImageInFrameProps.Remove(image);

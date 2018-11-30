@@ -49,16 +49,20 @@ namespace X_Ren_Py
 		string Return="return";
 
 		//строки для options.rpy
-		//string gameWindowShow= "define config.window";
-		//string gameSaveDir = "define config.save_directory";
+		//"define config.window";
+		//"define config.save_directory";
 
 		//строки для gui.rpy
+		//define gui.text_font = "DejaVuSans.ttf"
+		//define gui.name_text_font = "DejaVuSans.ttf"
+		//define gui.interface_text_font = "DejaVuSans.ttf"
 
 		//строка-компаратор
 		string[] comparerScript = {"define", "image", "label"};
 		string[] comparerOptions = {"define config.name","define gui.show_name","define config.version","define gui.about",
 			"define build.name","define config.has_sound","define config.has_music","define config.has_voice", "default preferences.text_cps", "default preferences.afm_time",
 "define config.enter_transition","define config.exit_transition","define config.after_load_transition","define config.end_game_transition","define config.window_icon"};
+		string[] comparerGui = { "gui.init", "define gui.accent_color" };
 		//ресурсы
 		string imageextensions = "Image files (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
         string audioextensions = "Audio files (*.wav, *.ogg, *.mp3, *.opus)|*.wav;*.ogg;*.mp3;*.opus";
@@ -67,12 +71,12 @@ namespace X_Ren_Py
 		SolidColorBrush unusedResourceColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
 		//контекстные меню
-		MenuItem addTab, deleteTab, addFrame, duplicateFrame, duplicateRootframe, deleteFrame, addMenu, addImage, deleteImage, addAudio, deleteAudio, stopAudio, addMovie, deleteMovie;
+		MenuItem addLabel, deleteLabel, addFrame, addRootFrame, duplicateFrame, duplicateRootframe, convertFrameMenu, deleteFrame, addMenu, addImage, deleteImage, addAudio, deleteAudio, stopAudio, addMovie, deleteMovie;
         ContextMenu cmFrame, cmRootframe, cmLabel, cmImage, cmAudio, cmMovie;
 
         //текст для динамических кнопок
-        string framemenu = "➤Menu";
-        string menuframe = "➤Frame";
+        string framemenu = "Frame➤Menu";
+        string menuframe = "Menu➤Frame";
 
 		//общие для всех элементы комбобоксов
 		ComboBoxItem jumpAction, callAction, passAction, emptyLabel;
@@ -90,6 +94,7 @@ namespace X_Ren_Py
 		{"None","dissolve","fade","pixellate","move","moveoutright","moveoutleft","moveouttop","moveoutbottom","easeoutright","easeoutleft","easeouttop","easeoutbottom","zoomout","zoominout",
 			"vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideawayleft","slideawayright","slideawayup","slideawaydown","pushright","pushleft","pushtop","pushbottom","irisout" };
 		ObservableCollection <ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
+		List<Image> characterIcons = new List<Image> { };
         List<ImageProperties> ImageInFrameProps = new List<ImageProperties> { };
         List<AudioProperties> AudioInFrameProps = new List<AudioProperties> { };
         bool removeorunselect=true;//переключатель удаления взаимосвязей выделенных ресурсов. При выборе фрейма их не надо удалять, потому 0, при снятии галочки вручную - 1
@@ -101,9 +106,11 @@ namespace X_Ren_Py
         public void initializeAll()
 		{
 			//contextMenus
-			addTab= new MenuItem() { Header = "Add label" }; addTab.Click += addLabel_Click;
-			deleteTab= new MenuItem() { Header = "Delete label" }; deleteTab.Click += deleteLabel_Click;
-			addFrame = new MenuItem() { Header = "Add empty frame" }; addFrame.Click += addNextFrame_Click;	
+			addLabel= new MenuItem() { Header = "Add label" }; addLabel.Click += addLabel_Click;
+			deleteLabel= new MenuItem() { Header = "Delete label" }; deleteLabel.Click += deleteLabel_Click;
+			addFrame = new MenuItem() { Header = "Add empty frame" }; addFrame.Click += addNextFrame_Click;
+			addRootFrame = new MenuItem() { Header = "Add empty frame" }; addRootFrame.Click += addNextFrame_Click;
+			convertFrameMenu = new MenuItem() { }; convertFrameMenu.Click += convertFrameMenu_Click;
 			duplicateFrame = new MenuItem() { Header = "Duplicate frame" }; duplicateFrame.Click += duplicateFrame_Click;
 			duplicateRootframe = new MenuItem() { Header = "Duplicate frame" }; duplicateRootframe.Click += duplicateFrame_Click;
 			deleteFrame = new MenuItem() { Header = "Delete frame/menu" }; deleteFrame.Click += deleteFrame_Click;
@@ -116,9 +123,9 @@ namespace X_Ren_Py
 			addMovie = new MenuItem() { Header = "Add movie file" }; addMovie.Click += movieImport_Click;
 			deleteMovie = new MenuItem() { Header = "Delete movie file" }; deleteMovie.Click += deleteVideo_Click;
 
-			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, duplicateFrame, deleteFrame, stopAudio } };
-			cmRootframe = new ContextMenu { ItemsSource = new MenuItem[] { duplicateRootframe } };
-			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addTab, addFrame, addMenu, deleteTab } };
+			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, duplicateFrame, convertFrameMenu, deleteFrame, stopAudio } };
+			cmRootframe = new ContextMenu { ItemsSource = new MenuItem[] { addRootFrame, duplicateRootframe } };
+			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addLabel, addFrame, addMenu, deleteLabel } };
 			cmImage = new ContextMenu { ItemsSource = new MenuItem[] { addImage, deleteImage } };
 			cmAudio = new ContextMenu { ItemsSource = new MenuItem[] { addAudio, deleteAudio } };
 			cmMovie = new ContextMenu { ItemsSource = new MenuItem[] { addMovie, deleteMovie } };
@@ -138,10 +145,13 @@ namespace X_Ren_Py
 			animationOutTypeComboBox.ItemsSource = animationOut;
 
 			//start
+			XFrame firstFrame = createFrame(true);
 			ListView startListView =createLabel("start");
-			startListView.Items.Add(createFrame(true));
-			currentFrame = startListView.Items[0] as XFrame;
-			(startListView.Items[0] as XFrame).IsSelected = true;			
+			startListView.Items.Add(firstFrame);
+			currentFrame = firstFrame;
+			firstFrame.IsSelected = true;
+			//characters
+			characterListView.SelectedIndex = 0;		
 
 			//options
 			title.Text = "default";

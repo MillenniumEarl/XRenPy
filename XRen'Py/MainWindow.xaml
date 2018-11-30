@@ -38,7 +38,7 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="#FF7F7F7F" BorderThickness="1" Grid.ColumnSpan="2" Height="2" VerticalAlignment="Top" Grid.Row="1"/>
             <Label Content="Structure" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="110" Grid.Row="1" Foreground="#FFF0F0F0"/>
-            <TabControl x:Name="tabControlStruct" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="5,40,2,40" Grid.Row="1">
+            <TabControl x:Name="tabControlStruct" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="5,40,2,10" Grid.Row="1">
                 <TabItem Padding="0" Width="18" >
                     <TabItem.Header>
                         <Button Name="addTabButton" Click="addLabel_Click" Content="+" Cursor="" Padding="2,0,4,2" Margin="-1"/>
@@ -46,7 +46,7 @@
                 </TabItem>
             </TabControl>
             <Label Content="Resources" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1" Grid.Column="1" Foreground="#FFF0F0F0"/>
-            <TabControl x:Name="tabControlResources" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="4,45,3,40" Grid.Row="1" Grid.Column="1">
+            <TabControl x:Name="tabControlResources" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="4,45,3,10" Grid.Row="1" Grid.Column="1">
                 <TabItem Header="Background">
                     <ListView x:Name="backImageListView" Background="{x:Null}" SelectionMode="Single" >
                         <ListView.ContextMenu>
@@ -102,7 +102,7 @@
                     </ListView>
                 </TabItem>
             </TabControl>
-            <GridSplitter x:Name="gridSplitter1" Grid.Row="1" Cursor="SizeWE" Background="#FF7F7F7F" Width="2" HorizontalAlignment="Left" Grid.Column="1" Margin="0,40"/>
+            <GridSplitter x:Name="gridSplitter1" Grid.Row="1" Cursor="SizeWE" Background="#FF7F7F7F" Width="2" HorizontalAlignment="Left" Grid.Column="1" Margin="0,40,0,10"/>
             <Expander x:Name="optionsExpander" Header="Options" FontSize="24" Height="Auto" VerticalAlignment="Top" FlowDirection="RightToLeft" Expanded="mainexp_Expanded" Grid.ColumnSpan="2" Grid.RowSpan="2" HorizontalAlignment="Right" Width="Auto" Foreground="#FFF0F0F0" Padding="5,0,0,0">
                 <Grid Background="#7FFFFFFF" Height="500" VerticalAlignment="Top" FlowDirection="LeftToRight" Width="200">
                     <Rectangle Fill="White" Stroke="Black" Margin="5"/>
@@ -111,12 +111,12 @@
                     <!--<CheckBox x:Name="cyrillicchckbx" Content="Title contains cyrillic symbols" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="180" FontSize="12"/>-->
                     <Label Content="Build name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30,0,0" FontSize="10" Height="16" Width="64" Padding="5,0" Foreground="#FF7F7F7F"/>
                     <Label x:Name="buildName"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,30,0,0" FontSize="10" Height="16" Width="116" Padding="5,0" Foreground="#FF7F7F7F"/>
-                    <CheckBox x:Name="titleVisible" Content="Show name" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
+                    <CheckBox x:Name="titleVisible" Content="Show name" HorizontalAlignment="Left" Margin="15,54,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
                     <Label Content="Version" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" Padding="5,0" Height="20"/>
                     <TextBox x:Name="version" Margin="59,79,63,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" Text="1.0" />
-                    <CheckBox x:Name="containsMusic" Content="Enable music mixer" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
-                    <CheckBox x:Name="containsSound" Content="Enable sound mixer" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" FontSize="12" />
-                    <CheckBox x:Name="containsVoice" Content="Enable voice mixer" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" FontSize="12" />
+                    <CheckBox x:Name="containsMusic" Content="Enable music mixer" HorizontalAlignment="Left" Margin="15,104,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
+                    <CheckBox x:Name="containsSound" Content="Enable sound mixer" HorizontalAlignment="Left" Margin="15,119,0,0" VerticalAlignment="Top" FontSize="12" />
+                    <CheckBox x:Name="containsVoice" Content="Enable voice mixer" HorizontalAlignment="Left" Margin="15,134,0,0" VerticalAlignment="Top" FontSize="12" />
                     <Label Content="Text showing speed" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,154,0,0" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
                     <TextBox x:Name="textShowSpeed" Margin="150,154,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
                     <Label Content="Auto reader latency" HorizontalAlignment="Left" Margin="10,179,0,0" VerticalAlignment="Top" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
@@ -157,28 +157,6 @@
                     </StackPanel>
                 </Grid>
             </Expander>
-            <Expander x:Name="characterExpander" Header="Character" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="Auto" Width="Auto" ExpandDirection="Up" Collapsed="char_Collapsed" Grid.ColumnSpan="2" Grid.Row="1" Foreground="#FFF0F0F0" Margin="0" Padding="5,0,0,0" >
-                <Grid Background="#7FFFFFFF" Height="272" Width="294">
-                    <Rectangle Fill="White" Stroke="Black" Margin="5"/>
-                    <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,48" Width="130">
-                        <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none"/>
-                        <local:XCharacter Background="Gainsboro" Content="centered" Alias="centered"/>
-                        <local:XCharacter Background="Gainsboro" Content="extend" Alias="extend"/>
-                    </ListView>
-                    <Button x:Name="addCharacter" FontSize="12" Content="Add character" Margin="154,239,10,10" Click="addCharacter_Click"/>
-                    <TextBox x:Name="characterName" FontSize="12" Height="23" Margin="154,39,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                    <Label FontSize="12" Content="Character name" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="137"/>
-                    <Label FontSize="12" Content="Character name style" HorizontalAlignment="Left" Margin="154,73,0,0" VerticalAlignment="Top" Width="137"/>
-                    <CheckBox x:Name="characterNameBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,104,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="characterNameItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,104,0,0" VerticalAlignment="Top"/>
-                    <xctk:ColorPicker x:Name="charName_colorPicker" FontSize="12"  VerticalAlignment="Top" Margin="154,124,10,0" UsingAlphaChannel="False"/>
-                    <Label FontSize="12" Content="Character text style" HorizontalAlignment="Left" Margin="154,151,0,0" VerticalAlignment="Top" Width="137"/>
-                    <CheckBox x:Name="characterTextBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,182,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="characterTextItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,182,0,0" VerticalAlignment="Top"/>
-                    <xctk:ColorPicker x:Name="charText_colorPicker" FontSize="12" VerticalAlignment="Top" Margin="154,202,10,0" UsingAlphaChannel="False"/>
-                    <Button x:Name="editCharacter" FontSize="12" Content="Apply edit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="139" Click="editCharacter_Click" Margin="10,239,0,0" Height="23"/>
-                </Grid>
-            </Expander>
         </Grid>
         <Viewbox Grid.Column="1" Margin="5">
             <Grid x:Name="imagegrid" Height="720" Width="1280">
@@ -193,18 +171,70 @@
                 <Label x:Name="characterLabel" Content="Character" VerticalAlignment="Bottom" Height="38" VerticalContentAlignment="Center" FontSize="30" Margin="240,0,0,190" FontFamily="DejaVu Sans" HorizontalAlignment="Left" Width="545"/>
             </Grid>
         </Viewbox>
-        <Button x:Name="convertButton" Grid.Column="1" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="convertButton_Click" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" Height="100" VerticalAlignment="Top" Margin="5,5,0,0"/>
+        <Button x:Name="charactersButton" Grid.Column="1" Content="Characters" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="charactersButton_Click" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" Height="100" VerticalAlignment="Top" Margin="5,5,0,0"/>
         <Button x:Name="duplicateButton" Grid.Column="1" Content="Duplicate" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="duplicateFrame_Click" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,5"/>
         <Button x:Name="GUIButton" Grid.Column="1" Content="GUI" Background="#66FFFFFF" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="GUIButton_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,5,5,0"/>
         <Button x:Name="addEmptyFrameButton" Grid.Column="1" Content="Add next" Background="#66FFFFFF" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="addNextFrame_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Bottom" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,0,5,5"/>
         <Button x:Name="prevFrame" Grid.Column="1" Content="≪" HorizontalAlignment="Left" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="5,105,0,105"/>
         <Button x:Name="nextFrame" Grid.Column="1" Content="≫" HorizontalAlignment="Right" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="0,105,5,105"/>
-        <Grid Background="#7FFFFFFF" Height="40" VerticalAlignment="Top" FlowDirection="LeftToRight" Grid.Column="1" Margin="110,5,110,0">
+        <Grid  x:Name="GUIGrid" Background="#7FFFFFFF" Height="300" VerticalAlignment="Top" FlowDirection="LeftToRight" Grid.Column="1" Margin="0,10,110,0" HorizontalAlignment="Right" Width="270" Visibility="Collapsed">
             <Rectangle Fill="White" Stroke="Black" Margin="5"/>
             <Label Content="Width" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="10,10,0,0" VerticalContentAlignment="Center" Padding="5,0" Height="20"/>
             <TextBox x:Name="projectWidth" Margin="52,10,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectWidth_TextChanged" Text="1280" />
             <Label Content="Height" HorizontalAlignment="Left" Margin="97,10,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
             <TextBox x:Name="projectHeight" Margin="143,10,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" TextChanged="projectHeight_TextChanged" HorizontalAlignment="Left" Width="47" Text="720" />
+
+            <TabControl Margin="10,35,10,10" >
+                <TabItem Header="Colors">
+                    <Grid>
+                        <Label FontSize="12" Content="Headers/characters" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0" Margin="0,0,110,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorHeaders" FontSize="12"  VerticalAlignment="Top" UsingAlphaChannel="False" SelectedColor="#FF99CCFF" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Text" Margin="0,22,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorText" FontSize="12"  VerticalAlignment="Top" Margin="0,22,0,0" UsingAlphaChannel="False" SelectedColor="#FFFFFFFF" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Interface text" Margin="0,44,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorInterfaceText" FontSize="12"  VerticalAlignment="Top" Margin="0,44,0,0" SelectedColor="#FFFFFFFF" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Small text, idle state" Margin="0,66,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorSmallIdle" FontSize="12"  VerticalAlignment="Top" Margin="0,66,0,0" UsingAlphaChannel="False" SelectedColor="#FFAAAAAA" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Buttons, idle state" Margin="0,88,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorIdle" FontSize="12"  VerticalAlignment="Top" Margin="0,88,0,0" UsingAlphaChannel="False" SelectedColor="#FF888888" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Buttons, hover" Margin="0,110,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorHover" FontSize="12"  VerticalAlignment="Top" Margin="0,110,0,0" UsingAlphaChannel="False" SelectedColor="#FFc1e0ff" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Buttons, selected" Margin="0,132,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorSelected" FontSize="12"  VerticalAlignment="Top" Margin="0,132,0,0" UsingAlphaChannel="False" SelectedColor="#FFFFFFFF" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Buttons, insensitive" Margin="0,154,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorInsensitive" FontSize="12"  VerticalAlignment="Top" Margin="0,154,0,0" SelectedColor="#8888887f" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Images, muted" Margin="0,176,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorMuted" FontSize="12"  VerticalAlignment="Top" Margin="0,176,0,0" UsingAlphaChannel="False" SelectedColor="#FF3d5166" HorizontalAlignment="Right" Width="110"/>
+                        <Label FontSize="12" Content="Images, muted hover" Margin="0,198,110,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <xctk:ColorPicker x:Name="default_ColorHoverMuted" FontSize="12"  VerticalAlignment="Top" Margin="0,198,0,0" UsingAlphaChannel="False" SelectedColor="#FF5b7a99" HorizontalAlignment="Right" Width="110"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Fonts">
+                    <Grid>
+                        <Label FontSize="12" Content="Text" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0" Margin="0,20,170,0"/>
+                        <ComboBox x:Name="comboBox_FontText" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" Initialized="comboBox_Initialized" Padding="6,0,5,0" FontSize="16" Height="22" Margin="0,20,0,0"/>
+                        <Label FontSize="12" Content="Characters" Margin="0,42,170,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <ComboBox x:Name="comboBox_FontChar" Margin="0,42,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" Initialized="comboBox_Initialized" FontSize="16" Padding="6,0,5,0" Height="22"/>
+                        <Label FontSize="12" Content="Interface" Margin="0,64,170,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <ComboBox x:Name="comboBox_FontInterface" Margin="0,64,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" Initialized="comboBox_Initialized" Height="22" Padding="6,0,5,0" FontSize="16"/>
+                        <Label Content="Text" HorizontalAlignment="Left" Margin="0,107,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="fontTextSize" Margin="66,107,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="22" />
+                        <Label Content="Interface" HorizontalAlignment="Left" Margin="0,132,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="fontInterfaceSize" Margin="66,132,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="22" />
+                        <Label Content="Label" HorizontalAlignment="Left" Margin="0,157,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="fontLabelSize" Margin="66,157,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="24" />
+                        <Label Content="Notifications" HorizontalAlignment="Left" Margin="111,132,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="fontNotifySize" Margin="214,132,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="16" />
+                        <Label FontSize="12" Content="Size, pt" HorizontalAlignment="Left" Margin="1,91,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
+                        <Label FontSize="12" Content="Font" HorizontalAlignment="Left" Margin="1,4,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
+                        <Label Content="Character name" HorizontalAlignment="Left" Margin="111,107,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="fontCharacterNameSize" Margin="214,107,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="30" />
+                        <Label Content="Title" HorizontalAlignment="Left" Margin="111,157,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="fontTitleNameSize" Margin="214,157,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="50" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Images"/>
+            </TabControl>
         </Grid>
         <Expander x:Name="media" Grid.Column="1" Header="" ExpandDirection="Right" Background="#7F000000" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="hidden" Expanded="media_Expanded" Collapsed="media_Collapsed">
             <Grid Background="#7F7F7F7F" Width="480" Height="300">
@@ -251,5 +281,29 @@
                 </StackPanel>
             </Grid>
         </Expander>
+        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Visibility="Collapsed">
+            <Rectangle Fill="White" Stroke="Black" Margin="5"/>
+            <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">
+                <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" />
+                <local:XCharacter Background="Gainsboro" Content="centered" Alias="centered" Selected="uneditableCharacter_Selected"/>
+                <local:XCharacter Background="Gainsboro" Content="extend" Alias="extend" Selected="uneditableCharacter_Selected"/>
+            </ListView>
+            <Button x:Name="addCharacter" FontSize="12" Content="Add" Margin="154,267,82,0" Click="addCharacter_Click" Height="23" VerticalAlignment="Top"/>
+            <TextBox x:Name="characterName" FontSize="12" Height="20" Margin="154,96,9,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+            <Label FontSize="12" Content="Character name" HorizontalAlignment="Left" Margin="154,76,0,0" VerticalAlignment="Top" Width="135" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
+            <Label FontSize="12" Content="Name style" HorizontalAlignment="Left" Margin="154,121,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
+            <CheckBox x:Name="characterNameBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,142,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="characterNameItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,142,0,0" VerticalAlignment="Top"/>
+            <xctk:ColorPicker x:Name="charName_colorPicker" FontSize="12"  VerticalAlignment="Top" Margin="234,162,10,0" UsingAlphaChannel="False" SelectedColor="Transparent"/>
+            <Label FontSize="12" Content="Text style" HorizontalAlignment="Left" Margin="154,189,0,0" VerticalAlignment="Top" Width="136" Padding="5,0" VerticalContentAlignment="Center" Height="16" FontStyle="Italic"/>
+            <CheckBox x:Name="characterTextBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,210,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="characterTextItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,210,0,0" VerticalAlignment="Top"/>
+            <xctk:ColorPicker x:Name="charText_colorPicker" FontSize="12" VerticalAlignment="Top" Margin="235,230,9,0" UsingAlphaChannel="False" SelectedColor="Transparent"/>
+            <Button x:Name="editCharacter" FontSize="12" Content="Change" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67" Click="editCharacter_Click" Margin="223,267,0,0" Height="23"/>
+            <Label FontSize="12" Content="Text color" HorizontalAlignment="Left" Margin="154,230,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+            <Label FontSize="12" Content="Name color" HorizontalAlignment="Left" Margin="154,162,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+            <xctk:IconButton x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Background="{x:Null}" Click="icon_Click" Foreground="{x:Null}"/>
+            <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,12,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
+        </Grid>
     </Grid>
 </Window>

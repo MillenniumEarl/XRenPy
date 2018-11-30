@@ -74,13 +74,10 @@ namespace X_Ren_Py
 				if (addorselect) AudioInFrameProps.Add(new AudioProperties() { Frame = currentFrame, Audio = currentAudio, Loop=isLooped });
             getAudioProperties(currentFrame, currentAudio);
 			audioPropsPanel.Visibility = Visibility.Visible;
-			show = true;
-			if (addorselect) selectCheckedItem(sender);        
+			show = true; 
 		}
         private void audio_Unchecked(object sender, RoutedEventArgs e)
         {
-			if (addorselect) selectCheckedItem(sender);
-
             XAudio selectedAudio = ((sender as CheckBox).Parent as StackPanel).Parent as XAudio;
             string source = new Uri(selectedAudio.Path).ToString();
             if (removeorunselect) AudioInFrameProps.Remove(AudioInFrameProps.Find(i => i.Frame == currentFrame && i.Audio == selectedAudio));

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Win32;
+﻿using System.Windows;
 
 namespace X_Ren_Py
 {
@@ -16,11 +13,7 @@ namespace X_Ren_Py
 			createDirectories();
 			initializeAll();
         }
-
-		private void GUIButton_Click(object sender, RoutedEventArgs e)
-		{
-
-		}
+		
 
 		//string correctChecker(string text)
 		//{   //перенос строки

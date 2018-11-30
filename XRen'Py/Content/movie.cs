@@ -64,12 +64,9 @@ namespace X_Ren_Py
 			if (addorselect) currentFrame.Movie = currentMovie;
             movieBackground.Source = new Uri(currentMovie.Path.ToString());
 			show = true;
-			if (addorselect) selectCheckedItem(sender);
         }
         private void movie_Unchecked(object sender, RoutedEventArgs e)
         {
-			if (addorselect) selectCheckedItem(sender); 
-
             XMovie selectedMovie = (sender as CheckBox).Parent as XMovie;
             if (removeorunselect) currentFrame.Movie = null;
             movieBackground.Source = null;

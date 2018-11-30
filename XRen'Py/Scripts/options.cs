@@ -105,12 +105,11 @@ namespace X_Ren_Py
 								case "define config.end_game_transition": builder.Add("define config.end_game_transition = " + gameEndTransition.SelectedItem); break;
 								case "define config.window_show_transition": builder.Add("define config.window_show_transition = "+dialogShowTransition.SelectedItem); break;
 								case "define config.window_hide_transition": builder.Add("define config.window_hide_transition = "+dialogHideTransition.SelectedItem); break;
-								case "define config.window_icon": try{string iconPath = icon.Icon.Source.ToString();builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));}
+								case "define config.window_icon": try{string iconPath = icon.Icon.Source.ToString(); builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));}
 										catch (Exception) { builder.Add(singleLine); };	break;
 								default: break;
 							}
 						}
-
 					}
 					if (!found) builder.Add(singleLine);
 				}
@@ -194,14 +193,15 @@ namespace X_Ren_Py
 
 		private void icon_Click(object sender, RoutedEventArgs e)
 		{
-			OpenFileDialog imageDialog = new OpenFileDialog() { Filter = "Icon files (*.ico,*.png)|*.ico;*.png" };
+			OpenFileDialog imageDialog = new OpenFileDialog() { Filter = "Icon files (*.ico,*.png,*jpg,*.bmp)|*.ico;*.png;*jpg;*.bmp" };
 
 			if (imageDialog.ShowDialog() == true)
 			{
 				try
 				{
 					contentCollector(imageDialog.FileName, projectFolder+guiFolder + imageDialog.SafeFileName);
-					icon.Icon = new Image { Source = imageShow(projectFolder + guiFolder + imageDialog.SafeFileName) };
+					(sender as Xceed.Wpf.Toolkit.IconButton).Icon = new Image { Source = imageShow(projectFolder + guiFolder + imageDialog.SafeFileName) };
+					(sender as Xceed.Wpf.Toolkit.IconButton).Content = guiFolder + imageDialog.SafeFileName;					
 				}
 				catch (Exception) { MessageBox.Show("Please choose the image!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 			}

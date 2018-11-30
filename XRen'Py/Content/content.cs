@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace X_Ren_Py
 {
@@ -101,6 +102,7 @@ namespace X_Ren_Py
 		private bool _TextIsItalic;
 		private Color _NameColor;
 		private Color _TextColor;
+		private Image _Icon;
 		public string Alias { get { return _Alias; } set { _Alias = value; } }
 
 		public void ContentToAlias() { _Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
@@ -110,8 +112,8 @@ namespace X_Ren_Py
 		public bool NameIsItalic { get { return _NameIsItalic; } set { _NameIsItalic = value; } }
 		public bool TextIsBold { get { return _TextIsBold; } set { _TextIsBold = value; } }
 		public bool TextIsItalic { get { return _TextIsItalic; } set { _TextIsItalic = value; } }
-
-		public void loadCharacter(string singleLine)
+		public Image Icon { get { return _Icon; } set { _Icon = value; } }
+		public void loadCharacter(string singleLine, List<Image> characterIcons)
 		{
 			try
 			{
@@ -121,7 +123,11 @@ namespace X_Ren_Py
 				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
 				for (int prop = 0; prop < all.Length; prop++)
 				{
-					if (all[prop].StartsWith("color")) NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
+					if (all[prop].StartsWith("image"))
+					{
+						Icon = characterIcons.First(icon => icon.Source.ToString().Substring(singleLine.LastIndexOf('/') + 1, singleLine.LastIndexOf('.') - (singleLine.LastIndexOf('/') + 1)) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"",""));
+					}
+					else if (all[prop].StartsWith("color")) NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
 					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) NameIsBold = true;
 					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) NameIsItalic = true;
 					else if (all[prop].StartsWith("what_color")) TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
@@ -260,14 +266,9 @@ namespace X_Ren_Py
     
     public partial class MainWindow : Window
     {
-        private void selectCheckedItem(object sender)
-        {
-            (((sender as CheckBox).Parent as StackPanel).Parent as XContent).IsSelected = true;
-        }
-		
+
 		protected void content_Selected(object sender, RoutedEventArgs e)  
         {
-            //selectItem(sender);
             show = true;
 
             switch (sender.GetType().ToString())
@@ -302,7 +303,7 @@ namespace X_Ren_Py
             else MessageBox.Show("Empty header!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private void contentCollector(string currentPath, string projectPath)//збираємо контент докупи
+        private void contentCollector(string currentPath, string projectPath)
         {
 			if (File.Exists(projectPath))
 			{

@@ -28,14 +28,6 @@ namespace X_Ren_Py
 			imageViewer.Source = null;
 			media.Visibility = Visibility.Hidden;
 			show = false;
-		}
-
-		private void char_Collapsed(object sender, RoutedEventArgs e)
-		{
-			if (characterListView.SelectedItem != null)
-			{
-				saveCharacter();
-			}
-		}
+		}		
 	}
 }

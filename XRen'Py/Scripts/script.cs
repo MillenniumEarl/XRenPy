@@ -34,7 +34,7 @@ namespace X_Ren_Py
 								if (singleLine.Contains("Character"))
 								{
 									XCharacter character = new XCharacter();
-									character.loadCharacter(singleLine);
+									character.loadCharacter(singleLine, characterIcons);
 									characterListView.Items.Add(character);
 								}
 								else if (singleLine.Contains("audio."))
@@ -47,11 +47,15 @@ namespace X_Ren_Py
 								break;
 							case "image":
 								if (!singleLine.Contains("Movie"))
-								{
-									XImage image = new XImage();
-									image.loadImage(singleLine, projectFolder + "images\\");
-									imageMouseActions(image);
-									backImageListView.Items.Add(image);
+								{	if (singleLine.StartsWith("image side"))
+										characterIcons.Add(new Image() { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) });
+									else
+									{
+										XImage image = new XImage();
+										image.loadImage(singleLine, projectFolder + "images\\");
+										imageMouseActions(image);
+										backImageListView.Items.Add(image);
+									}
 								}
 								else
 								{
@@ -231,14 +235,15 @@ namespace X_Ren_Py
 			for (int i = 3; i < characterListView.Items.Count; i++)
 			{
 				XCharacter chosenCharacter = characterListView.Items[i] as XCharacter;
-				string color = "", bold = "", italic = "", what_color = "", what_bold = "", what_italic = "";
+				string icon="",color = "", bold = "", italic = "", what_color = "", what_bold = "", what_italic = "";
+				if (chosenCharacter.Icon.Source != null) { icon = ", image" + equalsQuote(chosenCharacter.Alias); writer.WriteLine("image side " + chosenCharacter.Alias + equalsQuote(chosenCharacter.Content.ToString())); }
 				if (chosenCharacter.NameColor.ToString() != "") color = ", color" + equalsQuote(chosenCharacter.NameColor.ToString().Remove(1, 2));
 				if (chosenCharacter.NameIsBold) bold = ", who_bold=True";
 				if (chosenCharacter.NameIsItalic) italic = ", who_italic=True";
 				if (chosenCharacter.TextColor.ToString() != "") what_color = ", what_color" + equalsQuote(chosenCharacter.TextColor.ToString().Remove(1, 2));
 				if (chosenCharacter.TextIsBold) what_bold = ", what_bold=True";
 				if (chosenCharacter.TextIsItalic) what_italic = ", what_italic=True";
-				writer.WriteLine(define + chosenCharacter.Alias + character + quote(chosenCharacter.Content.ToString()) + color + bold + italic + what_color + what_bold + what_italic + ")");
+				writer.WriteLine(define + chosenCharacter.Alias + character + quote(chosenCharacter.Content.ToString()) + icon + color + bold + italic + what_color + what_bold + what_italic + ")");
 			}
 
 			//end init
@@ -390,9 +395,7 @@ namespace X_Ren_Py
 		private void preSaveCurrentFrame()
 		{
 			//перед выбором фрейма нужно сохранить содержимое нынешнего выбранного фрейма
-			currentFrame.Content = currentFrame.Content.ToString().Substring(0, currentFrame.Content.ToString().IndexOf('['))+'['+textBox.Text+']';			
-				//может случиться, что мы начинаем выбирать другой фрейм без закрытия экспандеров с опциями и персонажем
-			characterExpander.IsExpanded = false;
+			currentFrame.Content = currentFrame.Content.ToString().Substring(0, currentFrame.Content.ToString().IndexOf('['))+'['+textBox.Text+']';	
 		}
 
 		private void selectFrame_Click(object sender, RoutedEventArgs e)
@@ -407,13 +410,13 @@ namespace X_Ren_Py
 			if (!currentFrame.isMenu)
 			{
 				menuStack.Visibility = Visibility.Hidden;
-				convertButton.Content = framemenu;
+				convertFrameMenu.Header = framemenu;
 				menuOptionsVisualList.ItemsSource = null;
 			}
 			else
 			{
 				menuStack.Visibility = Visibility.Visible;
-				convertButton.Content = menuframe;
+				convertFrameMenu.Header = menuframe;
 				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions; 				
 			}
 

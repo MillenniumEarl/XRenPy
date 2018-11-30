@@ -28,7 +28,7 @@ namespace X_Ren_Py
 					{
 						XCharacter character = new XCharacter() { };
 						characterProperties(character);
-						character.Selected += selectionChar_Click;
+						character.Selected += editableChar_Selected;
 						characterListView.Items.Add(character);
 					}
                 }
@@ -62,35 +62,59 @@ namespace X_Ren_Py
             else character.TextIsBold = false;
             if (characterTextItalic.IsChecked == true) character.TextIsItalic = true;
             else character.TextIsItalic = false;
-			character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor);
-            character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor);
-        }
+			character.Icon = iconCharacter.Icon;
+			if (charText_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor); else character.Background = null;
+			if (charName_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor); else character.Foreground = Brushes.Black;
+		}
 
-        private void selectionChar_Click(object sender, RoutedEventArgs e)
+        private void editableChar_Selected(object sender, RoutedEventArgs e)
         {
-            characterName.Text = (sender as XCharacter).Content.ToString();
+			editCharacter.IsEnabled = true;
+			characterName.Text = (sender as XCharacter).Content.ToString();
             charName_colorPicker.SelectedColor = (sender as XCharacter).NameColor;
             charText_colorPicker.SelectedColor = (sender as XCharacter).TextColor;
             characterNameBold.IsChecked = (sender as XCharacter).NameIsBold;
             characterNameItalic.IsChecked = (sender as XCharacter).NameIsItalic;
             characterTextBold.IsChecked = (sender as XCharacter).TextIsBold;
             characterTextItalic.IsChecked = (sender as XCharacter).TextIsItalic;
-        }
-        
-        private void saveCharacter()
+			iconCharacter.Icon = (sender as XCharacter).Icon;
+		}
+
+		private void uneditableCharacter_Selected(object sender, RoutedEventArgs e)
+		{
+			editCharacter.IsEnabled = false;
+		}
+
+		private void saveCharacter()
         {
-            currentFrame.Character = characterListView.SelectedItem as XCharacter;
+            currentFrame.Character = characterListView.SelectedItem as XCharacter;			
             characterLabel.Content = currentFrame.Character.Content;
-            characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor);
+			if (currentFrame.Character.NameColor != Color.FromArgb(0, 255, 255, 255)) characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor); else { characterLabel.Foreground = new SolidColorBrush(default_ColorHeaders.SelectedColor.Value); }//дефолтный цвет из GUI
             if (characterNameBold.IsChecked == true) characterLabel.FontWeight = FontWeights.Bold;
             else characterLabel.FontWeight = FontWeights.Normal;
             if (characterNameItalic.IsChecked == true) characterLabel.FontStyle = FontStyles.Italic;
             else characterLabel.FontStyle = FontStyles.Normal;
-            textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor);
-            if (characterTextBold.IsChecked == true) textBox.FontWeight = FontWeights.Bold;
+			if (currentFrame.Character.TextColor != Color.FromArgb(0, 255, 255, 255)) textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor); else { textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value); }//дефолтный цвет из GUI
+			if (characterTextBold.IsChecked == true) textBox.FontWeight = FontWeights.Bold;
             else textBox.FontWeight = FontWeights.Normal;
             if (characterTextItalic.IsChecked == true) textBox.FontStyle = FontStyles.Italic;
             else textBox.FontStyle = FontStyles.Normal;
         }
-    }
+
+		private void charactersButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (charactersButton.Background == Brushes.LightBlue)
+			{
+				charactersButton.Background = new SolidColorBrush(Color.FromArgb(102, 255, 255, 255));
+				CharactersGrid.Visibility = Visibility.Collapsed;
+				saveCharacter();
+			}
+			else
+			{
+				charactersButton.Background = Brushes.LightBlue;
+				CharactersGrid.Visibility = Visibility.Visible;
+				characterListView.SelectedItem = currentFrame.Character;
+			}
+		}
+	}
 }

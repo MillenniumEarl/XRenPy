@@ -8,11 +8,6 @@ namespace X_Ren_Py
 {
     public partial class MainWindow : Window
     {   
-        private void deleteOption_Click(object sender, RoutedEventArgs e)
-        {
-			currentFrame.MenuOptions.Remove((sender as Button).Parent as XMenuOption);
-		}
-
         private XMenuOption createMenuOption(bool root)
         { XMenuOption newmenuoption = new XMenuOption();
 			if (!root) { newmenuoption.Choice = "Menu option"; }
@@ -26,14 +21,14 @@ namespace X_Ren_Py
 			return newmenuoption;
         }
 		
-		private void convertButton_Click(object sender, RoutedEventArgs e)
+		private void convertFrameMenu_Click(object sender, RoutedEventArgs e)
 		{
-			if (convertButton.Content.ToString() == framemenu)
+			if (convertFrameMenu.Header.ToString() == framemenu)
 			{
 				currentFrame.isMenu = true;
 				currentFrame.MenuOptions = new ObservableCollection<XMenuOption> { createMenuOption(true) };
 				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions;
-				convertButton.Content = menuframe;
+				convertFrameMenu.Header = menuframe;
 				menuStack.Visibility = Visibility.Visible;
 			}
 			else
@@ -41,7 +36,7 @@ namespace X_Ren_Py
 				currentFrame.isMenu = false;
 				currentFrame.MenuOptions = null;
 				menuOptionsVisualList.ItemsSource = null;
-				convertButton.Content = framemenu;
+				convertFrameMenu.Header = framemenu;
 				menuStack.Visibility = Visibility.Hidden;
 			}
 		}
@@ -49,6 +44,10 @@ namespace X_Ren_Py
 		private void addOption_Click(object sender, RoutedEventArgs e)
 		{					
 			currentFrame.MenuOptions.Add(createMenuOption(false));
+		}
+		private void deleteOption_Click(object sender, RoutedEventArgs e)
+        {
+			currentFrame.MenuOptions.Remove((sender as Button).Parent as XMenuOption);
 		}
 		private void Link_Click(object sender, MouseButtonEventArgs e)
 		{
