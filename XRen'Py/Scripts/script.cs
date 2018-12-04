@@ -183,9 +183,7 @@ namespace X_Ren_Py
 			createDirectories();
 			FileStream fs = new FileStream(projectFolder + "script.rpy", FileMode.Create);
 			StreamWriter writer = new StreamWriter(fs);
-			//код для сохранения проекта
 			writer.WriteLine(scriptstart + nextLine);
-			//options.rpy
 			//init
 			writer.WriteLine(backgroundImages);
 			foreach (XImage image in backImageListView.Items)
@@ -236,7 +234,7 @@ namespace X_Ren_Py
 			{
 				XCharacter chosenCharacter = characterListView.Items[i] as XCharacter;
 				string icon="",color = "", bold = "", italic = "", what_color = "", what_bold = "", what_italic = "";
-				if (chosenCharacter.Icon.Source != null) { icon = ", image" + equalsQuote(chosenCharacter.Alias); writer.WriteLine("image side " + chosenCharacter.Alias + equalsQuote(chosenCharacter.Content.ToString())); }
+				if (chosenCharacter.Icon != null) { icon = ", image" + equalsQuote(chosenCharacter.Alias); writer.WriteLine("image side " + chosenCharacter.Alias + equalsQuote(chosenCharacter.Content.ToString())); }
 				if (chosenCharacter.NameColor.ToString() != "") color = ", color" + equalsQuote(chosenCharacter.NameColor.ToString().Remove(1, 2));
 				if (chosenCharacter.NameIsBold) bold = ", who_bold=True";
 				if (chosenCharacter.NameIsItalic) italic = ", who_italic=True";
@@ -328,6 +326,16 @@ namespace X_Ren_Py
 					}
 
 					//movie
+					if (chosenFrame.Movie != null)
+					{
+						if (previousFrame.Movie != chosenFrame.Movie)
+							writer.WriteLine(tab + "show " + chosenFrame.Movie.Alias);
+					}
+					else
+					{
+						if (chosenFrameNumber > 0 && previousFrame.BackgroundImage != null)
+							writer.WriteLine(tab + "hide " + previousFrame.Movie.Alias);
+					}
 
 					//Character
 					string character = "";
