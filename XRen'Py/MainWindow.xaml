@@ -284,9 +284,9 @@
         <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Visibility="Collapsed">
             <Rectangle Fill="White" Stroke="Black" Margin="5"/>
             <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">
-                <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" />
-                <local:XCharacter Background="Gainsboro" Content="centered" Alias="centered" Selected="uneditableCharacter_Selected"/>
-                <local:XCharacter Background="Gainsboro" Content="extend" Alias="extend" Selected="uneditableCharacter_Selected"/>
+                <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
+                <local:XCharacter Background="Gainsboro" Content="centered" Alias="centered" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
+                <local:XCharacter Background="Gainsboro" Content="extend" Alias="extend" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
             </ListView>
             <Button x:Name="addCharacter" FontSize="12" Content="Add" Margin="154,267,82,0" Click="addCharacter_Click" Height="23" VerticalAlignment="Top"/>
             <TextBox x:Name="characterName" FontSize="12" Height="20" Margin="154,96,9,0" TextWrapping="Wrap" VerticalAlignment="Top"/>

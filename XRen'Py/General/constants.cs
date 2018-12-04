@@ -62,7 +62,9 @@ namespace X_Ren_Py
 		string[] comparerOptions = {"define config.name","define gui.show_name","define config.version","define gui.about",
 			"define build.name","define config.has_sound","define config.has_music","define config.has_voice", "default preferences.text_cps", "default preferences.afm_time",
 "define config.enter_transition","define config.exit_transition","define config.after_load_transition","define config.end_game_transition","define config.window_icon"};
-		string[] comparerGui = { "gui.init", "define gui.accent_color" };
+		string[] comparerGui = { "gui.init", "define gui.accent_color", "define gui.idle_color", "define gui.idle_small_color", "define gui.hover_color", "define gui.selected_color",
+			"define gui.insensitive_color", "define gui.muted_color", "define gui.hover_muted_color", "define gui.text_color", "define gui.text_size","define gui.name_text_size","define gui.interface_text_size",
+			"define gui.label_text_size", "define gui.notify_text_size", "define gui.title_text_size" };
 		//ресурсы
 		string imageextensions = "Image files (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
         string audioextensions = "Audio files (*.wav, *.ogg, *.mp3, *.opus)|*.wav;*.ogg;*.mp3;*.opus";
