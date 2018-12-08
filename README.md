@@ -54,6 +54,7 @@ Features to add:
 Things to solve:
 - unexpected grid behaviour while changing the size of structure and resource blocks
 - strange program fail to start while being transferred to another PC
+- image DPI really matters, but we don't need it to matter (96 DPI is OK now)
 
 Things to test:
 - design
