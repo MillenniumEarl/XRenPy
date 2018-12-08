@@ -12,7 +12,7 @@ namespace X_Ren_Py
             InitializeComponent();
 			createDirectories();
 			initializeAll();
-        }		
+		}		
 
 		//string correctChecker(string text)
 		//{   //перенос строки

@@ -154,6 +154,7 @@ namespace X_Ren_Py
 		public bool? IsChecked { get { return _CheckBox.IsChecked; } set { _CheckBox.IsChecked = value; } }
         public CheckBox Checkbox { get { return _CheckBox; } set { _CheckBox = value; } }
         public string Header { get { return _Label.Content.ToString(); } set { _Label.Content = value; _Alias = value.ToLower().Substring(0, value.LastIndexOf('.')).Replace(" ","").Replace("-", ""); } }
+		public Brush TextColor { get { return _Label.Foreground; } set { _Label.Foreground = value; } }
 		
 		protected void createContent()
 		{			
@@ -270,26 +271,28 @@ namespace X_Ren_Py
 		protected void content_Selected(object sender, RoutedEventArgs e)  
         {
             show = true;
-
-            switch (sender.GetType().ToString())
-            {
-                case "X_Ren_Py.XImage":                    
-                    {
-                        currentImage = sender as XImage;
-                        if ((sender as XImage).IsChecked == true && ((sender as XImage).Parent as ListView) == imageListView) if(!addorselect) getImageProperties(currentFrame, sender as XImage);
-                    };
-                    break;
-                case "X_Ren_Py.XAudio":                    
-                    {
-                        currentAudio = sender as XAudio;
-                        if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(currentFrame, sender as XAudio);
-                    };
-                    break;
-                case "X_Ren_Py.XMovie":
-                    currentMovie = sender as XMovie;
-                    break;
-                default: return;
-            }
+			if (File.Exists((sender as XContent).Path))
+			{
+				switch (sender.GetType().ToString())
+				{
+					case "X_Ren_Py.XImage":
+						{
+							currentImage = sender as XImage;
+							if ((sender as XImage).IsChecked == true && ((sender as XImage).Parent as ListView) == imageListView) if (!addorselect) getImageProperties(currentFrame, sender as XImage);
+						};
+						break;
+					case "X_Ren_Py.XAudio":
+						{
+							currentAudio = sender as XAudio;
+							if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(currentFrame, sender as XAudio);
+						};
+						break;
+					case "X_Ren_Py.XMovie":
+						currentMovie = sender as XMovie;
+						break;
+					default: return;
+				}
+			}
         }
         
 		private void namechange_DoubleClick(object sender, MouseButtonEventArgs e)

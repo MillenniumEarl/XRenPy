@@ -4,6 +4,9 @@ using Microsoft.Win32;
 using System.Windows.Controls;
 using System.Linq;
 using System.Windows.Input;
+using AlbumArtExtraction;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace X_Ren_Py
 {
@@ -32,6 +35,44 @@ namespace X_Ren_Py
                 }
         }
 
+		private void audioReload_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog musDialog = new OpenFileDialog() { Filter = audioextensions };
+			if (musDialog.ShowDialog() == true)
+				try
+				{
+					currentAudio.Header = musDialog.SafeFileName;
+					currentAudio.Path = musDialog.FileName;
+					coverartShow(musDialog.FileName);
+					movieplayer.Source = new Uri(musDialog.FileName, UriKind.Absolute);
+					currentAudio.TextColor = Brushes.Black;
+					currentAudio.Checkbox.IsEnabled = true;
+				}
+				catch (Exception)
+				{
+					MessageBox.Show("Invalid audio", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+		}
+
+		private void coverartShow(string audiofile)
+		{
+			ID3v2AlbumArtExtractor extractID3 = new ID3v2AlbumArtExtractor();
+			ID3v22AlbumArtExtractor extractID3V2 = new ID3v22AlbumArtExtractor();
+
+			BitmapImage bitmapToShow = new BitmapImage();
+			bitmapToShow.BeginInit();
+			bitmapToShow.CacheOption = BitmapCacheOption.OnLoad;
+
+				if (extractID3V2.CheckType(audiofile) && extractID3V2.Extract(audiofile) != null)
+					bitmapToShow.StreamSource = extractID3V2.Extract(audiofile);
+				else if (extractID3.CheckType(audiofile) && extractID3.Extract(audiofile) != null)
+					bitmapToShow.StreamSource = extractID3.Extract(audiofile);
+				else bitmapToShow.UriSource = new Uri("Images/Music.png", UriKind.Relative);
+
+			bitmapToShow.EndInit();
+			coverart.Source = bitmapToShow;
+		}
+
 		private void audioMouseActions(XAudio newaudio)
 		{
 			newaudio.ContextMenu = cmAudio;
@@ -52,9 +93,9 @@ namespace X_Ren_Py
 				imagePropsPanel.Visibility = Visibility.Collapsed;
 				if (currentAudio != null)
 				{					
-					movieplayer.Source = new Uri(currentAudio.Path.ToString(), UriKind.Absolute);
+					movieplayer.Source = new Uri(currentAudio.Path, UriKind.Absolute);
 					mediaNameLabel.Content = currentAudio.Header;
-					coverartShow(currentAudio.Path.ToString());
+					coverartShow(currentAudio.Path);
 					if (currentAudio.IsChecked == true)
 					{
 						getAudioProperties(currentFrame, currentAudio);

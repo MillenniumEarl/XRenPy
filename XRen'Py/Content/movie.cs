@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace X_Ren_Py
 {
@@ -24,9 +25,28 @@ namespace X_Ren_Py
 						movieMouseActions(newmovie);
 						movieListView.Items.Add(newmovie);
 					}
-					catch (Exception) { MessageBox.Show("Please choose the audio!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+					catch (Exception) { MessageBox.Show("Please choose the movie!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                 }
         }
+
+		private void movieReload_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog vidDialog = new OpenFileDialog() { Filter = vidextensions };
+
+			if (vidDialog.ShowDialog() == true)
+				try
+				{
+					currentMovie.Header = vidDialog.SafeFileName;
+					currentMovie.Path = vidDialog.FileName;
+					movieplayer.Source = new Uri(vidDialog.FileName, UriKind.Absolute);
+					currentMovie.TextColor = Brushes.Black;
+					currentMovie.Checkbox.IsEnabled = true;
+				}
+				catch (Exception)
+				{
+					MessageBox.Show("Invalid movie", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+		}
 
 		private void movieMouseActions(XMovie newmovie)
 		{
@@ -49,7 +69,7 @@ namespace X_Ren_Py
 				if (currentMovie != null)
 				{	
 					mediaNameLabel.Content = currentMovie.Header;
-					movieplayer.Source = new Uri(currentMovie.Path.ToString(), UriKind.Absolute);
+					movieplayer.Source = new Uri(currentMovie.Path, UriKind.Absolute);
 				}
 			}
 		}
@@ -62,7 +82,7 @@ namespace X_Ren_Py
 			lastMovieChecked = currentMovie;
 
 			if (addorselect) currentFrame.Movie = currentMovie;
-            movieBackground.Source = new Uri(currentMovie.Path.ToString());
+            movieBackground.Source = new Uri(currentMovie.Path);
 			show = true;
         }
         private void movie_Unchecked(object sender, RoutedEventArgs e)

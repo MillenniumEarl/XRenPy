@@ -243,7 +243,7 @@
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid x:Name="audiomovie">
-                    <MediaElement x:Name="movieplayer" LoadedBehavior="Manual" MediaOpened="movieplayer_MediaOpened"/>
+                    <MediaElement x:Name="movieplayer" LoadedBehavior="Manual" MediaOpened="movieplayer_MediaOpened" />
                     <Image x:Name="coverart" Margin="120,15" Source="Images/Music.png"/>
                     <Grid>
                         <Grid.Effect>
