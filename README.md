@@ -31,19 +31,17 @@ Currently released application features:
 - changing/creating options.rpy with all available options except build options
 - changing/creating gui.rpy with colors and fonts available (connection as default is in process)
 - you can add your own icon of project
+- content can be reloaded if deleted
 
 Features to add:
 - checking of duplicate resources
-- different image and movies sizes and placement
-- multiple movies at once (not actually necessary, but who knows)
 - draggable tabs in structure tab control
 - draggable and resizeable visual elements in the view block with effect
 - project cleaning - removal of unnecessary resources
 - on loading of another project temporarily save the state of current project/make a transaction while loading so it completes only if everything load fine
 - new project manipulation logic:
-  (done) duplication of frames is primary action, inserting empty frames is secondary;
-  (done) merging of "add" and "insert" to inserting empty frame; 
-  (done) on selection of frame the resources that are shown/played in it are ticked and highlighted
+  - (done) duplication of frames is primary action;
+  - (done) on selection of frame the resources that are shown/played in it are ticked and highlighted
   - on selection of resource the frames it is shown in are also highlighted;
   - all resources have three-state checkboxes;    
   - the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
