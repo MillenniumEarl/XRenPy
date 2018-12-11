@@ -59,6 +59,7 @@ namespace X_Ren_Py
 		{
 			newimage.ContextMenu = cmImage;
 			newimage.Selected += content_Selected;
+			newimage.MouseUp += content_Selected;
 			newimage.MouseLeave += image_MouseLeave;
 			newimage.MouseEnter += image_Enter;
 			newimage.Checkbox.Checked += image_Checked;
@@ -174,7 +175,8 @@ namespace X_Ren_Py
 			{
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Bottom,
-				Stretch = Stretch.None				
+				Stretch = Stretch.None,
+							
 			};
 		}
 		private void imageDeleteFromList_Click(object sender, RoutedEventArgs e)
@@ -185,21 +187,16 @@ namespace X_Ren_Py
 
 		private BitmapImage imageShow(string path)
 		{
+			//thanks to Zombies With Coffee, LLC for this hack
+			var bytes = File.ReadAllBytes(path);
+			bytes[38] = 0xc4; bytes[39] = 0x0e; // HLL to 3780 (96 dpi)			
+			bytes[42] = 0xc4; bytes[43] = 0x0e; // VLL to 3780 (96 dpi)			
 			BitmapImage bitmapToShow = new BitmapImage();
-
-				bitmapToShow.BeginInit();
-				bitmapToShow.CacheOption = BitmapCacheOption.OnLoad;
-				bitmapToShow.UriSource = new Uri(path);
-				bitmapToShow.EndInit();
-				//int width = bitmapToShow.PixelWidth;
-				//int height = bitmapToShow.PixelHeight;
-
-				//int stride = width * 4; // 4 байта на пиксель
-				//var pixelData = new byte[stride * height];
-				//bitmapToShow.CopyPixels(pixelData, stride, 0);
-
-				//bitmapToShow = BitmapSource.Create(width, height, 96, 96, bitmapToShow.Format, bitmapToShow.Palette, pixelData, stride) as BitmapImage;
-
+			bitmapToShow.BeginInit();
+			bitmapToShow.CacheOption = BitmapCacheOption.OnLoad;
+			bitmapToShow.StreamSource = new MemoryStream(bytes);
+			//bitmapToShow.UriSource = new Uri(path);
+			bitmapToShow.EndInit();
 			return bitmapToShow;
 		}
 

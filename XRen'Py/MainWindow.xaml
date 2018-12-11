@@ -163,7 +163,7 @@
                 <Image x:Name="imageBackground" Height="720" Width="1280"/>
                 <MediaElement x:Name="movieBackground" Height="720" Width="1280" LoadedBehavior="Pause"/>
                 <Border x:Name="imageBorder" BorderBrush="Black" BorderThickness="1"/>
-                <StackPanel x:Name="menuStack" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="menuStack" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Collapsed">
                     <ListView x:Name="menuOptionsVisualList" Height="Auto" Background="#66FFFFFF"/>
                     <Button x:Name="addOptionButton" Click="addOption_Click" Content="+" FontSize="24" Padding="0" Background="#66FFFFFF"/>
                 </StackPanel>

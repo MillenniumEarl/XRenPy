@@ -128,7 +128,7 @@ namespace X_Ren_Py
 			reloadMovie = new MenuItem() { Header = "Reload audio" }; reloadMovie.Click += movieReload_Click;
 			deleteMovie = new MenuItem() { Header = "Delete movie" }; deleteMovie.Click += deleteVideo_Click;
 
-			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, duplicateFrame, convertFrameMenu, deleteFrame, stopAudio } };
+			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] { duplicateFrame, convertFrameMenu, deleteFrame, stopAudio } };
 			cmRootframe = new ContextMenu { ItemsSource = new MenuItem[] { addRootFrame, duplicateRootframe } };
 			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addLabel, addFrame, addMenu, deleteLabel } };
 			cmImage = new ContextMenu { ItemsSource = new MenuItem[] { addImage, reloadImage, deleteImage } };

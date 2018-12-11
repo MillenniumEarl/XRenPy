@@ -77,6 +77,7 @@ namespace X_Ren_Py
 		{
 			newaudio.ContextMenu = cmAudio;
 			newaudio.Selected += content_Selected;
+			newaudio.MouseUp += content_Selected;
 			newaudio.MouseLeave += audio_MouseLeave;
 			newaudio.MouseEnter += audiomovie_Enter;
 			newaudio.Checkbox.Checked += audio_Checked;

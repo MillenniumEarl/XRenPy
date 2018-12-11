@@ -52,6 +52,7 @@ namespace X_Ren_Py
 		{
 			newmovie.ContextMenu = cmMovie;
 			newmovie.Selected += content_Selected;
+			newmovie.MouseUp += content_Selected;
 			newmovie.MouseLeave += movie_MouseLeave;
 			newmovie.MouseEnter += audiomovie_Enter;
 			newmovie.Checkbox.Checked += movie_Checked;

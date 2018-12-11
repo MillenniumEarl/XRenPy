@@ -333,7 +333,7 @@ namespace X_Ren_Py
 					}
 					else
 					{
-						if (chosenFrameNumber > 0 && previousFrame.BackgroundImage != null)
+						if (chosenFrameNumber > 0 && previousFrame.Movie!= null)
 							writer.WriteLine(tab + "hide " + previousFrame.Movie.Alias);
 					}
 
@@ -361,42 +361,14 @@ namespace X_Ren_Py
 			}
 
 			writer.Close();
-
-
-			//BackgroundWorker worker = new BackgroundWorker();
-			//worker.DoWork += (o, ea) =>
-			//{
-			//	foreach (XImage image in backImageListView.Items)
-			//	{
-			//		writer.WriteLine("image " + image.Content.Substring(0, image.Content.LastIndexOf('.')) + "=\"" + image.Content + "\"");
-			//		contentCollector(image.Path, projectFolder + imagesFolder + image.Content);
-			//	}
-
-			//	foreach (XImage image in imageListView.Items)
-			//	{
-			//		writer.WriteLine("image " + image.Content.Substring(0, image.Content.LastIndexOf('.')) + "=\"" + image.Content + "\"");
-			//		contentCollector(image.Path, projectFolder + imagesFolder + image.Content);
-			//	}
-			//	writer.Close();
-
-			//	//use the Dispatcher to delegate the listOfStrings collection back to the UI
-			//	//Dispatcher.Invoke((Action)(() => _listBox.ItemsSource = listOfString));
-			//};
-			//worker.RunWorkerCompleted += (o, ea) =>
-			//{
-			//	busyIndicator.IsBusy = false;
-			//};
-			//busyIndicator.IsBusy = true;
-			//worker.RunWorkerAsync();	
 		}
 
 		private XFrame createFrame(bool root)
 		{
-			XFrame frame;
-			if (!root) { frame = new XFrame() { Content = "Frame " + framecount + " []", ContextMenu = cmFrame, Character = characterListView.Items[0] as XCharacter,AnimationInType=0, AnimationOutType = 0 }; }
-			else { frame = new XFrame() { Content = "Root frame " + framecount + " []", ContextMenu = cmRootframe, Character = characterListView.Items[0] as XCharacter, AnimationInType = 0, AnimationOutType = 0 }; }
+			XFrame frame = new XFrame() { Content = "Frame " + framecount + " []", Character = characterListView.Items[0] as XCharacter,AnimationInType=0, AnimationOutType = 0 };
+			if (!root) frame.ContextMenu = cmFrame; else frame.ContextMenu = cmRootframe;
 			frame.Selected += selectFrame_Click;
-			//frame.MouseDoubleClick += namechange_DoubleClick;
+			frame.MouseUp += selectFrame_Click;
 			framecount++;
 			return frame;
 		}

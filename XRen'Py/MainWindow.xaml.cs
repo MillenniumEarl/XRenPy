@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using PerMonitorDPI;
 
 namespace X_Ren_Py
 {
@@ -8,10 +9,11 @@ namespace X_Ren_Py
     public partial class MainWindow : Window
     {
         public MainWindow()
-        {
-            InitializeComponent();
+        {			
+			InitializeComponent();
 			createDirectories();
 			initializeAll();
+			new PerMonitorDpiBehavior(this);
 		}		
 
 		//string correctChecker(string text)
@@ -26,6 +28,5 @@ namespace X_Ren_Py
 		//        text = "u" + text;
 		//    return text;
 		//}
-
 	}
 }
