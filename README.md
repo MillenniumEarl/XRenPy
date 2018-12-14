@@ -34,18 +34,9 @@ Currently released application features:
 - content can be reloaded if deleted
 
 Features to add:
+- NVL
 - checking of duplicate resources
-- draggable tabs in structure tab control
 - draggable and resizeable visual elements in the view block with effect
-- project cleaning - removal of unnecessary resources
-- on loading of another project temporarily save the state of current project/make a transaction while loading so it completes only if everything load fine
-- new project manipulation logic:
-  - (done) duplication of frames is primary action;
-  - (done) on selection of frame the resources that are shown/played in it are ticked and highlighted
-  - on selection of resource the frames it is shown in are also highlighted;
-  - all resources have three-state checkboxes;    
-  - the resources that are shown somewhere in previous frames are also ticked, but when developer wants to remove any used resource before frame will appear, he ticks it as indeterminate state, which causes the removal of resource tick in all frames below;
-- log system
 - updater service
 - including newest Ren'Py version to the project (PyTom, hope you can hear me)
 
