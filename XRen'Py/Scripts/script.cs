@@ -95,10 +95,11 @@ namespace X_Ren_Py
 										}
 
 										if (framebody[0].StartsWith("menu"))
-										{
+										{	frame.isMenu = true;
+											frame.MenuOptions = new ObservableCollection<XMenuOption> { };
 											bool first = true;
 											for (int line = 1; line < framebody.Count - 1; line += 2)
-											{
+											{												
 												XMenuOption newmenuoption = new XMenuOption() { Choice = framebody[line].TrimEnd(':').Trim('"') };
 												newmenuoption.Delete.IsEnabled = !first;
 												newmenuoption.MenuAction.ItemsSource = menuActions;
@@ -116,7 +117,9 @@ namespace X_Ren_Py
 												else newmenuoption.MenuAction.SelectedIndex = 2;
 												newmenuoption.Delete.Click += deleteOption_Click;
 												newmenuoption.MouseUp += Link_Click;
-												first = false;
+
+												frame.MenuOptions.Add(newmenuoption);
+												first = false;	
 											}
 										}
 										else
