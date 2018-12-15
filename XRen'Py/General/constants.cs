@@ -52,11 +52,6 @@ namespace X_Ren_Py
 		//"define config.window";
 		//"define config.save_directory";
 
-		//строки для gui.rpy
-		//define gui.text_font = "DejaVuSans.ttf"
-		//define gui.name_text_font = "DejaVuSans.ttf"
-		//define gui.interface_text_font = "DejaVuSans.ttf"
-
 		//строка-компаратор
 		string[] comparerScript = { "define", "image", "label" };
 		string[] comparerOptions = {"define config.name","define gui.show_name","define config.version","define gui.about",
@@ -81,13 +76,14 @@ namespace X_Ren_Py
 		string menuframe = "Menu➤Frame";
 
 		//общие для всех элементы комбобоксов
-		ComboBoxItem jumpAction, callAction, passAction, emptyLabel;
+		ComboBoxItem jumpAction, callAction, passAction;
 
 		int framecount = 0;
 		XFrame currentFrame;
 		XImage currentImage;
 		XAudio currentAudio;
 		XMovie currentMovie;
+		List<ComboBoxItem> fonts;
 		List<ComboBoxItem> menuActions = new List<ComboBoxItem> { };
 		List<string> animationIn = new List<string>
 		{ "None","dissolve","fade","pixellate","move","moveinright","moveinleft","moveintop","moveinbottom","easeinright","easeinleft","easeintop","easeinbottom","zoomin","zoominout",
@@ -138,12 +134,10 @@ namespace X_Ren_Py
 			//menuOptions
 			jumpAction = new ComboBoxItem() { Content = "jump" };
 			callAction = new ComboBoxItem() { Content = "call" };
-			passAction = new ComboBoxItem() { Content = "pass" };
-			emptyLabel = new ComboBoxItem() { Visibility = Visibility.Collapsed };
+			passAction = new ComboBoxItem() { Content = "pass" };			
 			menuActions.Add(jumpAction);
 			menuActions.Add(callAction);
 			menuActions.Add(passAction);
-			menuLabelList.Add(emptyLabel);
 
 			//image animations
 			animationInTypeComboBox.ItemsSource = animationIn;
@@ -167,6 +161,38 @@ namespace X_Ren_Py
 			gameEndTransition.ItemsSource = animationOut; gameEndTransition.SelectedIndex = 0;
 			dialogShowTransition.ItemsSource = animationIn; dialogShowTransition.SelectedIndex = 1;
 			dialogHideTransition.ItemsSource = animationOut; dialogHideTransition.SelectedIndex = 1;
+
+			//gui: fonts
+			fonts = new List<ComboBoxItem> { };
+			FileInfo[] fontFiles = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Fonts)).GetFiles();
+			foreach (FileInfo font in fontFiles)
+			{
+				if (Fonts.GetFontFamilies(font.FullName).Count != 0)
+				{
+					Typeface type = Fonts.GetTypefaces(font.FullName).First();
+					string style = ""; string weight = ""; string stretch = "";
+					if (type.Style != FontStyles.Normal) style = " " + type.Style.ToString();
+					if (type.Weight != FontWeights.Normal) weight = " " + type.Weight.ToString();
+					if (type.Stretch != FontStretches.Normal) stretch = " " + type.Stretch.ToString();
+					ComboBoxItem newFont = new ComboBoxItem()
+					{
+						Content = type.FontFamily.Source.Substring(type.FontFamily.Source.IndexOf('#') + 1) + style + weight + stretch,
+						FontFamily = type.FontFamily,
+						FontStyle = type.Style,
+						FontWeight = type.Weight,
+						FontStretch = type.Stretch,
+						Tag = font.Name
+					};
+					fonts.Add(newFont);
+				}
+			}
+			comboBox_FontText.ItemsSource = fonts;
+			comboBox_FontChar.ItemsSource = fonts;
+			comboBox_FontInterface.ItemsSource = fonts;
+			ComboBoxItem selectedfont=fonts.FirstOrDefault(font => font.Content.ToString().Equals("DejaVu Sans"));
+			comboBox_FontText.SelectedItem = selectedfont;
+			comboBox_FontChar.SelectedItem = selectedfont;
+			comboBox_FontInterface.SelectedItem = selectedfont;
 		}
 
 		private void createDirectories()

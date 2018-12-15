@@ -9,13 +9,12 @@ namespace X_Ren_Py
     public partial class MainWindow : Window
     {   
         private XMenuOption createMenuOption(bool root)
-        { XMenuOption newmenuoption = new XMenuOption();
-			if (!root) { newmenuoption.Choice = "Menu option"; }
-			else { newmenuoption.Choice = "First option"; newmenuoption.Delete.IsEnabled = false; }			
+        { XMenuOption newmenuoption = new XMenuOption() { Choice= "Menu option"};
+			newmenuoption.Delete.IsEnabled = !root; 			
 			newmenuoption.MenuAction.ItemsSource = menuActions;
 			newmenuoption.MenuAction.SelectedIndex = 2;
 			newmenuoption.ActionLabel.ItemsSource = menuLabelList;
-			newmenuoption.ActionLabel.SelectedIndex = 1;
+			newmenuoption.ActionLabel.SelectedIndex = 0;
 			newmenuoption.Delete.Click += deleteOption_Click;
 			newmenuoption.MouseUp += Link_Click;
 			return newmenuoption;

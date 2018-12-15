@@ -16,7 +16,7 @@ namespace X_Ren_Py
 			framecount = 0;
 			projectExpander.IsExpanded = false;
 			for(int i=2; i<imagegrid.Children.IndexOf(imageBorder);i++) imagegrid.Children.RemoveAt(i);
-			for (int i = 1; i <=tabControlStruct.Items.Count; i++) tabControlStruct.Items.RemoveAt(i);
+			for (int i = 0; i <tabControlStruct.Items.Count; i++) tabControlStruct.Items.RemoveAt(i);
 			foreach (TabItem tab in tabControlResources.Items) (tab.Content as ListView).Items.Clear();
 			ImageInFrameProps.Clear(); AudioInFrameProps.Clear();
 		}

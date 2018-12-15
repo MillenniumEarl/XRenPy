@@ -14,19 +14,6 @@ namespace X_Ren_Py
 			createDirectories();
 			initializeAll();
 			new PerMonitorDpiBehavior(this);
-		}		
-
-		//string correctChecker(string text)
-		//{   //перенос строки
-		//    if (text.Contains("\n")) { }
-		//    //двойные кавычки
-		//    if (text.Contains("\""))
-		//        text = text.Replace("\"", "\\\"");
-		//    //кириллица
-		//    Regex reg = new Regex("[а-яёА-ЯЁ]+");
-		//    if (reg.IsMatch(text))
-		//        text = "u" + text;
-		//    return text;
-		//}
+		}
 	}
 }

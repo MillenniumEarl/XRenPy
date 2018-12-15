@@ -117,7 +117,7 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				File.Create(projectFolder + "options.rpy");
+				File.Create(projectFolder + "options.rpy").Close();
 				builder.Add("define config.name = _(" + quote(title.Text) + ')');
 				string show = "True"; if (titleVisible.IsChecked == false) show = "False"; builder.Add("define gui.show_name = " + show);
 				builder.Add("define config.version = " + quote(version.Text));
@@ -140,7 +140,7 @@ namespace X_Ren_Py
 				{ string iconPath = icon.Icon.Source.ToString();
 				builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));
 				}
-				catch (Exception) { };
+				catch (Exception) { };				
 			}			
 			File.WriteAllLines(projectFolder + "options.rpy", builder);
 		}
