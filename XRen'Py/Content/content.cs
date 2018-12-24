@@ -6,7 +6,6 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System;
-using System.Collections.Generic;
 
 namespace X_Ren_Py
 {
@@ -113,30 +112,6 @@ namespace X_Ren_Py
 		public bool TextIsBold { get { return _TextIsBold; } set { _TextIsBold = value; } }
 		public bool TextIsItalic { get { return _TextIsItalic; } set { _TextIsItalic = value; } }
 		public Image Icon { get { return _Icon; } set { _Icon = value; } }
-		public void loadCharacter(string singleLine, List<Image> characterIcons)
-		{
-			try
-			{
-				int firstquote = singleLine.IndexOf('"') + 1;
-				Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
-				Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
-				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
-				for (int prop = 0; prop < all.Length; prop++)
-				{
-					if (all[prop].StartsWith("image"))
-					{
-						Icon = characterIcons.First(icon => icon.Source.ToString().Substring(singleLine.LastIndexOf('/') + 1, singleLine.LastIndexOf('.') - (singleLine.LastIndexOf('/') + 1)) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"",""));
-					}
-					else if (all[prop].StartsWith("color")) NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
-					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) NameIsBold = true;
-					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) NameIsItalic = true;
-					else if (all[prop].StartsWith("what_color")) TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
-					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) TextIsBold = true;
-					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) TextIsItalic = true;
-				}
-			}
-			catch (Exception) { MessageBox.Show("Error: Character loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-		}
 
 }
 

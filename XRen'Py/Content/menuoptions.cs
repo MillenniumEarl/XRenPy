@@ -36,7 +36,7 @@ namespace X_Ren_Py
 				currentFrame.MenuOptions = null;
 				menuOptionsVisualList.ItemsSource = null;
 				convertFrameMenu.Header = framemenu;
-				menuStack.Visibility = Visibility.Hidden;
+				menuStack.Visibility = Visibility.Collapsed;
 			}
 		}
 

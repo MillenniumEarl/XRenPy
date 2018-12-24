@@ -15,10 +15,10 @@
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" MinWidth="320" MaxWidth="480"/>
+            <ColumnDefinition Width="318" MinWidth="318" MaxWidth="1054"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Left" Width="4">
+        <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Left" Width="4" >
             <GridSplitter.Background>
                 <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
                     <GradientStop Color="#FF7F7F7F" Offset="0.5"/>
@@ -38,16 +38,32 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="#FF7F7F7F" BorderThickness="1" Grid.ColumnSpan="2" Height="2" VerticalAlignment="Top" Grid.Row="1"/>
             <Label Content="Structure" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="110" Grid.Row="1" Foreground="#FFF0F0F0"/>
-            <TabControl x:Name="tabControlStruct" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="5,40,2,10" Grid.Row="1">
-                <TabItem Padding="0" Width="18" x:Name="addTab">
+            <TabControl x:Name="tabControlStruct" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="5,40,2,10" Grid.Row="1" TabStripPlacement="Left" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TabItem Padding="0" x:Name="addTab" MaxWidth="40">
                 <TabItem.Header>
-                    <Button x:Name="addTabButton" Click="addLabel_Click" Content="+" Cursor="" Padding="2,0,4,2" Margin="-1"/>
+                        <Button x:Name="addTabButton" Click="addLabel_Click" Content="+"/>
                 </TabItem.Header>
             </TabItem>
             </TabControl>
             <Label Content="Resources" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1" Grid.Column="1" Foreground="#FFF0F0F0"/>
-            <TabControl x:Name="tabControlResources" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="4,45,3,10" Grid.Row="1" Grid.Column="1">
-                <TabItem Header="Background">
+            <TabControl x:Name="tabControlResources" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="4,40,3,10" Grid.Row="1" Grid.Column="1" TabStripPlacement="Right" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TabControl.Resources>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="HeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{TemplateBinding Content}">                                        
+                                        <ContentPresenter.LayoutTransform>
+                                            <RotateTransform Angle="270" />
+                                        </ContentPresenter.LayoutTransform>
+                                    </ContentPresenter>                                    
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Padding" Value="1,10" />
+                    </Style>
+                </TabControl.Resources>
+                <TabItem Header="Background images">
                     <ListView x:Name="backImageListView" Background="{x:Null}" SelectionMode="Single" >
                         <ListView.ContextMenu>
                             <ContextMenu>
@@ -56,7 +72,7 @@
                         </ListView.ContextMenu>
                     </ListView>
                 </TabItem>
-                <TabItem Header="Images">
+                <TabItem Header="Character images">
                     <ListView x:Name="imageListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
@@ -83,7 +99,7 @@
                         </ListView.ContextMenu>
                     </ListView>
                 </TabItem>
-                <TabItem Header="Voice">
+                <TabItem Header="Voices">
                     <ListView x:Name="voiceListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
@@ -92,11 +108,20 @@
                         </ListView.ContextMenu>
                     </ListView>
                 </TabItem>
-                <TabItem Header="Movie">
+                <TabItem Header="Movies">
                     <ListView x:Name="movieListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add movie" Click="movieImport_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                    </ListView>
+                </TabItem>
+                <TabItem Header="Side images">
+                    <ListView x:Name="sideListView" Background="{x:Null}" SelectionMode="Single">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add image" Click="imageImport_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                     </ListView>

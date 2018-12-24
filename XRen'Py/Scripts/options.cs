@@ -37,8 +37,8 @@ namespace X_Ren_Py
 							case "define config.has_sound": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsSound.IsChecked = true; else containsSound.IsChecked = false; break;
 							case "define config.has_music": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsMusic.IsChecked = true; else containsMusic.IsChecked = false; break;
 							case "define config.has_voice": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice.IsChecked = true; else containsVoice.IsChecked = false; break;
-							case "default preferences.text_cps": textShowSpeed.Text = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "default preferences.afm_time": autoReaderLatency.Text = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
+							case "default preferences.text_cps": textShowSpeed.Text = value(singleLine); break;
+							case "default preferences.afm_time": autoReaderLatency.Text = value(singleLine); break;
 							case "define config.enter_transition": gameOpenTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
 							case "define config.intra_transition": gameIntraTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
 							case "define config.exit_transition": gameExitTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
@@ -105,7 +105,7 @@ namespace X_Ren_Py
 								case "define config.end_game_transition": builder.Add("define config.end_game_transition = " + gameEndTransition.SelectedItem); break;
 								case "define config.window_show_transition": builder.Add("define config.window_show_transition = "+dialogShowTransition.SelectedItem); break;
 								case "define config.window_hide_transition": builder.Add("define config.window_hide_transition = "+dialogHideTransition.SelectedItem); break;
-								case "define config.window_icon": try{string iconPath = icon.Icon.Source.ToString(); builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));}
+								case "define config.window_icon": try{string iconPath = icon.Icon.Source.ToString(); builder.Add("define config.window_icon" +esQuote(iconPath.Substring(iconPath.IndexOf(game) + 6)));}
 										catch (Exception) { builder.Add(singleLine); };	break;
 								default: break;
 							}
@@ -138,7 +138,7 @@ namespace X_Ren_Py
 				builder.Add("define config.window_hide_transition = " + dialogHideTransition.SelectedItem);
 				try
 				{ string iconPath = icon.Icon.Source.ToString();
-				builder.Add("define config.window_icon = " + quote(iconPath.Substring(iconPath.IndexOf(game) + 6)));
+				builder.Add("define config.window_icon" + esQuote(iconPath.Substring(iconPath.IndexOf(game) + 6)));
 				}
 				catch (Exception) { };				
 			}			

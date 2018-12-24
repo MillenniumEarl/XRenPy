@@ -13,12 +13,11 @@ namespace X_Ren_Py
 	{
 		private void clearAll()
 		{
-			framecount = 0;
 			projectExpander.IsExpanded = false;
 			for(int i=2; i<imagegrid.Children.IndexOf(imageBorder);i++) imagegrid.Children.RemoveAt(i);
 			for (int i = 0; i <tabControlStruct.Items.Count; i++) tabControlStruct.Items.RemoveAt(i);
 			foreach (TabItem tab in tabControlResources.Items) (tab.Content as ListView).Items.Clear();
-			ImageInFrameProps.Clear(); AudioInFrameProps.Clear();
+			ImageInFrameProps.Clear(); AudioInFrameProps.Clear(); menuLabelList.Clear();
 		}
 
 		private void NewProject_Click(object sender, RoutedEventArgs e)
@@ -108,8 +107,20 @@ namespace X_Ren_Py
 		}
 
 		private void Exit_Click(object sender, RoutedEventArgs e){Close();}
-		public string equalsQuote(string content) { return "=\"" + content + "\""; }
+		public string eQuote(string content) { return "=\"" + content + "\""; }
+		public string esQuote(string content) { return " = \"" + content + "\""; }
 		public string quote(string content) { return "\"" + content + "\""; }
+		
+		public static string value(string info)
+		{
+			info = info.Substring(info.IndexOf('=') + 1).TrimStart(' ').TrimEnd(':');
+
+			if (info.StartsWith("\"")) info = info.Trim('"');
+			else
+			if (info.StartsWith("'")) info = info.Trim('\'');
+
+			return info;
+		}
 	}
 }
 

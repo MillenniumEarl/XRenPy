@@ -58,7 +58,8 @@ namespace X_Ren_Py
 			"define build.name","define config.has_sound","define config.has_music","define config.has_voice", "default preferences.text_cps", "default preferences.afm_time",
 "define config.enter_transition","define config.exit_transition","define config.after_load_transition","define config.end_game_transition","define config.window_icon"};
 		string[] comparerGui = { "gui.init", "define gui.accent_color", "define gui.idle_color", "define gui.idle_small_color", "define gui.hover_color", "define gui.selected_color",
-			"define gui.insensitive_color", "define gui.muted_color", "define gui.hover_muted_color", "define gui.text_color", "define gui.text_size","define gui.name_text_size","define gui.interface_text_size",
+			"define gui.insensitive_color", "define gui.muted_color", "define gui.hover_muted_color", "define gui.text_color", "define gui.text_font", "define gui.name_text_font", "define gui.interface_text_font",
+			"define gui.text_size","define gui.name_text_size","define gui.interface_text_size",
 			"define gui.label_text_size", "define gui.notify_text_size", "define gui.title_text_size" };
 		//ресурсы
 		string imageextensions = "Image files (*.bmp, *.jpg, *.png, *.webp)|*.bmp;*.jpg;*.png;*.webp";
@@ -78,7 +79,6 @@ namespace X_Ren_Py
 		//общие для всех элементы комбобоксов
 		ComboBoxItem jumpAction, callAction, passAction;
 
-		int framecount = 0;
 		XFrame currentFrame;
 		XImage currentImage;
 		XAudio currentAudio;
@@ -92,7 +92,7 @@ namespace X_Ren_Py
 		{"None","dissolve","fade","pixellate","move","moveoutright","moveoutleft","moveouttop","moveoutbottom","easeoutright","easeoutleft","easeouttop","easeoutbottom","zoomout","zoominout",
 			"vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideawayleft","slideawayright","slideawayup","slideawaydown","pushright","pushleft","pushtop","pushbottom","irisout" };
 		ObservableCollection<ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
-		List<Image> characterIcons = new List<Image> { };
+		
 		List<ImageProperties> ImageInFrameProps = new List<ImageProperties> { };
 		List<AudioProperties> AudioInFrameProps = new List<AudioProperties> { };
 		bool removeorunselect = true;//переключатель удаления взаимосвязей выделенных ресурсов. При выборе фрейма их не надо удалять, потому 0, при снятии галочки вручную - 1
