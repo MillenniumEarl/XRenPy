@@ -23,37 +23,28 @@ namespace X_Ren_Py
 			while (!reader.EndOfStream)
 			{
 				singleLine = reader.ReadLine().TrimStart(' ');
-				for (int compare = 0; compare < comparerOptions.Length; compare++)
-				{
-					if (singleLine.StartsWith(comparerOptions[compare]))
-					{
-						switch (comparerOptions[compare])
-						{
-							case "define config.name": title.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1)); break;
-							case "define gui.show_name": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") titleVisible.IsChecked = true; else titleVisible.IsChecked = false; break;
-							case "define config.version": version.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1)); break;
-							case "define gui.about": about.Text = singleLine.Substring(singleLine.IndexOf("\"\"\"") + 3); break;
-							case "define build.name": buildName.Content = singleLine.Substring(singleLine.IndexOf('"')).Replace("\"",""); break;
-							case "define config.has_sound": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsSound.IsChecked = true; else containsSound.IsChecked = false; break;
-							case "define config.has_music": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsMusic.IsChecked = true; else containsMusic.IsChecked = false; break;
-							case "define config.has_voice": if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice.IsChecked = true; else containsVoice.IsChecked = false; break;
-							case "default preferences.text_cps": textShowSpeed.Text = value(singleLine); break;
-							case "default preferences.afm_time": autoReaderLatency.Text = value(singleLine); break;
-							case "define config.enter_transition": gameOpenTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.intra_transition": gameIntraTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.exit_transition": gameExitTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.after_load_transition": gameStartTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.end_game_transition": gameEndTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.window_show_transition": dialogShowTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.window_hide_transition": dialogHideTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' '); break;
-							case "define config.window_icon": icon.Icon = new Image { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) }; break;
-							default: break;
-						}
-						break;
-					}
-				}
+				if (singleLine.StartsWith("define config.name"))						title.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1));
+				else if (singleLine.StartsWith("define gui.show_name"))					{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") titleVisible.IsChecked = true; else titleVisible.IsChecked = false; }
+				else if (singleLine.StartsWith("define config.version"))				version.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1));
+				else if (singleLine.StartsWith("define gui.about"))						about.Text = singleLine.Substring(singleLine.IndexOf("\"\"\"") + 3);
+				else if (singleLine.StartsWith("define build.name"))					buildName.Content = singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "");
+				else if (singleLine.StartsWith("define config.has_sound"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsSound.IsChecked = true; else containsSound.IsChecked = false; }
+				else if (singleLine.StartsWith("define config.has_music"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsMusic.IsChecked = true; else containsMusic.IsChecked = false; }
+				else if (singleLine.StartsWith("define config.has_voice"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice.IsChecked = true; else containsVoice.IsChecked = false; }
+				else if (singleLine.StartsWith("default preferences.text_cps"))			textShowSpeed.Text = value(singleLine);
+				else if (singleLine.StartsWith("default preferences.afm_time"))			autoReaderLatency.Text = value(singleLine);
+				else if (singleLine.StartsWith("define config.enter_transition"))		gameOpenTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.intra_transition"))		gameIntraTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.exit_transition"))		gameExitTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.after_load_transition"))	gameStartTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.end_game_transition"))	gameEndTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.window_show_transition")) dialogShowTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.window_hide_transition")) dialogHideTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.window_icon"))			icon.Icon = new Image { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) };
 			}
 		}
+
+
 
 		private void saveOptions()
 		{			
@@ -68,50 +59,27 @@ namespace X_Ren_Py
 				while (!reader.EndOfStream)
 				{
 					singleLine = reader.ReadLine();
-					bool found = false;
-					for (int compare = 0; compare < comparerOptions.Length; compare++)
-					{
-						if (singleLine.StartsWith(comparerOptions[compare]))
-						{
-							found = true;
-							switch (comparerOptions[compare])
-							{
-								case "define config.name":builder.Add("define config.name = _(" + quote(title.Text) + ')');	break;
-								case "define gui.show_name":
-										string show = "True";
-										if (titleVisible.IsChecked == false) show = "False";
-										builder.Add("define gui.show_name = " + show);	break;									
-								case "define config.version":builder.Add("define config.version = " + quote(version.Text));break;									
-								case "define gui.about":builder.Add("define gui.about = _p(\"\"\"" + about.Text);break;							
-								case "define build.name":builder.Add("define build.name = " + quote(buildName.Content.ToString()));break;
-								case "define config.has_sound":
-										string sound = "True";
-										if (containsSound.IsChecked == false) sound = "False";
-										builder.Add("define config.has_sound = " + sound); break;
-								case "define config.has_music":
-										string music = "True";
-										if (containsMusic.IsChecked == false) music = "False";
-										builder.Add("define config.has_music = " + music); break;
-								case "define config.has_voice":
-										string voice = "True";
-										if (containsVoice.IsChecked == false) voice = "False";
-										builder.Add("define config.has_voice = " + voice); break;
-								case "default preferences.text_cps": builder.Add("default preferences.text_cps = " + textShowSpeed.Text); break;
-								case "default preferences.afm_time":builder.Add("default preferences.afm_time = " + autoReaderLatency.Text);break;
-								case "define config.enter_transition": builder.Add("define config.enter_transition = " + gameOpenTransition.SelectedItem); break;
-								case "define config.intra_transition": builder.Add("define config.intra_transition = "+gameIntraTransition.SelectedItem); break;
-								case "define config.exit_transition": builder.Add("define config.exit_transition = " + gameExitTransition.SelectedItem); break;
-								case "define config.after_load_transition": builder.Add("define config.after_load_transition = " + gameStartTransition.SelectedItem); break;
-								case "define config.end_game_transition": builder.Add("define config.end_game_transition = " + gameEndTransition.SelectedItem); break;
-								case "define config.window_show_transition": builder.Add("define config.window_show_transition = "+dialogShowTransition.SelectedItem); break;
-								case "define config.window_hide_transition": builder.Add("define config.window_hide_transition = "+dialogHideTransition.SelectedItem); break;
-								case "define config.window_icon": try{string iconPath = icon.Icon.Source.ToString(); builder.Add("define config.window_icon" +esQuote(iconPath.Substring(iconPath.IndexOf(game) + 6)));}
-										catch (Exception) { builder.Add(singleLine); };	break;
-								default: break;
-							}
-						}
-					}
-					if (!found) builder.Add(singleLine);
+					if (singleLine.StartsWith("define config.name")) builder.Add("define config.name = _(" + quote(title.Text) + ')');
+					else if (singleLine.StartsWith("define gui.show_name")) { string show = "True"; if (titleVisible.IsChecked == false) show = "False"; builder.Add("define gui.show_name = " + show); }
+					else if (singleLine.StartsWith("define config.version")) builder.Add("define config.version = " + quote(version.Text));
+					else if (singleLine.StartsWith("define gui.about")) builder.Add("define gui.about = _p(\"\"\"" + about.Text);
+					else if (singleLine.StartsWith("define build.name")) builder.Add("define build.name = " + quote(buildName.Content.ToString()));
+					else if (singleLine.StartsWith("define config.has_sound")) { string sound = "True"; if (containsSound.IsChecked == false) sound = "False"; builder.Add("define config.has_sound = " + sound); }
+					else if (singleLine.StartsWith("define config.has_music")) { string music = "True"; if (containsMusic.IsChecked == false) music = "False"; builder.Add("define config.has_music = " + music); }
+					else if (singleLine.StartsWith("define config.has_voice")) { string voice = "True"; if (containsVoice.IsChecked == false) voice = "False"; builder.Add("define config.has_voice = " + voice); }
+					else if (singleLine.StartsWith("default preferences.text_cps")) builder.Add("default preferences.text_cps = " + textShowSpeed.Text);
+					else if (singleLine.StartsWith("default preferences.afm_time")) builder.Add("default preferences.afm_time = " + autoReaderLatency.Text);
+					else if (singleLine.StartsWith("define config.enter_transition")) builder.Add("define config.enter_transition = " + gameOpenTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.intra_transition")) builder.Add("define config.intra_transition = " + gameIntraTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.exit_transition")) builder.Add("define config.exit_transition = " + gameExitTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.after_load_transition")) builder.Add("define config.after_load_transition = " + gameStartTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.end_game_transition")) builder.Add("define config.end_game_transition = " + gameEndTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.window_show_transition")) builder.Add("define config.window_show_transition = " + dialogShowTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.window_hide_transition")) builder.Add("define config.window_hide_transition = " + dialogHideTransition.SelectedItem);
+					else if (singleLine.StartsWith("define config.window_icon"))
+						try { string iconPath = icon.Icon.Source.ToString(); builder.Add("define config.window_icon" + esQuote(iconPath.Substring(iconPath.IndexOf(game) + 6))); }
+						catch (Exception) { builder.Add(singleLine); }
+					else builder.Add(singleLine);
 				}
 				reader.Close();
 			}

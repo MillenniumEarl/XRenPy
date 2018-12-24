@@ -39,6 +39,13 @@
             <Border BorderBrush="#FF7F7F7F" BorderThickness="1" Grid.ColumnSpan="2" Height="2" VerticalAlignment="Top" Grid.Row="1"/>
             <Label Content="Structure" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="110" Grid.Row="1" Foreground="#FFF0F0F0"/>
             <TabControl x:Name="tabControlStruct" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="5,40,2,10" Grid.Row="1" TabStripPlacement="Left" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="AllowDrop" Value="True"/>
+                        <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove"/>
+                        <EventSetter Event="Drop" Handler="TabItem_Drop"/>
+                    </Style>
+                </TabControl.Resources>
                 <TabItem Padding="0" x:Name="addTab" MaxWidth="40">
                 <TabItem.Header>
                         <Button x:Name="addTabButton" Click="addLabel_Click" Content="+"/>
@@ -184,7 +191,7 @@
         </Grid>
         <Viewbox Grid.Column="1" Margin="5">
             <Grid x:Name="imagegrid" Height="720" Width="1280">
-                <Image x:Name="imageBackground" Height="720" Width="1280"/>
+                <Image x:Name="imageBackground" Height="720" Width="1280" UseLayoutRounding="True" ClipToBounds="True" Stretch="None"/>
                 <MediaElement x:Name="movieBackground" Height="720" Width="1280" LoadedBehavior="Pause"/>
                 <Border x:Name="imageBorder" BorderBrush="Black" BorderThickness="1"/>
                 <StackPanel x:Name="menuStack" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Collapsed">
@@ -282,7 +289,7 @@
                         <Label x:Name="mediaNameLabel" Content="" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
                     </Grid>
                 </Grid>
-                <Image x:Name="imageViewer"/>
+                <Image x:Name="imageViewer" UseLayoutRounding="True"/>
                 <StackPanel x:Name="imagePropsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Row="1" Visibility="Hidden">
                     <Label x:Name="alignLabel" Content="Alignment"/>
                     <ComboBox x:Name="alignComboBox" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" VerticalContentAlignment="Center" SelectionChanged="alignComboBox_SelectionChanged">

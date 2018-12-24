@@ -127,26 +127,24 @@ namespace X_Ren_Py
 		{
 			currentImage = ((sender as CheckBox).Parent as StackPanel).Parent as XImage;
 
-				if (currentImage.Parent == backImageListView)
-				{
-					if (lastImageChecked != null && lastImageChecked != currentImage) lastImageChecked.IsChecked = false;
-					lastImageChecked = currentImage;
+			if (currentImage.Parent == backImageListView)
+			{
+				if (lastImageChecked != null && lastImageChecked != currentImage) lastImageChecked.IsChecked = false;
+				lastImageChecked = currentImage;
 
-					if (addorselect) currentFrame.BackgroundImage = currentImage;
-					imageBackground.Source = imageShow(currentImage.Path);
-					showImagePropsBackground();
-				}
-				else
-				{
-					if (addorselect)
-					{
-						ImageInFrameProps.Add(new ImageProperties() { Frame = currentFrame, Image = currentImage, Displayable = newDisplayable() });
-					}
-					Image img = ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage).Displayable;
-					img.Source = imageShow(currentImage.Path);
-					imagegrid.Children.Insert(imagegrid.Children.IndexOf(imageBorder), img);
-					showImagePropsCharacter(currentImage);
-				}
+				if (addorselect) currentFrame.BackgroundImage = currentImage;
+				imageBackground.Source = imageShow(currentImage.Path);
+				showImagePropsBackground();
+			}
+			else
+			{
+				if (addorselect)				
+					ImageInFrameProps.Add(new ImageProperties() { Frame = currentFrame, Image = currentImage, Displayable = newDisplayable() });
+				Image img = ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage).Displayable;
+				img.Source = imageShow(currentImage.Path);
+				imagegrid.Children.Insert(imagegrid.Children.IndexOf(imageBorder), img);
+				showImagePropsCharacter(currentImage);
+			}
 				imagePropsPanel.Visibility = Visibility.Visible;
 				show = true;
 		}
@@ -176,27 +174,32 @@ namespace X_Ren_Py
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Bottom,
 				Stretch = Stretch.None,
-							
+				ClipToBounds = true						
 			};
 		}
 		private void imageDeleteFromList_Click(object sender, RoutedEventArgs e)
-		{
+		{	
 			foreach (ImageProperties image in ImageInFrameProps.Where(image => image.Image == sender)) ImageInFrameProps.Remove(image);
 			resourcesSelectedItem_delete();
 		}
 
 		private BitmapImage imageShow(string path)
 		{
-			//thanks to Zombies With Coffee, LLC for this hack
-			var bytes = File.ReadAllBytes(path);
-			bytes[38] = 0xc4; bytes[39] = 0x0e; // HLL to 3780 (96 dpi)			
-			bytes[42] = 0xc4; bytes[43] = 0x0e; // VLL to 3780 (96 dpi)			
+			BitmapImage bitmapDPI = new BitmapImage();
+			bitmapDPI.BeginInit();
+			bitmapDPI.UriSource = new Uri(path);
+			bitmapDPI.EndInit();
+			int decodex = Convert.ToInt32(bitmapDPI.Width * (bitmapDPI.DpiX / 96) * (bitmapDPI.DpiX / 96));
+			int decodey = Convert.ToInt32(bitmapDPI.Height * (bitmapDPI.DpiY / 96) * (bitmapDPI.DpiY / 96));
+
 			BitmapImage bitmapToShow = new BitmapImage();
 			bitmapToShow.BeginInit();
+			bitmapToShow.UriSource = new Uri(path);
+			bitmapToShow.DecodePixelWidth = decodex;
+			bitmapToShow.DecodePixelHeight = decodey;
 			bitmapToShow.CacheOption = BitmapCacheOption.OnLoad;
-			bitmapToShow.StreamSource = new MemoryStream(bytes);
-			//bitmapToShow.UriSource = new Uri(path);
 			bitmapToShow.EndInit();
+
 			return bitmapToShow;
 		}
 
