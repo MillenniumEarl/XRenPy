@@ -30,8 +30,7 @@ namespace X_Ren_Py
 				DragDrop.DoDragDrop(tabItem, tabItem, DragDropEffects.All);
 			}
 		}
-
-
+		
 		private void TabItem_Drop(object sender, DragEventArgs e)
 		{
 			if (e.Source != addTab && e.Source != addTabButton)
@@ -52,6 +51,32 @@ namespace X_Ren_Py
 					tabControl.Items.Insert(sourceIndex, tabItemTarget);
 				}
 			}
+		}
+
+		private void mainexp_Expanded(object sender, RoutedEventArgs e)
+		{
+			if (sender == projectExpander)
+				optionsExpander.IsExpanded = false;
+			else projectExpander.IsExpanded = false;
+		}
+
+		private void maingrid_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			optionsExpander.IsExpanded = false;
+			projectExpander.IsExpanded = false;
+		}
+
+		private void media_Expanded(object sender, RoutedEventArgs e)
+		{
+			media.Visibility = Visibility.Visible;
+		}
+
+		private void media_Collapsed(object sender, RoutedEventArgs e)
+		{
+			if (movieplayer.IsLoaded) movieplayer.Stop();
+			imageViewer.Source = null;
+			media.Visibility = Visibility.Hidden;
+			show = false;
 		}
 	}
 }

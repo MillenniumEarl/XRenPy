@@ -12,7 +12,6 @@ namespace X_Ren_Py
         public HeaderChange()
         {
             InitializeComponent();
-
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

@@ -9,7 +9,42 @@ using System;
 
 namespace X_Ren_Py
 {
+	public class XLabel : TabItem
+	{
+		private TextBox _Editable = new TextBox() {Visibility=Visibility.Collapsed };
+		private Label _Visible = new Label();
+		public string Text { get { return _Visible.Content.ToString(); } set { _Visible.Content = value; } }
+		public XLabel()
+		{
+			StackPanel stack = new StackPanel();
+			stack.Children.Add(_Editable);
+			stack.Children.Add(_Visible);
+			_Visible.MouseDoubleClick += label_DoubleClick;
+			_Editable.LostFocus += label_LostFocus;
+			Header = stack;
+		}
 
+		private void label_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (_Editable.Text != "start")
+			{
+				Text = _Editable.Text;
+				_Visible.Visibility = Visibility.Visible;
+				_Editable.Visibility = Visibility.Collapsed;
+			}
+			else MessageBox.Show("Error: Label can't be renamed to \"start\"", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+
+		private void label_DoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (_Visible.Content.ToString() != "start")
+			{
+				_Editable.Visibility = Visibility.Visible;
+				_Visible.Visibility = Visibility.Collapsed;
+			}
+			else MessageBox.Show("Error: Label \"start\" can't be renamed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+	}
 	public class XFrame : ListViewItem
 	{
 		//string _Content;

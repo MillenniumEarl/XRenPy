@@ -30,8 +30,9 @@ namespace X_Ren_Py
 						XImage newimage = new XImage() { Header = name, Path = currentPath };
 						imageMouseActions(newimage);
 
-						if (tabControlResources.SelectedContent == backImageListView) { backImageListView.Items.Add(newimage); }
-						else { imageListView.Items.Add(newimage); }
+						if (tabControlResources.SelectedContent == backImageListView) backImageListView.Items.Add(newimage);
+						else if (tabControlResources.SelectedContent == imageListView) imageListView.Items.Add(newimage);
+						else { newimage.Checkbox.Visibility=Visibility.Hidden; newimage.Tag = new Image { Source = imageShow(currentPath) }; sideListView.Items.Add(newimage); }				
 					}
 					catch (Exception) { MessageBox.Show("Please choose the image!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 				}

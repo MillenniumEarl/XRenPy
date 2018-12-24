@@ -63,8 +63,9 @@ namespace X_Ren_Py
 		SolidColorBrush unusedResourceColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
 		//контекстные меню
-		MenuItem addLabel, deleteLabel, addFrame, addRootFrame, duplicateFrame, duplicateRootframe, convertFrameMenu, deleteFrame, addMenu, addImage, deleteImage, reloadImage, addAudio, deleteAudio, stopAudio, reloadAudio, addMovie, deleteMovie, reloadMovie;
-		ContextMenu cmFrame, cmRootframe, cmLabel, cmImage, cmAudio, cmMovie;
+		MenuItem addLabel, deleteLabel, addFrame, addRootFrame, duplicateFrame, duplicateRootframe, convertFrameMenu, deleteFrame, addMenu, 
+			addImage, deleteImage, reloadImage, addAudio, deleteAudio, stopAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
+		ContextMenu cmFrame, cmRootframe, cmLabel, cmImage, cmAudio, cmMovie, cmIcon;
 
 		//текст для динамических кнопок
 		string framemenu = "Frame➤Menu";
@@ -115,8 +116,12 @@ namespace X_Ren_Py
 			deleteAudio = new MenuItem() { Header = "Delete audio" }; deleteAudio.Click += audioDeleteFromList_Click;
 			stopAudio = new MenuItem() { Header = "Stop audio", IsCheckable = true }; stopAudio.Checked += stopAudio_Click;
 			addMovie = new MenuItem() { Header = "Add movie" }; addMovie.Click += movieImport_Click;
-			reloadMovie = new MenuItem() { Header = "Reload audio" }; reloadMovie.Click += movieReload_Click;
+			reloadMovie = new MenuItem() { Header = "Reload movie" }; reloadMovie.Click += movieReload_Click;
 			deleteMovie = new MenuItem() { Header = "Delete movie" }; deleteMovie.Click += deleteVideo_Click;
+			addIcon = new MenuItem() { Header = "Add icon" }; addIcon.Click += imageImport_Click;
+			reloadIcon = new MenuItem() { Header = "Reload icon" }; reloadIcon.Click += imageReload_Click;
+			deleteIcon = new MenuItem() { Header = "Delete icon" }; deleteIcon.Click += imageDeleteFromList_Click;
+
 
 			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] { duplicateFrame, convertFrameMenu, deleteFrame, stopAudio } };
 			cmRootframe = new ContextMenu { ItemsSource = new MenuItem[] { addRootFrame, duplicateRootframe } };
@@ -124,6 +129,7 @@ namespace X_Ren_Py
 			cmImage = new ContextMenu { ItemsSource = new MenuItem[] { addImage, reloadImage, deleteImage } };
 			cmAudio = new ContextMenu { ItemsSource = new MenuItem[] { addAudio, reloadAudio, deleteAudio } };
 			cmMovie = new ContextMenu { ItemsSource = new MenuItem[] { addMovie, reloadMovie, deleteMovie } };
+			cmIcon = new ContextMenu { ItemsSource = new MenuItem[] { addIcon, reloadIcon, deleteIcon } };
 
 			//menuOptions
 			jumpAction = new ComboBoxItem() { Content = "jump" };

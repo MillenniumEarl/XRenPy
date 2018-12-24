@@ -1,12 +1,54 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace X_Ren_Py
 {
     public partial class MainWindow : Window
-    {
-        private void addCharacter_Click(object sender, RoutedEventArgs e)
+	{
+		public XCharacter loadCharacter(string singleLine)
+		{
+			XCharacter newCharacter = new XCharacter();
+			try
+			{
+				int firstquote = singleLine.IndexOf('"') + 1;
+				newCharacter.Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
+				newCharacter.Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
+				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
+				for (int prop = 0; prop < all.Length; prop++)
+				{
+					if (all[prop].StartsWith("image"))
+					{
+						int indexIn = singleLine.LastIndexOf('/') + 1;
+						int length = singleLine.LastIndexOf('.') - indexIn;
+						newCharacter.Icon = sideListView.Items.OfType<XImage>().First(icon => (icon.Tag as Image).Source.ToString().Substring(indexIn, length) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"", "")).Tag as Image;
+					}
+					else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
+					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) newCharacter.NameIsBold = true;
+					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) newCharacter.NameIsItalic = true;
+					else if (all[prop].StartsWith("what_color")) newCharacter.TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
+					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) newCharacter.TextIsBold = true;
+					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) newCharacter.TextIsItalic = true;
+				}
+			}
+			catch (Exception) { MessageBox.Show("Error: Character loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			return newCharacter;
+		}
+
+		private void loadText(XFrame frame, string line)
+		{
+			if (line != "")
+			{
+				if (line.IndexOf('"') == 0) frame.Character = characterListView.Items[0] as XCharacter;
+				else frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' ')));
+
+				frame.Text = line.Substring(line.IndexOf('"')).Trim('"');
+			}
+		}
+
+		private void addCharacter_Click(object sender, RoutedEventArgs e)
         {if (characterName.Text != "")
             {
                 try
@@ -62,7 +104,7 @@ namespace X_Ren_Py
             else character.TextIsBold = false;
             if (characterTextItalic.IsChecked == true) character.TextIsItalic = true;
             else character.TextIsItalic = false;
-			character.Icon = iconCharacter.Icon;
+			character.Icon = iconCharacter;
 			if (charText_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor); else character.Background = null;
 			if (charName_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor); else character.Foreground = Brushes.Black;
 		}
@@ -77,7 +119,7 @@ namespace X_Ren_Py
             characterNameItalic.IsChecked = (sender as XCharacter).NameIsItalic;
             characterTextBold.IsChecked = (sender as XCharacter).TextIsBold;
             characterTextItalic.IsChecked = (sender as XCharacter).TextIsItalic;
-			iconCharacter.Icon = (sender as XCharacter).Icon;
+			iconCharacter = (sender as XCharacter).Icon;
 		}
 
 		private void uneditableCharacter_Selected(object sender, RoutedEventArgs e)
@@ -100,6 +142,17 @@ namespace X_Ren_Py
             if (characterTextItalic.IsChecked == true) textBox.FontStyle = FontStyles.Italic;
             else textBox.FontStyle = FontStyles.Normal;
         }
+
+		private void characterSideImageConnect_Click(object sender, RoutedEventArgs e)
+		{
+			if (sideListView.SelectedItem != null)
+			{
+				Image image = (sideListView.SelectedItem as XImage).Tag as Image;
+				(characterListView.SelectedItem as XCharacter).Icon = image;
+				iconCharacter = image;
+			}
+			else MessageBox.Show("No side image selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 
 		private void charactersButton_Click(object sender, RoutedEventArgs e)
 		{

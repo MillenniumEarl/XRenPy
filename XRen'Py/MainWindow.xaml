@@ -47,10 +47,10 @@
                     </Style>
                 </TabControl.Resources>
                 <TabItem Padding="0" x:Name="addTab" MaxWidth="40">
-                <TabItem.Header>
+                    <TabItem.Header>
                         <Button x:Name="addTabButton" Click="addLabel_Click" Content="+"/>
-                </TabItem.Header>
-            </TabItem>
+                    </TabItem.Header>
+                </TabItem>
             </TabControl>
             <Label Content="Resources" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1" Grid.Column="1" Foreground="#FFF0F0F0"/>
             <TabControl x:Name="tabControlResources" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="4,40,3,10" Grid.Row="1" Grid.Column="1" TabStripPlacement="Right" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
@@ -59,11 +59,11 @@
                         <Setter Property="HeaderTemplate">
                             <Setter.Value>
                                 <DataTemplate>
-                                    <ContentPresenter Content="{TemplateBinding Content}">                                        
+                                    <ContentPresenter Content="{TemplateBinding Content}">
                                         <ContentPresenter.LayoutTransform>
                                             <RotateTransform Angle="270" />
                                         </ContentPresenter.LayoutTransform>
-                                    </ContentPresenter>                                    
+                                    </ContentPresenter>
                                 </DataTemplate>
                             </Setter.Value>
                         </Setter>
@@ -128,7 +128,7 @@
                     <ListView x:Name="sideListView" Background="{x:Null}" SelectionMode="Single">
                         <ListView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Add image" Click="imageImport_Click"/>
+                                <MenuItem Header="Add icon" Click="imageImport_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                     </ListView>
@@ -312,7 +312,7 @@
                 </StackPanel>
             </Grid>
         </Expander>
-        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Visibility="Collapsed">
+        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top">
             <Rectangle Fill="White" Stroke="Black" Margin="5"/>
             <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">
                 <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
@@ -333,8 +333,10 @@
             <Button x:Name="editCharacter" FontSize="12" Content="Change" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67" Click="editCharacter_Click" Margin="223,267,0,0" Height="23"/>
             <Label FontSize="12" Content="Text color" HorizontalAlignment="Left" Margin="154,230,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
             <Label FontSize="12" Content="Name color" HorizontalAlignment="Left" Margin="154,162,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
-            <xctk:IconButton x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Background="{x:Null}" Click="icon_Click" Foreground="{x:Null}"/>
+            <Rectangle HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stroke="Black"/>
+            <Image x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64"/>
             <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,12,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
+            <Button x:Name="characterSideImageConnect" Content="Connect" HorizontalAlignment="Left" Margin="223,54,0,0" VerticalAlignment="Top" Width="66" Grid.IsSharedSizeScope="True" Click="characterSideImageConnect_Click"/>
         </Grid>
     </Grid>
 </Window>

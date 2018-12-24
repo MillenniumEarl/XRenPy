@@ -126,11 +126,10 @@
     </ApplicationDefinition>
     <Compile Include="Content\menuoptions.cs" />
     <Compile Include="Content\characters.cs" />
-    <Compile Include="Design\expanders.cs" />
     <Compile Include="Content\content.cs" />
     <Compile Include="Content\movie.cs" />
     <Compile Include="Content\audio.cs" />
-    <Compile Include="Design\HeaderChange.xaml.cs">
+    <Compile Include="HeaderChange.xaml.cs">
       <DependentUpon>HeaderChange.xaml</DependentUpon>
     </Compile>
     <Compile Include="DisableSystemDpiAwareness.cs" />
@@ -143,7 +142,7 @@
     <Compile Include="Scripts\options.cs" />
     <Compile Include="Scripts\gui.cs" />
     <Compile Include="Scripts\script.cs" />
-    <Page Include="Design\HeaderChange.xaml">
+    <Page Include="HeaderChange.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -156,7 +155,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="General\constants.cs" />
-    <Compile Include="Design\mediaviewer.cs" />
+    <Compile Include="Content\mediaviewer.cs" />
     <Compile Include="Content\images.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

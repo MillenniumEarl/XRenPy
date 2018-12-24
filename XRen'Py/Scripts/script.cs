@@ -233,46 +233,6 @@ namespace X_Ren_Py
 			}
 		}
 
-		public XCharacter loadCharacter(string singleLine)
-		{
-			XCharacter newCharacter = new XCharacter();
-			try
-			{
-				int firstquote = singleLine.IndexOf('"') + 1;
-				newCharacter.Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
-				newCharacter.Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
-				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
-				for (int prop = 0; prop < all.Length; prop++)
-				{
-					if (all[prop].StartsWith("image"))
-					{
-						int indexIn = singleLine.LastIndexOf('/') + 1;
-						int length = singleLine.LastIndexOf('.') - indexIn;
-						newCharacter.Icon = sideListView.Items.OfType<ListViewItem>().First(icon => (icon.Tag as Image).Source.ToString().Substring(indexIn, length) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"", "")).Tag as Image;
-					}
-					else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
-					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) newCharacter.NameIsBold = true;
-					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) newCharacter.NameIsItalic = true;
-					else if (all[prop].StartsWith("what_color")) newCharacter.TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
-					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) newCharacter.TextIsBold = true;
-					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) newCharacter.TextIsItalic = true;
-				}
-			}
-			catch (Exception) { MessageBox.Show("Error: Character loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-			return newCharacter;
-		}
-
-		private void loadText(XFrame frame, string line)
-		{
-			if (line != "")
-			{
-				if (line.IndexOf('"') == 0) frame.Character = characterListView.Items[0] as XCharacter;
-				else frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' ')));
-
-				frame.Text = line.Substring(line.IndexOf('"')).Trim('"');
-			}
-		}
-
 		private void saveScript()
 		{
 			projectExpander.IsExpanded = false;
