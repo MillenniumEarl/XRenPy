@@ -26,7 +26,7 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
-        <Label x:Name="log" Padding="2" Background="#FFF0F0F0" Height="22" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="1"/>
+        <Label x:Name="log" Padding="2" Background="#FFF0F0F0" Height="22" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="1" Content="If you found an issue, contact me at iamzerochaotic@gmail.com"/>
         <Grid x:Name="leftGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="7*" MinWidth="105"/>
@@ -40,8 +40,7 @@
             <Label Content="Structure" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="110" Grid.Row="1" Foreground="#FFF0F0F0"/>
             <TabControl x:Name="tabControlStruct" Background="#66FFFFFF" BorderBrush="#FF7F7F7F" FontSize="12" Margin="5,40,2,10" Grid.Row="1" TabStripPlacement="Left" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <TabControl.Resources>
-                    <Style TargetType="TabItem">
-                        <Setter Property="AllowDrop" Value="True"/>
+                    <Style TargetType="local:XLabel">                        
                         <EventSetter Event="PreviewMouseMove" Handler="TabItem_PreviewMouseMove"/>
                         <EventSetter Event="Drop" Handler="TabItem_Drop"/>
                     </Style>
@@ -312,7 +311,7 @@
                 </StackPanel>
             </Grid>
         </Expander>
-        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top">
+        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Visibility="Collapsed">
             <Rectangle Fill="White" Stroke="Black" Margin="5"/>
             <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">
                 <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
@@ -334,7 +333,7 @@
             <Label FontSize="12" Content="Text color" HorizontalAlignment="Left" Margin="154,230,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
             <Label FontSize="12" Content="Name color" HorizontalAlignment="Left" Margin="154,162,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
             <Rectangle HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stroke="Black"/>
-            <Image x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64"/>
+            <Image x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stretch="UniformToFill"/>
             <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,12,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
             <Button x:Name="characterSideImageConnect" Content="Connect" HorizontalAlignment="Left" Margin="223,54,0,0" VerticalAlignment="Top" Width="66" Grid.IsSharedSizeScope="True" Click="characterSideImageConnect_Click"/>
         </Grid>

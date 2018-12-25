@@ -107,20 +107,7 @@ namespace X_Ren_Py
 		}
 
 		private void Exit_Click(object sender, RoutedEventArgs e){Close();}
-		public string eQuote(string content) { return "=\"" + content + "\""; }
-		public string esQuote(string content) { return " = \"" + content + "\""; }
-		public string quote(string content) { return "\"" + content + "\""; }
-		
-		public static string value(string info)
-		{
-			info = info.Substring(info.IndexOf('=') + 1).TrimStart(' ').TrimEnd(':');
 
-			if (info.StartsWith("\"")) info = info.Trim('"');
-			else
-			if (info.StartsWith("'")) info = info.Trim('\'');
-
-			return info;
-		}
 	}
 }
 

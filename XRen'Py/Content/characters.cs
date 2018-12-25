@@ -23,7 +23,7 @@ namespace X_Ren_Py
 					{
 						int indexIn = singleLine.LastIndexOf('/') + 1;
 						int length = singleLine.LastIndexOf('.') - indexIn;
-						newCharacter.Icon = sideListView.Items.OfType<XImage>().First(icon => (icon.Tag as Image).Source.ToString().Substring(indexIn, length) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"", "")).Tag as Image;
+						newCharacter.Icon = sideListView.Items.OfType<XImage>().First(icon => (icon.Path.Substring(indexIn, length) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"", "")));
 					}
 					else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
 					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) newCharacter.NameIsBold = true;
@@ -104,13 +104,14 @@ namespace X_Ren_Py
             else character.TextIsBold = false;
             if (characterTextItalic.IsChecked == true) character.TextIsItalic = true;
             else character.TextIsItalic = false;
-			character.Icon = iconCharacter;
+			if (iconCharacter.Source!=null) character.Icon = sideListView.Items.OfType<XImage>().First(sideimage => (new Uri(sideimage.Path).ToString() == iconCharacter.Source.ToString()));
 			if (charText_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor); else character.Background = null;
 			if (charName_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor); else character.Foreground = Brushes.Black;
 		}
 
         private void editableChar_Selected(object sender, RoutedEventArgs e)
         {
+			iconCharacter.Source = null;
 			editCharacter.IsEnabled = true;
 			characterName.Text = (sender as XCharacter).Content.ToString();
             charName_colorPicker.SelectedColor = (sender as XCharacter).NameColor;
@@ -119,11 +120,12 @@ namespace X_Ren_Py
             characterNameItalic.IsChecked = (sender as XCharacter).NameIsItalic;
             characterTextBold.IsChecked = (sender as XCharacter).TextIsBold;
             characterTextItalic.IsChecked = (sender as XCharacter).TextIsItalic;
-			iconCharacter = (sender as XCharacter).Icon;
+			if((sender as XCharacter).Icon != null) iconCharacter.Source = imageShow((sender as XCharacter).IconSource);
 		}
 
 		private void uneditableCharacter_Selected(object sender, RoutedEventArgs e)
 		{
+			iconCharacter.Source = null;
 			editCharacter.IsEnabled = false;
 		}
 
@@ -147,9 +149,9 @@ namespace X_Ren_Py
 		{
 			if (sideListView.SelectedItem != null)
 			{
-				Image image = (sideListView.SelectedItem as XImage).Tag as Image;
+				XImage image = sideListView.SelectedItem as XImage;
 				(characterListView.SelectedItem as XCharacter).Icon = image;
-				iconCharacter = image;
+				iconCharacter.Source = imageShow(image.Path);
 			}
 			else MessageBox.Show("No side image selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}

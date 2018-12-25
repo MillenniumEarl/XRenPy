@@ -129,9 +129,6 @@
     <Compile Include="Content\content.cs" />
     <Compile Include="Content\movie.cs" />
     <Compile Include="Content\audio.cs" />
-    <Compile Include="HeaderChange.xaml.cs">
-      <DependentUpon>HeaderChange.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DisableSystemDpiAwareness.cs" />
     <Compile Include="General\mainmenu.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -142,10 +139,6 @@
     <Compile Include="Scripts\options.cs" />
     <Compile Include="Scripts\gui.cs" />
     <Compile Include="Scripts\script.cs" />
-    <Page Include="HeaderChange.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

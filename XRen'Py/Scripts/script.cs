@@ -59,15 +59,15 @@ namespace X_Ren_Py
 							case "image":
 								if (!singleLine.Contains("Movie"))
 								{
-									if (singleLine.StartsWith("image side"))
-										sideListView.Items.Add(new ListViewItem { Tag = new Image() { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) } });
+									XImage image = new XImage();
+									image.loadImage(singleLine, projectFolder + "images\\");
+									imageMouseActions(image);
+									if (!singleLine.StartsWith("image side")) backImageListView.Items.Add(image);
 									else
 									{
-										XImage image = new XImage();
-										image.loadImage(singleLine, projectFolder + "images\\");
-										imageMouseActions(image);
-										backImageListView.Items.Add(image);
-									}
+										image.Checkbox.Visibility=Visibility.Hidden;
+										sideListView.Items.Add(image);
+									}									
 								}
 								else
 								{
@@ -79,15 +79,15 @@ namespace X_Ren_Py
 								break;
 							case "label":
 								{
-									TabItem selectedLabel = tabControlStruct.Items.OfType<TabItem>().First(label => label.Header.ToString() == singleLine.Substring(6, singleLine.Length - 7));//createLabel(singleLine.Substring(6, singleLine.Length - 7));
+									XLabel selectedLabel = tabControlStruct.Items.OfType<XLabel>().First(label => label.Text == singleLine.Substring(6, singleLine.Length - 7));//createLabel(singleLine.Substring(6, singleLine.Length - 7));
 									ImageProperties Background = new ImageProperties();
 									bool usePreviousBackground = false;
 									XFrame frame;
-									bool root = true;
+									//bool root = true;
 									string readingLine = reader.ReadLine().TrimStart(' ');
 									while (readingLine != "return")
 									{
-										frame = createFrame(root);
+										frame = createFrame();
 										List<string> framebody = new List<string> { readingLine };
 
 										while (!Regex.IsMatch(readingLine, @"[\S\s]*""[\S\s]*""$") && readingLine != "return" && !reader.EndOfStream)
@@ -221,7 +221,7 @@ namespace X_Ren_Py
 												}
 											}
 										(selectedLabel.Content as ListView).Items.Add(frame);
-										root = false;
+										//root = false;
 										if (readingLine != "return") readingLine = reader.ReadLine().TrimStart(' ');
 									}
 								}
@@ -305,12 +305,12 @@ namespace X_Ren_Py
 
 			for (int chosenLabelNumber = 1; chosenLabelNumber < tabControlStruct.Items.Count; chosenLabelNumber++)
 			{
-				writer.WriteLine(nextLine + label + (tabControlStruct.Items[chosenLabelNumber] as TabItem).Header + ':');
+				writer.WriteLine(nextLine + label + (tabControlStruct.Items[chosenLabelNumber] as XLabel).Text + ':');
 				XFrame previousFrame = new XFrame { };//предыдущий кадр для сравнения. Дабы не обновлять весь контент каждый кадр, как здесь, можно откидывать ненужные обновления после сравнения
-				for (int chosenFrameNumber = 0; chosenFrameNumber < ((tabControlStruct.Items[chosenLabelNumber] as TabItem).Content as ListView).Items.Count; chosenFrameNumber++)
+				for (int chosenFrameNumber = 0; chosenFrameNumber < ((tabControlStruct.Items[chosenLabelNumber] as XLabel).Content as ListView).Items.Count; chosenFrameNumber++)
 				{
 					//все что касается конкретного кадра
-					XFrame chosenFrame = ((tabControlStruct.Items[chosenLabelNumber] as TabItem).Content as ListView).Items[chosenFrameNumber] as XFrame;
+					XFrame chosenFrame = ((tabControlStruct.Items[chosenLabelNumber] as XLabel).Content as ListView).Items[chosenFrameNumber] as XFrame;
 					//background					
 					if (chosenFrame.BackgroundImage != null)
 					{
@@ -421,10 +421,10 @@ namespace X_Ren_Py
 			writer.Close();
 		}
 
-		private XFrame createFrame(bool root)
+		private XFrame createFrame()
 		{
-			XFrame frame = new XFrame() { Content = "Frame"  + " []", Character = characterListView.Items[0] as XCharacter, AnimationInType = 0, AnimationOutType = 0 };
-			if (!root) frame.ContextMenu = cmFrame; else frame.ContextMenu = cmRootframe;
+			XFrame frame = new XFrame() { Content = "Frame []", Character = characterListView.Items[0] as XCharacter, AnimationInType = 0, AnimationOutType = 0 };
+			frame.ContextMenu = cmFrame; //else frame.ContextMenu = cmRootframe;
 			frame.Selected += selectFrame_Click;
 			frame.MouseUp += selectFrame_Click;
 			return frame;
@@ -485,7 +485,7 @@ namespace X_Ren_Py
 		private void addNextFrame_Click(object sender, RoutedEventArgs e)
 		{
 			preSaveCurrentFrame();
-			XFrame frame = createFrame(false);
+			XFrame frame = createFrame();
 			ListView selectedList = getSelectedList();
 
 			if (sender == addMenu)
@@ -501,7 +501,7 @@ namespace X_Ren_Py
 		{
 			preSaveCurrentFrame();
 
-			XFrame duplicate = createFrame(false);
+			XFrame duplicate = createFrame();
 			duplicate.Text = currentFrame.Text;
 			duplicate.isMenu = currentFrame.isMenu;
 			duplicate.MenuOptions = currentFrame.MenuOptions;
@@ -536,7 +536,7 @@ namespace X_Ren_Py
 			getSelectedList().Items.Insert(getSelectedList().Items.IndexOf(currentFrame) + 1, duplicate);
 			duplicate.IsSelected = true;
 		}
-		private void deleteFrame_Click(object sender, EventArgs e) { getSelectedList().Items.Remove(getSelectedFrame()); }
+		private void deleteFrame_Click(object sender, EventArgs e) { if(getSelectedList().Items.Count>1) getSelectedList().Items.Remove(getSelectedFrame()); else MessageBox.Show("Error: Label must contain at least one frame", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		private void PrevNext_Click(object sender, RoutedEventArgs e)
 		{
 			preSaveCurrentFrame();
@@ -554,34 +554,28 @@ namespace X_Ren_Py
 		//LABELS SECTION
 		private void addLabel_Click(object sender, RoutedEventArgs e)
 		{
-			HeaderChange inputDialog = new HeaderChange();
-			inputDialog.Title = "Adding tab";
-			if (inputDialog.ShowDialog() == true && inputDialog.Answer != "")
-			{
-				string name = inputDialog.Answer;
-				ListView labelbody = createLabel(name);
-				labelbody.Items.Add(createFrame(true));
-			}
-			else MessageBox.Show("Empty header!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				ListView labelbody = createLabel("newlabel");
+				labelbody.Items.Add(createFrame());
 		}
 
 		private void deleteLabel_Click(object sender, RoutedEventArgs e)
 		{
-			if ((getSelectedList().Parent as TabItem).Header.ToString() != "start") tabControlStruct.Items.Remove(sender);
-			else MessageBox.Show("Label START cannot be deleted!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				tabControlStruct.Items.Remove(((sender as Button).Parent as StackPanel).Parent as XLabel);
 		}
 
 		private ListView createLabel(string name)
 		{
-			TabItem label = new TabItem() { Header = name, MaxWidth = 80 };
-			label.MouseDoubleClick += namechange_DoubleClick;
+			XLabel label = new XLabel() { Text = name};
+			if (name == "start")
+			{
+				label._Delete.Visibility = Visibility.Collapsed;				
+			}
+			else label._Delete.Click += deleteLabel_Click;
 			tabControlStruct.Items.Insert(tabControlStruct.Items.IndexOf(addTab), label);
+			(label.Content as ListView).ContextMenu = cmLabel;
 			label.IsSelected = true;
-			menuLabelList.Add(new ComboBoxItem { Content = label.Header });
-
-			ListView labelbody = new ListView() { Background = null, Margin = new Thickness(0), Padding = new Thickness(0), ContextMenu = cmLabel, SelectionMode = SelectionMode.Single };
-			label.Content = labelbody;
-			return labelbody;
+			menuLabelList.Add(label.comboBox);			
+			return label.Content as ListView;
 		}
 	}
 }

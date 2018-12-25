@@ -44,10 +44,12 @@ namespace X_Ren_Py
 		{					
 			currentFrame.MenuOptions.Add(createMenuOption(false));
 		}
+
 		private void deleteOption_Click(object sender, RoutedEventArgs e)
         {
 			currentFrame.MenuOptions.Remove(((sender as Button).Parent as StackPanel).Parent as XMenuOption);
 		}
+
 		private void Link_Click(object sender, MouseButtonEventArgs e)
 		{
 			if (!((sender as XMenuOption).MenuAction.SelectedItem == passAction))

@@ -20,14 +20,14 @@ namespace X_Ren_Py
 
 		private void TabItem_PreviewMouseMove(object sender, MouseEventArgs e)
 		{
-			var tabItem = e.Source as TabItem;
+			var label = e.Source as XLabel;
 
-			if (tabItem == null)
+			if (label == null)
 				return;
 
 			if (Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed)
 			{
-				DragDrop.DoDragDrop(tabItem, tabItem, DragDropEffects.All);
+				DragDrop.DoDragDrop(label, label, DragDropEffects.All);
 			}
 		}
 		
@@ -35,20 +35,22 @@ namespace X_Ren_Py
 		{
 			if (e.Source != addTab && e.Source != addTabButton)
 			{
-				var tabItemTarget = e.Source as TabItem;
-				var tabItemSource = e.Data.GetData(typeof(TabItem)) as TabItem;
+				XLabel labelTarget;
+				labelTarget = ((e.Source as Label).Parent as StackPanel).Parent as XLabel;
 
-				if (!tabItemTarget.Equals(tabItemSource))
+				XLabel labelSource = e.Data.GetData(typeof(XLabel)) as XLabel;
+
+				if (!labelTarget.Equals(labelSource))
 				{
-					var tabControl = tabItemTarget.Parent as TabControl;
-					int sourceIndex = tabControl.Items.IndexOf(tabItemSource);
-					int targetIndex = tabControl.Items.IndexOf(tabItemTarget);
+					var tabControl = labelTarget.Parent as TabControl;
+					int sourceIndex = tabControl.Items.IndexOf(labelSource);
+					int targetIndex = tabControl.Items.IndexOf(labelTarget);
 
-					tabControl.Items.Remove(tabItemSource);
-					tabControl.Items.Insert(targetIndex, tabItemSource);
+					tabControl.Items.Remove(labelSource);
+					tabControl.Items.Insert(targetIndex, labelSource);
 
-					tabControl.Items.Remove(tabItemTarget);
-					tabControl.Items.Insert(sourceIndex, tabItemTarget);
+					tabControl.Items.Remove(labelTarget);
+					tabControl.Items.Insert(sourceIndex, labelTarget);
 				}
 			}
 		}
@@ -77,6 +79,21 @@ namespace X_Ren_Py
 			imageViewer.Source = null;
 			media.Visibility = Visibility.Hidden;
 			show = false;
+		}
+
+		public string eQuote(string content) { return "=\"" + content + "\""; }
+		public string esQuote(string content) { return " = \"" + content + "\""; }
+		public string quote(string content) { return "\"" + content + "\""; }
+		private string simplifyTransition(string transition) { if (transition.IndexOf('(') > 0) return transition.Substring(0, transition.IndexOf('(')).ToLower(); else return transition; }
+		public static string value(string info)
+		{
+			info = info.Substring(info.IndexOf('=') + 1).TrimStart(' ').TrimEnd(':');
+
+			if (info.StartsWith("\"")) info = info.Trim('"');
+			else
+			if (info.StartsWith("'")) info = info.Trim('\'');
+
+			return info;
 		}
 	}
 }

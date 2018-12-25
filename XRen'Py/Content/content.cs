@@ -4,35 +4,49 @@ using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System;
 
 namespace X_Ren_Py
 {
 	public class XLabel : TabItem
 	{
-		private TextBox _Editable = new TextBox() {Visibility=Visibility.Collapsed };
-		private Label _Visible = new Label();
-		public string Text { get { return _Visible.Content.ToString(); } set { _Visible.Content = value; } }
+		private TextBox _Editable = new TextBox() {  MaxLength =10, Margin = new Thickness(0), Padding = new Thickness(0), Visibility=Visibility.Collapsed };
+		private Label _Visible = new Label() {  Padding = new Thickness(3,1,3,1), MaxWidth = 100, AllowDrop = true };
+		private ListView _Content = new ListView() { Background = null, Margin = new Thickness(0), Padding = new Thickness(0), SelectionMode = SelectionMode.Single };
+		private Button _Apply = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✓", Visibility = Visibility.Collapsed };
+		public Button _Delete = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✗", };
+		public ComboBoxItem comboBox = new ComboBoxItem();
+		public string Text { get { return _Visible.Content.ToString(); } set { _Visible.Content = value; _Editable.Text = value; comboBox.Content = value; } }
+		//public new ListView Content { get; set; }
 		public XLabel()
 		{
-			StackPanel stack = new StackPanel();
-			stack.Children.Add(_Editable);
+			Padding = new Thickness(2,0,2,0);
+			StackPanel stack = new StackPanel() {Height = 20, Orientation=Orientation.Horizontal, Margin = new Thickness(0)};
+			stack.Children.Add(_Delete);
+			stack.Children.Add(_Apply);
 			stack.Children.Add(_Visible);
+			stack.Children.Add(_Editable);					
 			_Visible.MouseDoubleClick += label_DoubleClick;
-			_Editable.LostFocus += label_LostFocus;
+			_Apply.Click += apply_Click;
 			Header = stack;
+			Content = _Content;
 		}
 
-		private void label_LostFocus(object sender, RoutedEventArgs e)
+		private void apply_Click(object sender, RoutedEventArgs e)
 		{
-			if (_Editable.Text != "start")
+			if (_Editable.Text != "")
 			{
-				Text = _Editable.Text;
-				_Visible.Visibility = Visibility.Visible;
-				_Editable.Visibility = Visibility.Collapsed;
+				if (_Editable.Text != "start")
+				{
+					Text = _Editable.Text;
+					_Visible.Visibility = Visibility.Visible;
+					_Delete.Visibility = Visibility.Visible;
+					_Editable.Visibility = Visibility.Collapsed;
+					_Apply.Visibility = Visibility.Collapsed;
+				}
+				else MessageBox.Show("Error: Label can't be renamed to \"start\"", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
-			else MessageBox.Show("Error: Label can't be renamed to \"start\"", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			else MessageBox.Show("Error: Label name can't be empty", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 
 		private void label_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -40,7 +54,9 @@ namespace X_Ren_Py
 			if (_Visible.Content.ToString() != "start")
 			{
 				_Editable.Visibility = Visibility.Visible;
+				_Apply.Visibility = Visibility.Visible;
 				_Visible.Visibility = Visibility.Collapsed;
+				_Delete.Visibility = Visibility.Collapsed;
 			}
 			else MessageBox.Show("Error: Label \"start\" can't be renamed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
@@ -136,7 +152,7 @@ namespace X_Ren_Py
 		private bool _TextIsItalic;
 		private Color _NameColor;
 		private Color _TextColor;
-		private Image _Icon;
+		private XImage _Icon;
 		public string Alias { get { return _Alias; } set { _Alias = value; } }
 
 		public void ContentToAlias() { _Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
@@ -146,9 +162,10 @@ namespace X_Ren_Py
 		public bool NameIsItalic { get { return _NameIsItalic; } set { _NameIsItalic = value; } }
 		public bool TextIsBold { get { return _TextIsBold; } set { _TextIsBold = value; } }
 		public bool TextIsItalic { get { return _TextIsItalic; } set { _TextIsItalic = value; } }
-		public Image Icon { get { return _Icon; } set { _Icon = value; } }
+		public XImage Icon { get { return _Icon; } set { _Icon = value; } }
+		public string IconSource { get { return _Icon.Path; } }
 
-}
+	}
 
     public class XContent:ListViewItem
     {
@@ -303,17 +320,6 @@ namespace X_Ren_Py
 					default: return;
 				}
 			}
-        }
-        
-		private void namechange_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            HeaderChange inputDialog = new HeaderChange();
-            if (inputDialog.ShowDialog() == true && inputDialog.Answer != "")
-            {
-				menuLabelList.First(item => item.Content == (sender as TabItem).Header).Content = inputDialog.Answer;
-							(sender as TabItem).Header = inputDialog.Answer;
-            }
-            else MessageBox.Show("Empty header!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void contentCollector(string currentPath, string projectPath)

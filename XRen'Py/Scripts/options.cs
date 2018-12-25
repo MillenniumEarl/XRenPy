@@ -33,19 +33,17 @@ namespace X_Ren_Py
 				else if (singleLine.StartsWith("define config.has_voice"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice.IsChecked = true; else containsVoice.IsChecked = false; }
 				else if (singleLine.StartsWith("default preferences.text_cps"))			textShowSpeed.Text = value(singleLine);
 				else if (singleLine.StartsWith("default preferences.afm_time"))			autoReaderLatency.Text = value(singleLine);
-				else if (singleLine.StartsWith("define config.enter_transition"))		gameOpenTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
-				else if (singleLine.StartsWith("define config.intra_transition"))		gameIntraTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
-				else if (singleLine.StartsWith("define config.exit_transition"))		gameExitTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
-				else if (singleLine.StartsWith("define config.after_load_transition"))	gameStartTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
-				else if (singleLine.StartsWith("define config.end_game_transition"))	gameEndTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
-				else if (singleLine.StartsWith("define config.window_show_transition")) dialogShowTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
-				else if (singleLine.StartsWith("define config.window_hide_transition")) dialogHideTransition.SelectedItem = singleLine.Substring(singleLine.IndexOf('=') + 1).TrimStart(' ');
+				else if (singleLine.StartsWith("define config.enter_transition"))		gameOpenTransition.SelectedItem = simplifyTransition(value(singleLine));
+				else if (singleLine.StartsWith("define config.intra_transition"))		gameIntraTransition.SelectedItem = simplifyTransition(value(singleLine));
+				else if (singleLine.StartsWith("define config.exit_transition"))		gameExitTransition.SelectedItem = simplifyTransition(value(singleLine));
+				else if (singleLine.StartsWith("define config.after_load_transition"))	gameStartTransition.SelectedItem = simplifyTransition(value(singleLine));
+				else if (singleLine.StartsWith("define config.end_game_transition"))	gameEndTransition.SelectedItem = simplifyTransition(value(singleLine));
+				else if (singleLine.StartsWith("define config.window_show_transition")) dialogShowTransition.SelectedItem = simplifyTransition(value(singleLine));
+				else if (singleLine.StartsWith("define config.window_hide_transition")) dialogHideTransition.SelectedItem = simplifyTransition(value(singleLine));
 				else if (singleLine.StartsWith("define config.window_icon"))			icon.Icon = new Image { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) };
 			}
 		}
-
-
-
+		
 		private void saveOptions()
 		{			
 			List<string> builder= new List<string> { };
@@ -174,5 +172,6 @@ namespace X_Ren_Py
 				catch (Exception) { MessageBox.Show("Please choose the image!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 			}
 		}
+			
 	}
 }
