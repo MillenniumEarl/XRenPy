@@ -17,44 +17,7 @@ namespace X_Ren_Py
 			initializeAll();
 			new PerMonitorDpiBehavior(this);
 		}
-
-		private void TabItem_PreviewMouseMove(object sender, MouseEventArgs e)
-		{
-			var label = e.Source as XLabel;
-
-			if (label == null)
-				return;
-
-			if (Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed)
-			{
-				DragDrop.DoDragDrop(label, label, DragDropEffects.All);
-			}
-		}
 		
-		private void TabItem_Drop(object sender, DragEventArgs e)
-		{
-			if (e.Source != addTab && e.Source != addTabButton)
-			{
-				XLabel labelTarget;
-				labelTarget = ((e.Source as Label).Parent as StackPanel).Parent as XLabel;
-
-				XLabel labelSource = e.Data.GetData(typeof(XLabel)) as XLabel;
-
-				if (!labelTarget.Equals(labelSource))
-				{
-					var tabControl = labelTarget.Parent as TabControl;
-					int sourceIndex = tabControl.Items.IndexOf(labelSource);
-					int targetIndex = tabControl.Items.IndexOf(labelTarget);
-
-					tabControl.Items.Remove(labelSource);
-					tabControl.Items.Insert(targetIndex, labelSource);
-
-					tabControl.Items.Remove(labelTarget);
-					tabControl.Items.Insert(sourceIndex, labelTarget);
-				}
-			}
-		}
-
 		private void mainexp_Expanded(object sender, RoutedEventArgs e)
 		{
 			if (sender == projectExpander)

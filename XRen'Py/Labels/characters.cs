@@ -6,7 +6,32 @@ using System.Windows.Media;
 
 namespace X_Ren_Py
 {
-    public partial class MainWindow : Window
+	public class XCharacter : ListViewItem
+	{
+		//private string _Content;
+		private string _Alias;
+		private bool _NameIsBold=false;
+		private bool _NameIsItalic = false;
+		private bool _TextIsBold = false;
+		private bool _TextIsItalic = false;
+		private Color _NameColor;
+		private Color _TextColor;
+		private XImage _Icon;
+		public string Alias { get { return _Alias; } set { _Alias = value; } }
+
+		public void ContentToAlias() { _Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
+		public Color NameColor { get { return _NameColor; } set { _NameColor = value; } }
+		public Color TextColor { get { return _TextColor; } set { _TextColor = value; } }
+		public bool NameIsBold { get { return _NameIsBold; } set { _NameIsBold = value; } }
+		public bool NameIsItalic { get { return _NameIsItalic; } set { _NameIsItalic = value; } }
+		public bool TextIsBold { get { return _TextIsBold; } set { _TextIsBold = value; } }
+		public bool TextIsItalic { get { return _TextIsItalic; } set { _TextIsItalic = value; } }
+		public XImage Icon { get { return _Icon; } set { _Icon = value; } }
+		public string IconSource { get { return _Icon.Path; } }
+
+	}
+
+	public partial class MainWindow : Window
 	{
 		public XCharacter loadCharacter(string singleLine)
 		{
