@@ -1,5 +1,5 @@
 # XRenPy
-eXtended Ren'Py - visual constructor for Ren'Py 7 (WIP)
+eXtended Ren'Py - visual editor for Ren'Py 7 (WIP)
 
 - Currently only Windows
 - This application allows developers to create simple Ren'Py game without any knowledge of Python and Ren'Py scripting.
