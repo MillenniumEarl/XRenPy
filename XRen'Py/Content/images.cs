@@ -25,14 +25,17 @@ namespace X_Ren_Py
 					try
 					{
 						string name = imageDialog.SafeFileNames[file];
-						string currentPath = imageDialog.FileNames[file];
+						if (!(tabControlResources.SelectedContent as ListView).Items.OfType<XImage>().Any(item => item.Header == name))
+						{
+							string currentPath = imageDialog.FileNames[file];
 
-						XImage newimage = new XImage() { Header = name, Path = currentPath };
-						imageMouseActions(newimage);
+							XImage newimage = new XImage() { Header = name, Path = currentPath };
+							imageMouseActions(newimage);
 
-						if (tabControlResources.SelectedContent == backImageListView) backImageListView.Items.Add(newimage);
-						else if (tabControlResources.SelectedContent == imageListView) imageListView.Items.Add(newimage);
-						else { newimage.Checkbox.Visibility=Visibility.Hidden; sideListView.Items.Add(newimage); }				
+							if (tabControlResources.SelectedContent != sideListView) (tabControlResources.SelectedContent as ListView).Items.Add(newimage);
+							else { newimage.Checkbox.Visibility = Visibility.Hidden; sideListView.Items.Add(newimage); }
+						}		
+						else MessageBox.Show("Image is already in use!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 					}
 					catch (Exception) { MessageBox.Show("Please choose the image!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 				}

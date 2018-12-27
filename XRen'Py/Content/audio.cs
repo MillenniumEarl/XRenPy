@@ -22,15 +22,19 @@ namespace X_Ren_Py
                     try
 					{
 						string name = musDialog.SafeFileNames[file];
-						string currentPath = musDialog.FileNames[file];
+						if (!(tabControlResources.SelectedContent as ListView).Items.OfType<XAudio>().Any(item => item.Header == name))
+						{
+							string currentPath = musDialog.FileNames[file];
 
-						XAudio newaudio = new XAudio() { Header = name, Path = currentPath};
-						audioMouseActions(newaudio);
+							XAudio newaudio = new XAudio() { Header = name, Path = currentPath };
+							audioMouseActions(newaudio);
 
-						if (tabControlResources.SelectedContent == musicListView) { newaudio.Type = "music "; musicListView.Items.Add(newaudio); }
-						else if (tabControlResources.SelectedContent == soundListView) { newaudio.Type = "sound "; soundListView.Items.Add(newaudio); }
-						else { newaudio.Type = "voice "; voiceListView.Items.Add(newaudio); }
-					}
+							if (tabControlResources.SelectedContent == musicListView) { newaudio.Type = "music "; musicListView.Items.Add(newaudio); }
+							else if (tabControlResources.SelectedContent == soundListView) { newaudio.Type = "sound "; soundListView.Items.Add(newaudio); }
+							else { newaudio.Type = "voice "; voiceListView.Items.Add(newaudio); }
+						}
+						else MessageBox.Show("Audio is already in use!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
 					catch (Exception) { MessageBox.Show("Please choose the audio!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                 }
         }

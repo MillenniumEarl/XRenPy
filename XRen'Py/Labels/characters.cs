@@ -70,6 +70,7 @@ namespace X_Ren_Py
 				else frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' ')));
 
 				frame.Text = line.Substring(line.IndexOf('"')).Trim('"');
+				frame.Content = "Frame [" + frame.Text + ']';
 			}
 		}
 

@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Windows.Media;
 using System;
+using System.Linq;
 
 namespace X_Ren_Py
 {	
@@ -22,7 +23,7 @@ namespace X_Ren_Py
         public string Header { get { return _Label.Content.ToString(); } set { _Label.Content = value; _Alias = value.ToLower().Substring(0, value.LastIndexOf('.')).Replace(" ","").Replace("-", ""); } }
 		public Brush TextColor { get { return _Label.Foreground; } set { _Label.Foreground = value; } }
 		
-		protected void createContent()
+		public XContent()
 		{			
 			StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal};
 			stack.Children.Add(_CheckBox);
@@ -44,12 +45,7 @@ namespace X_Ren_Py
 			}
 			catch (Exception) { MessageBox.Show("Error: Image loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
-
-		public XImage()
-        {
-            createContent();
-        }
-    }
+	}
     public class XAudio : XContent
 	{
 		private string _Type= "music ";
@@ -66,10 +62,7 @@ namespace X_Ren_Py
 			}
 			catch (Exception) { MessageBox.Show("Error: Audio loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
-		public XAudio()
-        {
-            createContent();
-        }
+
     }
     public class XMovie : XContent
     {
@@ -93,10 +86,7 @@ namespace X_Ren_Py
 			}
 			catch (Exception) { MessageBox.Show("Error: Movie loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
-        public XMovie()
-        {
-            createContent();
-        }
+
     }
 
     public class ImageProperties
@@ -180,7 +170,8 @@ namespace X_Ren_Py
         private void resourcesSelectedItem_delete()
         {
             ListView selectedList = tabControlResources.SelectedContent as ListView;
-            selectedList.Items.Remove(selectedList.SelectedItem);
+			File.Delete((selectedList.SelectedItem as XContent).Path);
+			selectedList.Items.Remove(selectedList.SelectedItem);
         }
 		private void uncheckAll()
 		{

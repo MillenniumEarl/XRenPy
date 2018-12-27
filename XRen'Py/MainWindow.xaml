@@ -183,6 +183,7 @@
                         <Button x:Name="projSave" Content="Save project" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="SaveProject_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                         <Button x:Name="projSaveAs" Content="Save as..." Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="SaveProjectAS_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                         <!--<Button x:Name="projWizard" Content="Book2Script" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="LoadProject_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>-->
+                        <Separator/>
                         <Button x:Name="Exit" Content="Exit XRen'Py" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="Exit_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                     </StackPanel>
                 </Grid>

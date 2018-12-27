@@ -68,11 +68,14 @@ namespace X_Ren_Py
 		private void addLabel_Click(object sender, RoutedEventArgs e)
 		{
 				ListView labelbody = createLabel("newlabel");
-				labelbody.Items.Add(createFrame());
+				XFrame frame = createFrame();
+				labelbody.Items.Add(frame);
+				frame.IsSelected = true;
 		}
 
 		private void deleteLabel_Click(object sender, RoutedEventArgs e)
 		{
+				tabControlStruct.SelectedItem = tabControlStruct.Items[tabControlStruct.Items.IndexOf((sender as Button).Tag as XLabel) - 1];
 				tabControlStruct.Items.Remove((sender as Button).Tag as XLabel);
 		}
 
@@ -86,7 +89,7 @@ namespace X_Ren_Py
 			else label._Delete.Click += deleteLabel_Click;
 			tabControlStruct.Items.Insert(tabControlStruct.Items.IndexOf(addTab), label);
 			(label.Content as ListView).ContextMenu = cmLabel;
-			label.IsSelected = true;
+			label.IsSelected = true; 
 			menuLabelList.Add(label.comboBox);			
 			return label.Content as ListView;
 		}

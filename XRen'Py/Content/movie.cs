@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Linq;
 
 namespace X_Ren_Py
 {
@@ -13,20 +14,24 @@ namespace X_Ren_Py
         {
             OpenFileDialog vidDialog = new OpenFileDialog() { Filter = vidextensions, Multiselect = true };
 
-            if (vidDialog.ShowDialog() == true)
-                for (int file = 0; file < vidDialog.FileNames.Length; file++)
-                {
-                    try
+			if (vidDialog.ShowDialog() == true)
+				for (int file = 0; file < vidDialog.FileNames.Length; file++)
+				{
+					try
 					{
 						string name = vidDialog.SafeFileNames[file];
-						string currentPath = vidDialog.FileNames[file];
+						if (!(tabControlResources.SelectedContent as ListView).Items.OfType<XMovie>().Any(item => item.Header == name))
+						{
+							string currentPath = vidDialog.FileNames[file];
 
-						XMovie newmovie = new XMovie() { Header = name, Path = currentPath};
-						movieMouseActions(newmovie);
-						movieListView.Items.Add(newmovie);
+							XMovie newmovie = new XMovie() { Header = name, Path = currentPath };
+							movieMouseActions(newmovie);
+							movieListView.Items.Add(newmovie);
+						}
+						else MessageBox.Show("Movie is already in use!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 					}
 					catch (Exception) { MessageBox.Show("Please choose the movie!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-                }
+				}
         }
 
 		private void movieReload_Click(object sender, RoutedEventArgs e)

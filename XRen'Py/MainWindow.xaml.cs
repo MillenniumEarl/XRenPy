@@ -1,6 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using PerMonitorDPI;
 
 namespace X_Ren_Py
@@ -57,6 +55,6 @@ namespace X_Ren_Py
 			if (info.StartsWith("'")) info = info.Trim('\'');
 
 			return info;
-		}
+		}		
 	}
 }

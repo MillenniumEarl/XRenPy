@@ -47,18 +47,12 @@ namespace X_Ren_Py
 		{
 			XFrame frame = new XFrame() { Character = characterListView.Items[0] as XCharacter, ContextMenu = cmFrame};
 			frame.Selected += selectFrame_Click;
-			frame.MouseUp += selectFrame_Click;
 			return frame;
 		}
-		private void preSaveCurrentFrame()
-		{
-			//перед выбором фрейма нужно сохранить содержимое нынешнего выбранного фрейма
-			currentFrame.Content = currentFrame.Content.ToString().Substring(0, currentFrame.Content.ToString().IndexOf('[')) + '[' + textBox.Text + ']';
-		}
-
+		
 		private void selectFrame_Click(object sender, RoutedEventArgs e)
 		{
-			preSaveCurrentFrame();
+			if (currentFrame!=sender) currentFrame.IsSelected = false;			
 			uncheckAll();
 			addorselect = false;
 			currentFrame = sender as XFrame;
@@ -105,7 +99,6 @@ namespace X_Ren_Py
 		}
 		private void addNextFrame_Click(object sender, RoutedEventArgs e)
 		{
-			preSaveCurrentFrame();
 			XFrame frame = createFrame();
 			ListView selectedList = getSelectedList();
 
@@ -120,8 +113,6 @@ namespace X_Ren_Py
 		}
 		private void duplicateFrame_Click(object sender, RoutedEventArgs e)
 		{
-			preSaveCurrentFrame();
-
 			XFrame duplicate = createFrame();
 			duplicate.Text = currentFrame.Text;
 			duplicate.isMenu = currentFrame.isMenu;
@@ -159,8 +150,7 @@ namespace X_Ren_Py
 		}
 		private void deleteFrame_Click(object sender, EventArgs e) { if(getSelectedList().Items.Count>1) getSelectedList().Items.Remove(getSelectedFrame()); else MessageBox.Show("Error: Label must contain at least one frame", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		private void PrevNext_Click(object sender, RoutedEventArgs e)
-		{
-			preSaveCurrentFrame();
+		{			
 			int index = getSelectedList().Items.IndexOf(getSelectedFrame());
 			if (sender == prevFrame && index - 1 >= 0) (getSelectedList().Items[index - 1] as XFrame).IsSelected = true;
 			else if (sender == nextFrame && index + 1 < getSelectedList().Items.Count) (getSelectedList().Items[index + 1] as XFrame).IsSelected = true;
@@ -168,6 +158,7 @@ namespace X_Ren_Py
 		private void textBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			currentFrame.Text = textBox.Text;
+			currentFrame.Content = "Frame [" + textBox.Text + ']';
 		}
 		private XFrame getSelectedFrame() { return getSelectedList().SelectedItem as XFrame; }
 		private ListView getSelectedList() { return tabControlStruct.SelectedContent as ListView; }

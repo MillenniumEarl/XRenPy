@@ -37,199 +37,193 @@ namespace X_Ren_Py
 			while (!reader.EndOfStream)
 			{
 				singleLine = reader.ReadLine().TrimStart(' ');
-				for (int compare = 0; compare < comparerScript.Length; compare++)
+
+				if (singleLine.StartsWith("define"))
 				{
-					if (singleLine.StartsWith(comparerScript[compare]))
-						switch (comparerScript[compare])
-						{//INIT
-							case "define":
-								if (singleLine.Contains("Character"))
+					if (singleLine.Contains("Character"))
+					{
+						XCharacter character = loadCharacter(singleLine);
+						characterListView.Items.Add(character);
+					}
+					else if (singleLine.Contains("audio."))
+					{
+						XAudio audio = new XAudio();
+						audio.loadAudio(singleLine, projectFolder + game);
+						audioMouseActions(audio);
+						musicListView.Items.Add(audio);
+					}
+				}
+				else if (singleLine.StartsWith("image"))
+				{
+					if (!singleLine.Contains("Movie"))
+					{
+						XImage image = new XImage();
+						image.loadImage(singleLine, projectFolder + "images\\");
+						imageMouseActions(image);
+						if (!singleLine.StartsWith("image side")) backImageListView.Items.Add(image);
+						else
+						{
+							image.Checkbox.Visibility = Visibility.Hidden;
+							sideListView.Items.Add(image);
+						}
+					}
+					else
+					{
+						XMovie movie = new XMovie();
+						movie.loadMovie(singleLine, projectFolder + "images\\");
+						movieMouseActions(movie);
+						movieListView.Items.Add(movie);
+					}
+				}
+				else if (singleLine.StartsWith("label"))
+				{
+					{
+						XLabel selectedLabel = tabControlStruct.Items.OfType<XLabel>().First(label => label.Text == singleLine.Substring(6, singleLine.Length - 7));
+						ImageProperties Background = new ImageProperties();
+						bool usePreviousBackground = false;
+						XFrame frame;
+						string readingLine = reader.ReadLine().TrimStart(' ');
+						while (readingLine != "return")
+						{
+							frame = createFrame();
+							List<string> framebody = new List<string> { readingLine };
+
+							while (!Regex.IsMatch(readingLine, @"[\S\s]*""[\S\s]*""$") && readingLine != "return" && !reader.EndOfStream)
+							{
+								readingLine = reader.ReadLine().TrimStart(' ');
+								framebody.Add(readingLine);
+							}
+
+							if (framebody[0].StartsWith("menu"))
+							{
+								if (Regex.IsMatch(framebody[1], @"[\S\s]*""[\S\s]*""$")) loadText(frame, framebody[1]);
+								framebody.Clear();
+
+								frame.BackgroundImage = Background.Image;
+								frame.isMenu = true;
+								frame.MenuOptions = new ObservableCollection<XMenuOption> { };
+								bool first = true;
+
+								readingLine = reader.ReadLine().TrimStart(' ');
+
+								while (Regex.IsMatch(readingLine, @"[\S\s]*""[\S\s]*"":$"))
 								{
-									XCharacter character = loadCharacter(singleLine);
-									characterListView.Items.Add(character);
-								}
-								else if (singleLine.Contains("audio."))
-								{
-									XAudio audio = new XAudio();
-									audio.loadAudio(singleLine, projectFolder + game);
-									audioMouseActions(audio);
-									musicListView.Items.Add(audio);
-								}
-								break;
-							case "image":
-								if (!singleLine.Contains("Movie"))
-								{
-									XImage image = new XImage();
-									image.loadImage(singleLine, projectFolder + "images\\");
-									imageMouseActions(image);
-									if (!singleLine.StartsWith("image side")) backImageListView.Items.Add(image);
-									else
+									XMenuOption newmenuoption = new XMenuOption() { Choice = value(readingLine) };
+									newmenuoption.Delete.IsEnabled = !first;
+									first = false;
+									newmenuoption.MenuAction.ItemsSource = menuActions;
+									newmenuoption.ActionLabel.ItemsSource = menuLabelList;
+									newmenuoption.Delete.Click += deleteOption_Click;
+									newmenuoption.MouseUp += Link_Click;
+
+									readingLine = reader.ReadLine().TrimStart(' ');
+									if (readingLine.StartsWith("jump"))
 									{
-										image.Checkbox.Visibility=Visibility.Hidden;
-										sideListView.Items.Add(image);
-									}									
-								}
-								else
-								{
-									XMovie movie = new XMovie();
-									movie.loadMovie(singleLine, projectFolder + "images\\");
-									movieMouseActions(movie);
-									movieListView.Items.Add(movie);
-								}
-								break;
-							case "label":
-								{
-									XLabel selectedLabel = tabControlStruct.Items.OfType<XLabel>().First(label => label.Text == singleLine.Substring(6, singleLine.Length - 7));//createLabel(singleLine.Substring(6, singleLine.Length - 7));
-									ImageProperties Background = new ImageProperties();
-									bool usePreviousBackground = false;
-									XFrame frame;
-									//bool root = true;
-									string readingLine = reader.ReadLine().TrimStart(' ');
-									while (readingLine != "return")
+										newmenuoption.MenuAction.SelectedIndex = 0;
+										newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == readingLine.Substring(readingLine.IndexOf(' ') + 1)));
+									}
+									else if (readingLine.StartsWith("call"))
 									{
-										frame = createFrame();
-										List<string> framebody = new List<string> { readingLine };
-
-										while (!Regex.IsMatch(readingLine, @"[\S\s]*""[\S\s]*""$") && readingLine != "return" && !reader.EndOfStream)
+										newmenuoption.MenuAction.SelectedIndex = 1;
+										newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == readingLine.Substring(readingLine.IndexOf(' ') + 1)));
+									}
+									else newmenuoption.MenuAction.SelectedIndex = 2;
+									frame.MenuOptions.Add(newmenuoption);
+									readingLine = reader.ReadLine().TrimStart(' ');
+								}
+							}
+							else
+								foreach (string line in framebody)
+								{
+									if (readingLine != "return" && !reader.EndOfStream)
+									{
+										if (!Regex.IsMatch(line, @"[\S\s]*""[\S\s]*""$"))
 										{
-											readingLine = reader.ReadLine().TrimStart(' ');
-											framebody.Add(readingLine);
-										}
-
-										if (framebody[0].StartsWith("menu"))
-										{
-											if (Regex.IsMatch(framebody[1], @"[\S\s]*""[\S\s]*""$")) loadText(frame, framebody[1]);
-											framebody.Clear();
-
-											frame.BackgroundImage = Background.Image;
-											frame.isMenu = true;
-											frame.MenuOptions = new ObservableCollection<XMenuOption> { };
-											bool first = true;
-
-											readingLine = reader.ReadLine().TrimStart(' ');
-
-											while (Regex.IsMatch(readingLine, @"[\S\s]*""[\S\s]*"":$"))
+											switch (line.Substring(0, line.IndexOf(' ')))
 											{
-												XMenuOption newmenuoption = new XMenuOption() { Choice = value(readingLine) };
-												newmenuoption.Delete.IsEnabled = !first;
-												first = false;
-												newmenuoption.MenuAction.ItemsSource = menuActions;
-												newmenuoption.ActionLabel.ItemsSource = menuLabelList;
-												newmenuoption.Delete.Click += deleteOption_Click;
-												newmenuoption.MouseUp += Link_Click;
+												case "scene":
+													{
+														string[] all = line.Split(' ');
+														frame.BackgroundImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+														if (all.Length > 2) if (all[2] == "with") frame.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+														Background = frame.BackgroundImageProps;
+														usePreviousBackground = true;
+														break;
+													}
+												case "show":
+													{
+														string[] all = line.Split(' ');
+														XImage image = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+														backImageListView.Items.Remove(image);
+														imageListView.Items.Add(image);
+														ImageProperties props = new ImageProperties() { Frame = frame, Image = image, Displayable = newDisplayable() };
 
-												readingLine = reader.ReadLine().TrimStart(' ');
-												if (readingLine.StartsWith("jump"))
-												{
-													newmenuoption.MenuAction.SelectedIndex = 0;
-													newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == readingLine.Substring(readingLine.IndexOf(' ') + 1)));
-												}
-												else if (readingLine.StartsWith("call"))
-												{
-													newmenuoption.MenuAction.SelectedIndex = 1;
-													newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == readingLine.Substring(readingLine.IndexOf(' ') + 1)));
-												}
-												else newmenuoption.MenuAction.SelectedIndex = 2;
-												frame.MenuOptions.Add(newmenuoption);
-												readingLine = reader.ReadLine().TrimStart(' ');
+														for (int i = 2; i < all.Length; i++)
+														{
+															if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
+															else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
+														}
+														ImageInFrameProps.Add(props);
+														break;
+													}
+												case "hide":
+													{
+														string[] all = line.Split(' ');
+														if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
+														{
+															frame.BackgroundImage = null;
+															if (all.Length > 2) if (all[2] == "with")
+																	Background.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+															usePreviousBackground = false;
+														}
+														//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
+														else
+															if (all.Length > 2) if (all[2] == "with")
+																ImageInFrameProps.First(item => item.Image.Alias == all[1]).AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+														break;
+													}
+												case "stop":
+													{
+														frame.stopAudio = true;
+														break;
+													}
+												case "play":
+													{
+														string[] all = line.Split(' ');
+														XAudio audio = musicListView.Items.OfType<XAudio>().First(item => item.Alias == all[2]);
+														if (all[1] != "music")
+														{
+															musicListView.Items.Remove(audio);
+															if (all[1] == "sound") soundListView.Items.Add(audio);
+															else voiceListView.Items.Add(audio);
+														}
+														AudioProperties props = new AudioProperties() { Frame = frame, Audio = audio };
+														for (int i = 2; i < all.Length; i++)
+														{
+															if (all[i] == "fadein") props.FadeIn = float.Parse(all[i + 1]);
+															else if (all[i] == "fadeout") props.FadeOut = float.Parse(all[i + 1]);
+															else if (all[i] == "noloop") props.Loop = false;
+														}
+														AudioInFrameProps.Add(props);
+														break;
+													}
+												default: break;
 											}
 										}
 										else
-											foreach (string line in framebody)
-											{
-												if (readingLine != "return" && !reader.EndOfStream)
-												{
-													if (!Regex.IsMatch(line, @"[\S\s]*""[\S\s]*""$"))
-
-													{
-														switch (line.Substring(0, line.IndexOf(' ')))
-														{
-															case "scene":
-																{
-																	string[] all = line.Split(' ');
-																	frame.BackgroundImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
-																	if (all.Length > 2) if (all[2] == "with") frame.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-																	Background = frame.BackgroundImageProps;
-																	usePreviousBackground = true;
-																	break;
-																}
-															case "show":
-																{
-																	string[] all = line.Split(' ');
-																	XImage image = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
-																	backImageListView.Items.Remove(image);
-																	imageListView.Items.Add(image);
-																	ImageProperties props = new ImageProperties() { Frame = frame, Image = image, Displayable = newDisplayable() };
-
-																	for (int i = 2; i < all.Length; i++)
-																	{
-																		if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
-																		else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
-																	}
-																	ImageInFrameProps.Add(props);
-																	break;
-																}
-															case "hide":
-																{
-																	string[] all = line.Split(' ');
-																	if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
-																	{
-																		frame.BackgroundImage = null;
-																		if (all.Length > 2) if (all[2] == "with")
-																				Background.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-																		usePreviousBackground = false;
-																	}
-																	//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
-																	else
-																		if (all.Length > 2) if (all[2] == "with")
-																			ImageInFrameProps.First(item => item.Image.Alias == all[1]).AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-																	break;
-																}
-															case "stop":
-																{
-																	frame.stopAudio = true;
-																	break;
-																}
-															case "play":
-																{
-																	string[] all = line.Split(' ');
-																	XAudio audio = musicListView.Items.OfType<XAudio>().First(item => item.Alias == all[2]);
-																	if (all[1] != "music")
-																	{
-																		musicListView.Items.Remove(audio);
-																		if (all[1] == "sound") soundListView.Items.Add(audio);
-																		else voiceListView.Items.Add(audio);
-																	}
-																	AudioProperties props = new AudioProperties() { Frame = frame, Audio = audio };
-																	for (int i = 2; i < all.Length; i++)
-																	{
-																		if (all[i] == "fadein") props.FadeIn = float.Parse(all[i + 1]);
-																		else if (all[i] == "fadeout") props.FadeOut = float.Parse(all[i + 1]);
-																		else if (all[i] == "noloop") props.Loop = false;
-																	}
-																	AudioInFrameProps.Add(props);
-																	break;
-																}
-															default: break;
-														}
-													}
-													else
-													{
-														if (usePreviousBackground) frame.BackgroundImage = Background.Image;
-														loadText(frame, line);
-													}
-												}
-											}
-										(selectedLabel.Content as ListView).Items.Add(frame);
-										//root = false;
-										if (readingLine != "return") readingLine = reader.ReadLine().TrimStart(' ');
+										{
+											if (usePreviousBackground) frame.BackgroundImage = Background.Image;
+											loadText(frame, line);
+										}
 									}
 								}
-								break;
-							default: return;
+							(selectedLabel.Content as ListView).Items.Add(frame);
+							
+							if (readingLine != "return") readingLine = reader.ReadLine().TrimStart(' ');
+							else frame.IsSelected = true;
 						}
+					}
 				}
-
 			}
 		}
 
