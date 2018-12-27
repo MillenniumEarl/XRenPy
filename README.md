@@ -35,7 +35,6 @@ Currently released application features:
 
 Features to add:
 - NVL
-- checking of duplicate resources
 - draggable and resizeable visual elements in the view block with effect
 - updater service
 - including newest Ren'Py version to the project (PyTom, hope you can hear me)
