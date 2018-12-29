@@ -1,4 +1,5 @@
 # XRenPy
+![Screenshot](preview.png)
 eXtended Ren'Py - visual editor for Ren'Py 7 (WIP)
 
 - Currently only Windows
