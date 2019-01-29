@@ -70,7 +70,7 @@
                     </Style>
                 </TabControl.Resources>
                 <TabItem Header="Background images">
-                    <ListView x:Name="backImageListView" Background="{x:Null}" SelectionMode="Single" >
+                    <ListView x:Name="backImageListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add image file" Click="imageImport_Click"/>
@@ -79,7 +79,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Character images">
-                    <ListView x:Name="imageListView" Background="{x:Null}" SelectionMode="Single">
+                    <ListView x:Name="imageListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add image" Click="imageImport_Click"/>
@@ -88,7 +88,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Music">
-                    <ListView x:Name="musicListView" Background="{x:Null}" SelectionMode="Single">
+                    <ListView x:Name="musicListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add music" Click="audioImport_Click"/>
@@ -97,7 +97,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Sounds">
-                    <ListView x:Name="soundListView" Background="{x:Null}" SelectionMode="Single">
+                    <ListView x:Name="soundListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add sound" Click="audioImport_Click"/>
@@ -106,7 +106,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Voices">
-                    <ListView x:Name="voiceListView" Background="{x:Null}" SelectionMode="Single">
+                    <ListView x:Name="voiceListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add voice" Click="audioImport_Click"/>
@@ -115,7 +115,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Movies">
-                    <ListView x:Name="movieListView" Background="{x:Null}" SelectionMode="Single">
+                    <ListView x:Name="movieListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add movie" Click="movieImport_Click"/>
@@ -124,7 +124,7 @@
                     </ListView>
                 </TabItem>
                 <TabItem Header="Side images">
-                    <ListView x:Name="sideListView" Background="{x:Null}" SelectionMode="Single">
+                    <ListView x:Name="sideListView" Background="{x:Null}" MouseUp="listView_MouseUp" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add icon" Click="imageImport_Click"/>
@@ -202,12 +202,91 @@
                 <TextBox x:Name="textBox" Margin="250,0" Foreground="#FFFFFFFF" TextWrapping="Wrap" Background="{x:Null}" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False" AllowDrop="False" FontSize="22" FontFamily="DejaVu Sans" Height="185" TextChanged="textBox_TextChanged" VerticalAlignment="Bottom"/>
             </Grid>
         </Viewbox>
-        <Button x:Name="charactersButton" Grid.Column="1" Content="Characters" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="charactersButton_Click" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" Height="100" VerticalAlignment="Top" Margin="5,5,0,0"/>
-        <Button x:Name="duplicateButton" Grid.Column="1" Content="Duplicate" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="duplicateFrame_Click" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,5"/>
-        <Button x:Name="GUIButton" Grid.Column="1" Content="GUI" Background="#66FFFFFF" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="GUIButton_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,5,5,0"/>
-        <Button x:Name="addEmptyFrameButton" Grid.Column="1" Content="Add next" Background="#66FFFFFF" BorderBrush="{x:Null}" IsCancel="True" FontSize="18" Click="addNextFrame_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Bottom" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,0,5,5"/>
+        <Button x:Name="charactersButton" Grid.Column="1" Content="Characters" BorderBrush="{x:Null}" FontSize="18" Click="charactersButton_Click" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" Height="100" VerticalAlignment="Top" Margin="5,5,0,0"/>
+        <Button x:Name="mixerButton" Grid.Column="1" Content="Audio mixer" BorderBrush="{x:Null}" FontSize="18" Click="audioMixer_Click" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,5"/>
+        <Button x:Name="GUIButton" Grid.Column="1" Content="GUI" Background="#66FFFFFF" BorderBrush="{x:Null}" FontSize="18" Click="GUIButton_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,5,5,0"/>
+        <Button x:Name="addFrameButton" Grid.Column="1" Content="Add frame" Background="#66FFFFFF" BorderBrush="{x:Null}" FontSize="18" Click="addNextFrame_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Bottom" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,0,5,5"/>
         <Button x:Name="prevFrame" Grid.Column="1" Content="≪" HorizontalAlignment="Left" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="5,105,0,105"/>
         <Button x:Name="nextFrame" Grid.Column="1" Content="≫" HorizontalAlignment="Right" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="0,105,5,105"/>
+        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Visibility="Collapsed">
+            <Rectangle Fill="White" Stroke="Black" Margin="5"/>
+            <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">
+                <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
+                <local:XCharacter Background="Gainsboro" Content="centered" Alias="centered" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
+                <local:XCharacter Background="Gainsboro" Content="extend" Alias="extend" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
+            </ListView>
+            <Button x:Name="addCharacter" FontSize="12" Content="Add" Margin="154,267,82,0" Click="addCharacter_Click" Height="23" VerticalAlignment="Top"/>
+            <TextBox x:Name="characterName" FontSize="12" Height="20" Margin="154,96,9,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+            <Label FontSize="12" Content="Character name" HorizontalAlignment="Left" Margin="154,76,0,0" VerticalAlignment="Top" Width="135" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
+            <Label FontSize="12" Content="Name style" HorizontalAlignment="Left" Margin="154,121,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
+            <CheckBox x:Name="characterNameBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,142,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="characterNameItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,142,0,0" VerticalAlignment="Top"/>
+            <xctk:ColorPicker x:Name="charName_colorPicker" FontSize="12"  VerticalAlignment="Top" Margin="234,162,10,0" UsingAlphaChannel="False" SelectedColor="Transparent"/>
+            <Label FontSize="12" Content="Text style" HorizontalAlignment="Left" Margin="154,189,0,0" VerticalAlignment="Top" Width="136" Padding="5,0" VerticalContentAlignment="Center" Height="16" FontStyle="Italic"/>
+            <CheckBox x:Name="characterTextBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,210,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="characterTextItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,210,0,0" VerticalAlignment="Top"/>
+            <xctk:ColorPicker x:Name="charText_colorPicker" FontSize="12" VerticalAlignment="Top" Margin="235,230,9,0" UsingAlphaChannel="False" SelectedColor="Transparent"/>
+            <Button x:Name="editCharacter" FontSize="12" Content="Change" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67" Click="editCharacter_Click" Margin="223,267,0,0" Height="23"/>
+            <Label FontSize="12" Content="Text color" HorizontalAlignment="Left" Margin="154,230,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+            <Label FontSize="12" Content="Name color" HorizontalAlignment="Left" Margin="154,162,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
+            <Rectangle HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stroke="Black"/>
+            <Image x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stretch="UniformToFill"/>
+            <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,12,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
+            <Button x:Name="characterSideImageConnect" Content="Connect" HorizontalAlignment="Left" Margin="223,54,0,0" VerticalAlignment="Top" Width="66" Grid.IsSharedSizeScope="True" Click="characterSideImageConnect_Click"/>
+        </Grid>
+        <Grid x:Name="mixerGrid" Background="#7FFFFFFF" Height="220" Width="300" VerticalAlignment="Bottom" FlowDirection="LeftToRight" Grid.Column="1" Margin="110,0,0,10" HorizontalAlignment="Left" Visibility="Collapsed">
+            <Rectangle Fill="White" Stroke="Black" Margin="5"/>
+            <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Width="70" Background="#19000000">
+                    <Label Content="Master" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5,5,5,20"/>
+                    <Button x:Name="playMaster" Width="40" Height="40" Content="▷" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="pauseMaster" Width="40" Height="40" Content="◫" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="stopMaster" Width="40" Height="40" Content="☐" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                </StackPanel>
+                <Separator/>
+                <StackPanel Width="70">
+                    <Label Content="Music" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5,5,5,20"/>
+                    <Button x:Name="playMusic" Width="40" Height="40" Content="▷" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="pauseMusic" Width="40" Height="40" Content="◫" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="stopMusic" Width="40" Height="40" Content="☐" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Label x:Name="musicName" Content="name" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+                <Separator>
+                    <Separator.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Separator.LayoutTransform>
+                </Separator>
+                <StackPanel Width="70">
+                    <Label Content="Sounds" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5,5,5,20"/>
+                    <Button x:Name="playSounds" Width="40" Height="40" Content="▷" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="pauseSounds" Width="40" Height="40" Content="◫" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="stopSounds" Width="40" Height="40" Content="☐" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Label x:Name="soundName" Content="name" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+                <Separator>
+                    <Separator.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Separator.LayoutTransform>
+                </Separator>
+                <StackPanel Width="70">
+                    <Label Content="Voice" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5,5,5,20"/>
+                    <Button x:Name="playVoice" Width="40" Height="40" Content="▷" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="pauseVoice" Width="40" Height="40" Content="◫" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Button x:Name="stopVoice" Width="40" Height="40" Content="☐" Padding="0,-7,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" />
+                    <Label x:Name="voiceName" Content="name" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
         <Grid  x:Name="GUIGrid" Background="#7FFFFFFF" Height="300" VerticalAlignment="Top" FlowDirection="LeftToRight" Grid.Column="1" Margin="0,10,110,0" HorizontalAlignment="Right" Width="270" Visibility="Collapsed">
             <Rectangle Fill="White" Stroke="Black" Margin="5"/>
             <Label Content="Width" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="10,10,0,0" VerticalContentAlignment="Center" Padding="5,0" Height="20"/>
@@ -267,7 +346,7 @@
                 <TabItem Header="Images"/>
             </TabControl>
         </Grid>
-        <Expander x:Name="media" Grid.Column="1" Header="" ExpandDirection="Right" Background="#7F000000" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="hidden" Expanded="media_Expanded" Collapsed="media_Collapsed">
+        <Expander x:Name="media" Grid.Column="1" Header="" ExpandDirection="Right" Background="#7F000000" HorizontalAlignment="Left" VerticalAlignment="Top"  Expanded="media_Expanded" Collapsed="media_Collapsed" Visibility="Hidden">
             <Grid Background="#7F7F7F7F" Width="480" Height="300">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -280,9 +359,9 @@
                         <Grid.Effect>
                             <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
                         </Grid.Effect>
-                        <Button x:Name="playMovie" Content="&#9199;" HorizontalAlignment="Left" Margin="160,196,0,0" VerticalAlignment="Top" Width="50" Height="50" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" HorizontalContentAlignment="Center" Padding="-1,-4,0,0" Background="{x:Null}" Foreground="#FFF0F0F0"/>
-                        <Button x:Name="pauseMovie" Content="&#9208;" Margin="215,196,215,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="pauseMovie_Click" FontSize="36" Padding="-1,-3,1,1" Background="{x:Null}" Foreground="#FFF0F0F0"/>
-                        <Button x:Name="stopMovie" Content="&#9209;" Margin="270,196,0,0" VerticalAlignment="Top" Height="50" BorderBrush="{x:Null}" Click="stopMovie_Click" HorizontalAlignment="Left" Width="50" FontSize="36" Padding="-1,-4,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="#FFF0F0F0"/>
+                        <Button x:Name="playMovie" Width="40" Height="40" Content="▷" Padding="0,-7,0,0" Margin="175,196,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Click="playMovie_Click" FontSize="36" Foreground="#FFF0F0F0" />
+                        <Button x:Name="pauseMovie" Width="40" Height="40" Content="◫" Padding="0,-7,0,0" Margin="215,196,215,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="36" Foreground="#FFF0F0F0" Click="pauseMovie_Click" />
+                        <Button x:Name="stopMovie" Width="40" Height="40" Content="☐" Padding="0,-7,0,0" Margin="265,196,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Click="stopMovie_Click" FontSize="36" Foreground="#FFF0F0F0" />
                         <Label x:Name="currentTimeMedia" Content="0:00" Margin="0,204,429,0" Height="37" VerticalAlignment="Top" FontSize="18" Foreground="#FFF0F0F0"/>
                         <Slider x:Name="volumeSliderMedia" Margin="0,181,0,0" RenderTransformOrigin="0.5,0.5" ValueChanged="movieVolume_ValueChanged" Maximum="100" SmallChange="5" LargeChange="10" TickFrequency="10" Value="100" Background="{x:Null}" Orientation="Vertical" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" HorizontalAlignment="Right" Width="29"/>
                         <Slider x:Name="currentTimeSliderMedia" Margin="0,246,34,0" VerticalAlignment="Top" TickPlacement="TopLeft" SmallChange="1" TickFrequency="5" ValueChanged="mediaCurrentTime_ValueChanged" LargeChange="10"/>
@@ -312,31 +391,5 @@
                 </StackPanel>
             </Grid>
         </Expander>
-        <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Visibility="Collapsed">
-            <Rectangle Fill="White" Stroke="Black" Margin="5"/>
-            <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">
-                <local:XCharacter Background="#FFF0F0F0" Content="none" Alias="none" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
-                <local:XCharacter Background="Gainsboro" Content="centered" Alias="centered" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
-                <local:XCharacter Background="Gainsboro" Content="extend" Alias="extend" Selected="uneditableCharacter_Selected" NameColor="Transparent" TextColor="Transparent"/>
-            </ListView>
-            <Button x:Name="addCharacter" FontSize="12" Content="Add" Margin="154,267,82,0" Click="addCharacter_Click" Height="23" VerticalAlignment="Top"/>
-            <TextBox x:Name="characterName" FontSize="12" Height="20" Margin="154,96,9,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <Label FontSize="12" Content="Character name" HorizontalAlignment="Left" Margin="154,76,0,0" VerticalAlignment="Top" Width="135" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
-            <Label FontSize="12" Content="Name style" HorizontalAlignment="Left" Margin="154,121,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
-            <CheckBox x:Name="characterNameBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,142,0,0" VerticalAlignment="Top"/>
-            <CheckBox x:Name="characterNameItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,142,0,0" VerticalAlignment="Top"/>
-            <xctk:ColorPicker x:Name="charName_colorPicker" FontSize="12"  VerticalAlignment="Top" Margin="234,162,10,0" UsingAlphaChannel="False" SelectedColor="Transparent"/>
-            <Label FontSize="12" Content="Text style" HorizontalAlignment="Left" Margin="154,189,0,0" VerticalAlignment="Top" Width="136" Padding="5,0" VerticalContentAlignment="Center" Height="16" FontStyle="Italic"/>
-            <CheckBox x:Name="characterTextBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,210,0,0" VerticalAlignment="Top"/>
-            <CheckBox x:Name="characterTextItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,210,0,0" VerticalAlignment="Top"/>
-            <xctk:ColorPicker x:Name="charText_colorPicker" FontSize="12" VerticalAlignment="Top" Margin="235,230,9,0" UsingAlphaChannel="False" SelectedColor="Transparent"/>
-            <Button x:Name="editCharacter" FontSize="12" Content="Change" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67" Click="editCharacter_Click" Margin="223,267,0,0" Height="23"/>
-            <Label FontSize="12" Content="Text color" HorizontalAlignment="Left" Margin="154,230,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
-            <Label FontSize="12" Content="Name color" HorizontalAlignment="Left" Margin="154,162,0,0" VerticalAlignment="Top" Width="80" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
-            <Rectangle HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stroke="Black"/>
-            <Image x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stretch="UniformToFill"/>
-            <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,12,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
-            <Button x:Name="characterSideImageConnect" Content="Connect" HorizontalAlignment="Left" Margin="223,54,0,0" VerticalAlignment="Top" Width="66" Grid.IsSharedSizeScope="True" Click="characterSideImageConnect_Click"/>
-        </Grid>
     </Grid>
 </Window>

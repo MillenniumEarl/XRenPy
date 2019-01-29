@@ -55,6 +55,11 @@ namespace X_Ren_Py
 			if (info.StartsWith("'")) info = info.Trim('\'');
 
 			return info;
-		}		
+		}
+
+		private void listView_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			getSelectedList().SelectedItem = null;
+		}
 	}
 }

@@ -4,6 +4,8 @@ using System.IO;
 using System.Windows.Media;
 using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace X_Ren_Py
 {	
@@ -12,7 +14,7 @@ namespace X_Ren_Py
 		protected string _Alias;
 		protected string _Path;
 
-        protected CheckBox _CheckBox = new CheckBox() { Margin = new Thickness(0), Padding = new Thickness(0) };
+        protected CheckBox _CheckBox = new CheckBox() { Margin = new Thickness(0), Padding = new Thickness(0), IsThreeState=true };
         protected Label _Label = new Label() { Margin = new Thickness(1, 0, 1, 0), Padding = new Thickness(1, 0, 1, 0) };
 
 		public string Alias { get { return _Alias; } set { _Alias = value; } }
@@ -28,7 +30,8 @@ namespace X_Ren_Py
 			StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal};
 			stack.Children.Add(_CheckBox);
 			stack.Children.Add(_Label);
-			Content = stack;       
+			Content = stack;
+			Checkbox.Tag = this;    
         }     
     }
 
@@ -89,31 +92,36 @@ namespace X_Ren_Py
 
     }
 
-    public class ImageProperties
-    {
-        private XFrame _Frame;
-        private XImage _Image;
-		private Image _Displayable;
-		private byte _Align;//0 - по умолчанию
+	public class ContentProperties
+	{
+		private XFrame _Frame;
+		private XFrame _StopFrame;
+		public XFrame Frame {get { return _Frame; } set { _Frame=value; } }
+		public XFrame StopFrame { get { return _StopFrame; } set { _StopFrame = value; } }
+	}
+	public class ImageBackProperties: ContentProperties
+	{
+		private XImage _Image;
 		private byte _AnimationInType;//0-нет анимации
 		private byte _AnimationOutType;//0-нет анимации
-
-		public XFrame Frame { get { return _Frame; } set { _Frame = value; } }
-        public XImage Image { get { return _Image; } set { _Image = value; } }
-		public Image Displayable { get { return _Displayable; } set { _Displayable = value; } }
-		public byte Align { get { return _Align; } set { _Align = value; } }
-        public byte AnimationInType { get { return _AnimationInType; } set { _AnimationInType = value; } }
+		public XImage Image { get { return _Image; } set { _Image = value; } }		
+		public byte AnimationInType { get { return _AnimationInType; } set { _AnimationInType = value; } }
 		public byte AnimationOutType { get { return _AnimationOutType; } set { _AnimationOutType = value; } }
 	}
-    public class AudioProperties
-    {
-        private XFrame _Frame;
+	public class ImageCharProperties: ImageBackProperties
+	{	private Image _Displayable;		
+		private byte _Align;//0 - по умолчанию
+		public Image Displayable { get { return _Displayable; } set { _Displayable = value; } }
+		public byte Align { get { return _Align; } set { _Align = value; } }
+	}
+    public class AudioProperties: ContentProperties
+	{        
         private XAudio _Audio;
         private float _FadeIn;
         private float _FadeOut;
         //private bool _Queue = false;//0-не в очереди на проигрывание
         private bool _Loop = false;
-        public XFrame Frame { get { return _Frame; } set { _Frame = value; } }
+        
         public XAudio Audio { get { return _Audio; } set { _Audio = value; } }
         public float FadeIn { get { return _FadeIn; } set { _FadeIn = value; } }
         public float FadeOut { get { return _FadeOut; } set { _FadeOut = value; } }
@@ -134,7 +142,11 @@ namespace X_Ren_Py
 					case "X_Ren_Py.XImage":
 						{
 							currentImage = sender as XImage;
-							if ((sender as XImage).IsChecked == true && ((sender as XImage).Parent as ListView) == imageListView) if (!addorselect) getImageProperties(currentFrame, sender as XImage);
+							if ((sender as XImage).IsChecked != false)
+							{
+								if (((sender as XImage).Parent as ListView) == backImageListView) { if (!addorselect) showImagePropsBackground(); }
+								else if (((sender as XImage).Parent as ListView) == imageListView) { if (!addorselect) showImagePropsCharacter(sender as XImage); }
+							}
 						};
 						break;
 					case "X_Ren_Py.XAudio":
@@ -151,28 +163,36 @@ namespace X_Ren_Py
 			}
         }
 
-        private void contentCollector(string currentPath, string projectPath)
+        private void contentCollector(string fromFile, string toFile)
         {
-			if (File.Exists(projectPath))
+			if (File.Exists(toFile))
 			{
-				if (projectPath != currentPath)
+				if (toFile != fromFile)
 				{
-					if (!Equals(File.ReadAllBytes(projectPath), File.ReadAllBytes(currentPath)))
+					if (!Equals(File.ReadAllBytes(toFile), File.ReadAllBytes(fromFile)))
 					{
-						File.Delete(projectPath);
-						File.Copy(currentPath, projectPath);
+						File.Delete(toFile);
+						File.Copy(fromFile, toFile);						
 					}
 				}
 			}
-			else File.Copy(currentPath, projectPath);
+			else File.Copy(fromFile, toFile);
 		}
 
-        private void resourcesSelectedItem_delete()
-        {
-            ListView selectedList = tabControlResources.SelectedContent as ListView;
-			File.Delete((selectedList.SelectedItem as XContent).Path);
-			selectedList.Items.Remove(selectedList.SelectedItem);
-        }
+		private void resourcesSelectedItem_delete()
+		{
+			media.IsExpanded=false;
+			ListView selectedList = tabControlResources.SelectedContent as ListView;
+
+			ArrayList elems = new ArrayList();
+			foreach (XContent item in selectedList.SelectedItems)	 elems.Add(item);
+			foreach (XContent item in elems)
+			{
+				File.Delete(item.Path);
+				selectedList.Items.Remove(item);
+			}	
+			
+		}
 		private void uncheckAll()
 		{
 			removeorunselect = false;

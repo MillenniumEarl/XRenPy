@@ -15,7 +15,6 @@ namespace X_Ren_Py
 		private bool _stopAudio = false;
 		private ObservableCollection<XMenuOption> _MenuOptions;
 		private XCharacter _Character;
-		private ImageProperties _BackgroundImageProps = new ImageProperties();
 		private XMovie _Movie;
 
 		public string Text { get { return _Text; } set { _Text = value; } }
@@ -23,18 +22,11 @@ namespace X_Ren_Py
 		public bool stopAudio { get { return _stopAudio; } set { _stopAudio = value; } }
 		public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
 		public XCharacter Character { get { return _Character; } set { _Character = value; } }
-
-		public ImageProperties BackgroundImageProps { get { return _BackgroundImageProps; } set { _BackgroundImageProps = value; } }
-		public XImage BackgroundImage { get { return _BackgroundImageProps.Image; } set { _BackgroundImageProps.Image = value; } }
-		public byte AnimationInType { get { return _BackgroundImageProps.AnimationInType; } set { _BackgroundImageProps.AnimationInType = value; } }
-		public byte AnimationOutType { get { return _BackgroundImageProps.AnimationOutType; } set { _BackgroundImageProps.AnimationOutType = value; } }
 		public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
 
 		public XFrame()
 		{
 			Content = "Frame []";
-			AnimationInType = 0;
-			AnimationOutType = 0;
 		}
 	}
 
@@ -56,8 +48,8 @@ namespace X_Ren_Py
 			uncheckAll();
 			addorselect = false;
 			currentFrame = sender as XFrame;
-			//после выбора фрейма нужно показать его содержимое. оно должно храниться в объекте этого фрейма с привязкой ко всем остальным объектам
 			textBox.Text = currentFrame.Text;
+			characterLabel.Content = currentFrame.Character.Content;
 
 			if (!currentFrame.isMenu)
 			{
@@ -72,28 +64,31 @@ namespace X_Ren_Py
 				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions;
 			}
 
-			if (currentFrame.BackgroundImage != null)
-			{
-				imageBackground.Source = imageShow(currentFrame.BackgroundImage.Path);
-				(backImageListView.Items[backImageListView.Items.IndexOf(currentFrame.BackgroundImage)] as XImage).IsChecked = true;
-			}
-			else imageBackground.Source = null;
+			//ресурсы
+			getPreviousFrames();
+			//при выборе фрейма сначала проверяется, есть ли пропы ТОЛЬКО предыдущих кадров включая нынешний, откидывается полностью часть пропов со стоп-маркерами в виде предыдущих же кадров
+			//проще говоря, в списке оказываются только те пропы, у которых есть начало, но нет конца до нынешнего фрейма включительно
+			List<ImageBackProperties> backgroundslist = BackInFrameProps.Where(back=>previousFrames.Contains(back.Frame)&&!previousFrames.Contains(back.StopFrame)).ToList();
+			List<ImageCharProperties> imageslist = ImageInFrameProps.Where(img => previousFrames.Contains(img.Frame) && !previousFrames.Contains(img.StopFrame)).ToList();
+			List<AudioProperties> audiolist = AudioInFrameProps.Where(mus => previousFrames.Contains(mus.Frame) && !previousFrames.Contains(mus.StopFrame)).ToList();
 
-			characterLabel.Content = currentFrame.Character.Content;
-
-			foreach (ImageProperties imageprops in ImageInFrameProps.Where(frame => frame.Frame == currentFrame))
+			//пропов будет всегда немного, потому по ним искать легче легкого и проще простого.
+			foreach (ImageBackProperties backprops in backgroundslist)
 			{
-				imageprops.Image.IsChecked = true;
-				imageprops.Image.Background = currentFrameResourceColor;
+				if (backprops.Frame != currentFrame) backprops.Image.IsChecked = null; else backprops.Image.IsChecked = true;
+				backprops.Image.Background = currentFrameResourceColor;
 			}
-			foreach (AudioProperties audprops in AudioInFrameProps.Where(frame => frame.Frame == currentFrame))
+
+			foreach (ImageCharProperties imageprops in imageslist)
 			{
-				audprops.Audio.IsChecked = true;
+				if (imageprops.Frame != currentFrame) imageprops.Image.IsChecked = null; else imageprops.Image.IsChecked = true;
+					imageprops.Image.Background = currentFrameResourceColor;
+			}
+			foreach (AudioProperties audprops in audiolist)
+			{
+				if (audprops.Frame != currentFrame) audprops.Audio.IsChecked = null; else audprops.Audio.IsChecked = true;
 				audprops.Audio.Background = currentFrameResourceColor;
 			}
-
-			if (currentFrame.stopAudio) stopAudio.IsChecked = true;
-			else stopAudio.IsChecked = false;
 
 			addorselect = true;
 		}
@@ -111,43 +106,7 @@ namespace X_Ren_Py
 			selectedList.Items.Insert(selectedList.Items.IndexOf(selectedList.SelectedItem) + 1, frame);
 			frame.IsSelected = true;
 		}
-		private void duplicateFrame_Click(object sender, RoutedEventArgs e)
-		{
-			XFrame duplicate = createFrame();
-			duplicate.Text = currentFrame.Text;
-			duplicate.isMenu = currentFrame.isMenu;
-			duplicate.MenuOptions = currentFrame.MenuOptions;
-			duplicate.Character = currentFrame.Character;
-			duplicate.BackgroundImage = currentFrame.BackgroundImage;
-			duplicate.Movie = currentFrame.Movie;
-
-			List<ImageProperties> newimageprops = new List<ImageProperties>();
-			//существующую коллекцию нельзя менять во время прохождения по ней, а объединить коллекции проще пока не удалось. Потому придется использовать два перечислителя
-			foreach (ImageProperties i in ImageInFrameProps)
-			{
-				if (i.Frame == currentFrame)
-				{
-					ImageProperties newprop = new ImageProperties() { Frame = duplicate, Image = i.Image };
-					newimageprops.Add(newprop);
-				}
-			}
-			foreach (ImageProperties i in newimageprops) { ImageInFrameProps.Add(i); }
-
-			List<AudioProperties> newaudioprops = new List<AudioProperties>();
-			//существующую коллекцию нельзя менять во время прохождения по ней, а объединить коллекции проще пока не удалось. Потому придется использовать два перечислителя
-			foreach (AudioProperties i in AudioInFrameProps)
-			{
-				if (i.Frame == currentFrame)
-				{
-					AudioProperties newprop = new AudioProperties() { Frame = duplicate, Audio = i.Audio };
-					newaudioprops.Add(newprop);
-				}
-			}
-			foreach (AudioProperties i in newaudioprops) { AudioInFrameProps.Add(i); }
-
-			getSelectedList().Items.Insert(getSelectedList().Items.IndexOf(currentFrame) + 1, duplicate);
-			duplicate.IsSelected = true;
-		}
+		
 		private void deleteFrame_Click(object sender, EventArgs e) { if(getSelectedList().Items.Count>1) getSelectedList().Items.Remove(getSelectedFrame()); else MessageBox.Show("Error: Label must contain at least one frame", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		private void PrevNext_Click(object sender, RoutedEventArgs e)
 		{			
@@ -162,6 +121,10 @@ namespace X_Ren_Py
 		}
 		private XFrame getSelectedFrame() { return getSelectedList().SelectedItem as XFrame; }
 		private ListView getSelectedList() { return tabControlStruct.SelectedContent as ListView; }
-
+		private void getPreviousFrames()
+		{
+			previousFrames.Clear();
+			for (int i = 0; i <= getSelectedList().Items.IndexOf(currentFrame); i++) previousFrames.Add(getSelectedList().Items[i] as XFrame);
+		}
 	}
 }

@@ -90,14 +90,14 @@ namespace X_Ren_Py
 				}
 		}
 
-		private void exportHideImage(StreamWriter writer, ImageProperties property)
+		private void exportHideImage(StreamWriter writer, ImageCharProperties property)
 		{
 			string animationType="";
 			if (property.AnimationOutType != 0) animationType = " with " + animationOutTypeComboBox.Items[property.AnimationOutType];
 			writer.WriteLine(tab + "hide " + property.Image.Alias+animationType);
 		}
 
-		private void exportShowImage(StreamWriter writer, ImageProperties property)
+		private void exportShowImage(StreamWriter writer, ImageCharProperties property)
 		{
 			string align = "";
 			string animationType = "";			

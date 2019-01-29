@@ -63,8 +63,8 @@ namespace X_Ren_Py
 		SolidColorBrush unusedResourceColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
 		//контекстные меню
-		MenuItem addFrame, addRootFrame, duplicateFrame, convertFrameMenu, deleteFrame, addMenu, 
-			addImage, deleteImage, reloadImage, addAudio, deleteAudio, stopAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
+		MenuItem addFrame, addRootFrame, convertFrameMenu, deleteFrame, addMenu, 
+			addImage, deleteImage, reloadImage, addAudio, deleteAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
 		ContextMenu cmFrame, cmLabel, cmImage, cmAudio, cmMovie, cmIcon;
 
 		//текст для динамических кнопок
@@ -78,6 +78,7 @@ namespace X_Ren_Py
 		XImage currentImage;
 		XAudio currentAudio;
 		XMovie currentMovie;
+		List<XFrame> previousFrames = new List<XFrame> { };
 		List<ComboBoxItem> fonts;
 		List<ComboBoxItem> menuActions = new List<ComboBoxItem> { };
 		List<string> animationIn = new List<string>
@@ -87,11 +88,13 @@ namespace X_Ren_Py
 		{"None","dissolve","fade","pixellate","move","moveoutright","moveoutleft","moveouttop","moveoutbottom","easeoutright","easeoutleft","easeouttop","easeoutbottom","zoomout","zoominout",
 			"vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideawayleft","slideawayright","slideawayup","slideawaydown","pushright","pushleft","pushtop","pushbottom","irisout" };
 		ObservableCollection<ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
-		
-		List<ImageProperties> ImageInFrameProps = new List<ImageProperties> { };
+
+		List<ImageBackProperties> BackInFrameProps = new List<ImageBackProperties> { };
+		List<ImageCharProperties> ImageInFrameProps = new List<ImageCharProperties> { };
 		List<AudioProperties> AudioInFrameProps = new List<AudioProperties> { };
 		bool removeorunselect = true;//переключатель удаления взаимосвязей выделенных ресурсов. При выборе фрейма их не надо удалять, потому 0, при снятии галочки вручную - 1
 		bool addorselect = true;//то же самое на случай добавления или показа ресурсов
+		bool waschecked = false;//если галочка стояла, 1. если нет, 0
 		bool show = false;
 		private XImage lastImageChecked;//для содержания последнего выбранного элемента из списка фоновых картинок
 		private XMovie lastMovieChecked;//для содержания последнего выбранного элемента из списка фоновых видео
@@ -102,7 +105,6 @@ namespace X_Ren_Py
 			addFrame = new MenuItem() { Header = "Add empty frame" }; addFrame.Click += addNextFrame_Click;
 			addRootFrame = new MenuItem() { Header = "Add empty frame" }; addRootFrame.Click += addNextFrame_Click;
 			convertFrameMenu = new MenuItem() { }; convertFrameMenu.Click += convertFrameMenu_Click;
-			duplicateFrame = new MenuItem() { Header = "Duplicate frame" }; duplicateFrame.Click += duplicateFrame_Click;
 			deleteFrame = new MenuItem() { Header = "Delete frame/menu" }; deleteFrame.Click += deleteFrame_Click;
 			addMenu = new MenuItem() { Header = "Add menu" }; addMenu.Click += addNextFrame_Click;
 			addImage = new MenuItem() { Header = "Add image" }; addImage.Click += imageImport_Click;
@@ -111,7 +113,6 @@ namespace X_Ren_Py
 			addAudio = new MenuItem() { Header = "Add audio" }; addAudio.Click += audioImport_Click;
 			reloadAudio = new MenuItem() { Header = "Reload audio" }; reloadAudio.Click += audioReload_Click;
 			deleteAudio = new MenuItem() { Header = "Delete audio" }; deleteAudio.Click += audioDeleteFromList_Click;
-			stopAudio = new MenuItem() { Header = "Stop audio", IsCheckable = true }; stopAudio.Click += stopAudio_Click;
 			addMovie = new MenuItem() { Header = "Add movie" }; addMovie.Click += movieImport_Click;
 			reloadMovie = new MenuItem() { Header = "Reload movie" }; reloadMovie.Click += movieReload_Click;
 			deleteMovie = new MenuItem() { Header = "Delete movie" }; deleteMovie.Click += deleteVideo_Click;
@@ -120,7 +121,7 @@ namespace X_Ren_Py
 			deleteIcon = new MenuItem() { Header = "Delete icon" }; deleteIcon.Click += imageDeleteFromList_Click;
 
 
-			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] {addRootFrame, duplicateFrame, convertFrameMenu, deleteFrame, stopAudio } };
+			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] {addRootFrame, convertFrameMenu, deleteFrame} };
 			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, addMenu} };
 			cmImage = new ContextMenu { ItemsSource = new MenuItem[] { addImage, reloadImage, deleteImage } };
 			cmAudio = new ContextMenu { ItemsSource = new MenuItem[] { addAudio, reloadAudio, deleteAudio } };

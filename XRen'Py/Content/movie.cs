@@ -22,11 +22,10 @@ namespace X_Ren_Py
 						string name = vidDialog.SafeFileNames[file];
 						if (!(tabControlResources.SelectedContent as ListView).Items.OfType<XMovie>().Any(item => item.Header == name))
 						{
-							string currentPath = vidDialog.FileNames[file];
-
-							XMovie newmovie = new XMovie() { Header = name, Path = currentPath };
-							movieMouseActions(newmovie);
-							movieListView.Items.Add(newmovie);
+							XMovie movie = new XMovie() { Header = name, Path = projectFolder + moviesFolder + name};
+							movieMouseActions(movie);
+							movieListView.Items.Add(movie);
+							contentCollector(vidDialog.FileNames[file], movie.Path);
 						}
 						else MessageBox.Show("Movie is already in use!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 					}
@@ -82,7 +81,7 @@ namespace X_Ren_Py
 
 		private void movie_Checked(object sender, RoutedEventArgs e)
         {			            
-			currentMovie= ((sender as CheckBox).Parent as StackPanel).Parent as XMovie;
+			currentMovie= (sender as CheckBox).Tag as XMovie;
 
 			if (lastMovieChecked != null && lastMovieChecked != currentMovie) lastMovieChecked.IsChecked = false;
 			lastMovieChecked = currentMovie;
@@ -93,7 +92,7 @@ namespace X_Ren_Py
         }
         private void movie_Unchecked(object sender, RoutedEventArgs e)
         {
-            XMovie selectedMovie = (sender as CheckBox).Parent as XMovie;
+            XMovie selectedMovie = (sender as CheckBox).Tag as XMovie;
             if (removeorunselect) currentFrame.Movie = null;
             movieBackground.Source = null;
             imageBackground.Source = null;
