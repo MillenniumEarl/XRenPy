@@ -79,10 +79,8 @@ namespace X_Ren_Py
 				{
 					{
 						XLabel selectedLabel = tabControlStruct.Items.OfType<XLabel>().First(label => label.Text == singleLine.Substring(6, singleLine.Length - 7));
-						//ImageBackProperties Background = new ImageCharProperties();
-						//bool usePreviousBackground = false;
 						XFrame frame;
-						List<XFrame> previousFrames=new List<XFrame> { };
+						previousFrames.Clear();
 						string readingLine = reader.ReadLine().TrimStart(' ');
 						while (readingLine != "return")
 						{
@@ -100,7 +98,6 @@ namespace X_Ren_Py
 								if (Regex.IsMatch(framebody[1], @"[\S\s]*""[\S\s]*""$")) loadText(frame, framebody[1]);
 								framebody.Clear();
 
-								//frame.BackgroundImage = Background.Image;
 								frame.isMenu = true;
 								frame.MenuOptions = new ObservableCollection<XMenuOption> { };
 								bool first = true;
@@ -146,11 +143,11 @@ namespace X_Ren_Py
 													{
 														//переделать под использование один-к-одному BackInFrameProps
 														string[] all = line.Split(' ');
-														ImageBackProperties BackProp = new ImageBackProperties() { Frame = frame, Image = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]) };														
+														XImage selectedImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+														ImageBackProperties BackProp = new ImageBackProperties() { Frame = frame, Image = selectedImage };
 														if (all.Length > 2) if (all[2] == "with") BackProp.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
 														BackInFrameProps.Add(BackProp);
-														//Background = frame.BackgroundImageProps;
-														//usePreviousBackground = true;
+														BackInFrameProps.LastOrDefault(prop => previousFrames.Contains(prop.Frame) && prop.Image == selectedImage).StopFrame = frame;
 														break;
 													}
 												case "show":
@@ -174,20 +171,25 @@ namespace X_Ren_Py
 														string[] all = line.Split(' ');
 														if (backImageListView.Items.OfType<XImage>().Any(prop => prop.Alias == all[1]))
 														{
-															//frame.BackgroundImage = null;
+															ImageBackProperties BackProp = BackInFrameProps.Last(prop => prop.Image.Alias == all[1]);
 															if (all.Length > 2) if (all[2] == "with")
-																	BackInFrameProps.Last(prop=>prop.Image.Alias == all[1]).AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-															//usePreviousBackground = false;
+																	BackProp.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+															BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == backImageListView.Items.OfType<XImage>().First(img => img.Alias == all[1])).StopFrame = frame;
 														}
 														//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
 														else
+														{
+															ImageCharProperties CharProp = ImageInFrameProps.Last(prop => prop.Image.Alias == all[1]);
 															if (all.Length > 2) if (all[2] == "with")
-																ImageInFrameProps.Last(prop => prop.Image.Alias == all[1]).AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+																	CharProp.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+															BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == imageListView.Items.OfType<XImage>().First(img => img.Alias == all[1])).StopFrame = frame;
+														}
 														break;
 													}
 												case "stop":
 													{
-														frame.stopAudio = true;
+														string type = line.Substring(5) + " ";
+														AudioInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Audio.Type == type).StopFrame = frame;
 														break;
 													}
 												case "play":
@@ -213,15 +215,12 @@ namespace X_Ren_Py
 												default: break;
 											}
 										}
-										else
-										{
-											//if (usePreviousBackground) frame.BackgroundImage = Background.Image;
-											loadText(frame, line);
-										}
+										else loadText(frame, line);
 									}
 								}
 							(selectedLabel.Content as ListView).Items.Add(frame);
-							
+							previousFrames.Add(frame);
+
 							if (readingLine != "return") readingLine = reader.ReadLine().TrimStart(' ');
 							else frame.IsSelected = true;
 						}
@@ -239,19 +238,19 @@ namespace X_Ren_Py
 			writer.WriteLine(scriptstart + nextLine);
 			//init
 			writer.WriteLine(backgroundImages);
-			foreach (XImage image in backImageListView.Items)	writer.WriteLine("image " + image.Alias + eQuote(image.Header));
-			
+			foreach (XImage image in backImageListView.Items) writer.WriteLine("image " + image.Alias + eQuote(image.Header));
+
 			writer.WriteLine(characterImages);
-			foreach (XImage image in imageListView.Items)		writer.WriteLine("image " + image.Alias + eQuote(image.Header));
+			foreach (XImage image in imageListView.Items) writer.WriteLine("image " + image.Alias + eQuote(image.Header));
 
 			writer.WriteLine(musicAudio);
-			foreach (XAudio audio in musicListView.Items)		writer.WriteLine(define + "audio." + audio.Alias + eQuote(musicFolder + audio.Header));
+			foreach (XAudio audio in musicListView.Items) writer.WriteLine(define + "audio." + audio.Alias + eQuote(musicFolder + audio.Header));
 
 			writer.WriteLine(soundsAudio);
-			foreach (XAudio audio in soundListView.Items)		writer.WriteLine(define + "audio." + audio.Alias + eQuote(soundsFolder + audio.Header));
+			foreach (XAudio audio in soundListView.Items) writer.WriteLine(define + "audio." + audio.Alias + eQuote(soundsFolder + audio.Header));
 
 			writer.WriteLine(voiceAudio);
-			foreach (XAudio audio in voiceListView.Items)		writer.WriteLine(define + "audio." + audio.Alias + eQuote(voicesFolder + audio.Header));
+			foreach (XAudio audio in voiceListView.Items) writer.WriteLine(define + "audio." + audio.Alias + eQuote(voicesFolder + audio.Header));
 
 			writer.WriteLine(Movies);
 			foreach (XMovie movie in movieListView.Items)
@@ -282,74 +281,67 @@ namespace X_Ren_Py
 			for (int chosenLabelNumber = 1; chosenLabelNumber < tabControlStruct.Items.Count; chosenLabelNumber++)
 			{
 				writer.WriteLine(nextLine + label + (tabControlStruct.Items[chosenLabelNumber] as XLabel).Text + ':');
-				XFrame previousFrame = new XFrame { };//предыдущий кадр для сравнения. Дабы не обновлять весь контент каждый кадр, как здесь, можно откидывать ненужные обновления после сравнения
+
 				for (int chosenFrameNumber = 0; chosenFrameNumber < ((tabControlStruct.Items[chosenLabelNumber] as XLabel).Content as ListView).Items.Count; chosenFrameNumber++)
 				{
 					//все что касается конкретного кадра
 					XFrame chosenFrame = ((tabControlStruct.Items[chosenLabelNumber] as XLabel).Content as ListView).Items[chosenFrameNumber] as XFrame;
 					//background	
-					
-					//переделать под использование BackInFrameProps				
-					//if (chosenFrame.BackgroundImage != null)
-					//{
-					//	string animationType = "";
-					//	if (chosenFrame.AnimationInType != 0) animationType = " with " + animationInTypeComboBox.Items[chosenFrame.AnimationInType];
-					//	if (previousFrame.BackgroundImage != chosenFrame.BackgroundImage)
-					//		writer.WriteLine(tab + "scene " + chosenFrame.BackgroundImage.Alias + animationType);
-					//}
-					//else
-					//{//когда выбран корневой фрейм, смысла скрывать фон нет - до него фона не было, потому j>0
-					//	string animationType = "";
-					//	if (chosenFrame.AnimationOutType != 0) animationType = " with " + animationOutTypeComboBox.Items[chosenFrame.AnimationOutType];
-					//	if (chosenFrameNumber > 0 && previousFrame.BackgroundImage != null)
-					//		writer.WriteLine(tab + "hide " + previousFrame.BackgroundImage.Alias + animationType);
-					//}
+					ImageBackProperties BackProp;
+
+					if (BackInFrameProps.Any(prop => prop.StopFrame == chosenFrame))
+					{
+						BackProp = BackInFrameProps.First(prop => prop.StopFrame == chosenFrame);
+						string animationType = "";
+						if (BackProp.AnimationOutType != 0) animationType = " with " + animationOutTypeComboBox.Items[BackProp.AnimationOutType];
+						writer.WriteLine(tab + "hide " + BackProp.Image.Alias + animationType);
+					}
+					if (BackInFrameProps.Any(prop => prop.Frame == chosenFrame))
+					{
+						BackProp = BackInFrameProps.First(prop => prop.Frame == chosenFrame);
+						string animationType = "";
+						if (BackProp.AnimationInType != 0) animationType = " with " + animationInTypeComboBox.Items[BackProp.AnimationInType];
+						writer.WriteLine(tab + "scene " + BackProp.Image.Alias + animationType);
+					}
 
 					//images
-					//случай, когда в данном фрейме есть картинки
-					if (ImageInFrameProps.Any(img => img.Frame == chosenFrame))
-					{//и в предыдущем тоже есть - самый сложный, но самый частый
-						if (ImageInFrameProps.Any(img => img.Frame == previousFrame))
+					if (ImageInFrameProps.Any(prop => prop.StopFrame == chosenFrame))
+					{
+						foreach (ImageCharProperties property in ImageInFrameProps.Where(prop => prop.StopFrame == chosenFrame))
 						{
-							//сравниваем все картинки между собой
-							var prevImages = ImageInFrameProps.Where(previmg => previmg.Frame == previousFrame);
-							var chosImages = ImageInFrameProps.Where(chosimg => chosimg.Frame == chosenFrame);
-							//если находим те, что есть в нынешнем фрейме, но в предыдущем их нет							
-							foreach (ImageCharProperties property in prevImages.Where(previmg => (!chosImages.Any(chosenimg => previmg.Image == chosenimg.Image))))
-								exportHideImage(writer, property);
-							foreach (ImageCharProperties property in chosImages.Where(chosenimg => (!prevImages.Any(previmg => chosenimg.Image == previmg.Image))))
-								exportShowImage(writer, property);
-						}
-						else
-						{//если в предыдущем нету ничего, а в нынешнем есть
-							foreach (ImageCharProperties property in ImageInFrameProps.Where(chosenimg => chosenimg.Frame == chosenFrame))
-							{
-								if (!ImageInFrameProps.Any(img => img.Image == property.Image && img.Frame == previousFrame))
-									exportShowImage(writer, property);
-							}
+							string animationType = "";
+							if (property.AnimationOutType != 0) animationType = " with " + animationOutTypeComboBox.Items[property.AnimationOutType];
+							writer.WriteLine(tab + "hide " + property.Image.Alias + animationType);
 						}
 					}
-					else
+					if (ImageInFrameProps.Any(prop => prop.Frame == chosenFrame))
 					{
-						//в нынешнем нет, а в предыдущем есть
-						if (ImageInFrameProps.Any(img => img.Frame == previousFrame))
-						{//hide картинок предыдущего фрейма
-							foreach (ImageCharProperties property in ImageInFrameProps.Where(previmg => previmg.Frame == previousFrame))
-							{
-								if (!ImageInFrameProps.Any(img => img.Image == property.Image && img.Frame == currentFrame))
-									exportHideImage(writer, property);
-							}
+						foreach (ImageCharProperties property in ImageInFrameProps.Where(prop => prop.Frame == chosenFrame))
+						{
+							string align = "";
+							string animationType = "";
+							if (property.Align != 0) align = " at " + alignComboBox.Items[property.Align];
+							if (property.AnimationInType != 0) animationType = " with " + animationInTypeComboBox.Items[property.AnimationInType];
+							writer.WriteLine(tab + "show " + property.Image.Alias + align + animationType);
 						}
 					}
 
 					//audio
-					if (chosenFrame.stopAudio) { writer.WriteLine(tab + "stop audio"); writer.WriteLine(tab + "stop music"); }
-					if (AudioInFrameProps.Any(img => img.Frame == chosenFrame))
+					if (AudioInFrameProps.Any(mus => mus.StopFrame == chosenFrame))
+					{
+						foreach (AudioProperties property in AudioInFrameProps.Where(prop => (prop.StopFrame == chosenFrame)))
+						{
+							if (property.Audio.Type == "music ") writer.WriteLine(tab + "stop music");
+							else if (property.Audio.Type == "sound ") writer.WriteLine(tab + "stop sound");
+							else writer.WriteLine(tab + "stop voice");
+						}
+					}
+					if (AudioInFrameProps.Any(mus => mus.Frame == chosenFrame))
 					{
 						string fadein = "";
 						string fadeout = "";
 						string loop = "";
-						foreach (AudioProperties property in AudioInFrameProps.Where(chosenaud => (chosenaud.Frame == chosenFrame)))
+						foreach (AudioProperties property in AudioInFrameProps.Where(prop => (prop.Frame == chosenFrame)))
 						{
 							if (property.FadeIn != 0) fadein = " fadein " + property.FadeIn;
 							if (property.FadeOut != 0) fadeout = " fadeout " + property.FadeOut;
@@ -360,16 +352,16 @@ namespace X_Ren_Py
 					}
 
 					//movie
-					if (chosenFrame.Movie != null)
-					{
-						if (previousFrame.Movie != chosenFrame.Movie)
-							writer.WriteLine(tab + "show " + chosenFrame.Movie.Alias);
-					}
-					else
-					{
-						if (chosenFrameNumber > 0 && previousFrame.Movie != null)
-							writer.WriteLine(tab + "hide " + previousFrame.Movie.Alias);
-					}
+					//if (chosenFrame.Movie != null)
+					//{
+					//	if (previousFrame.Movie != chosenFrame.Movie)
+					//		writer.WriteLine(tab + "show " + chosenFrame.Movie.Alias);
+					//}
+					//else
+					//{
+					//	if (chosenFrameNumber > 0 && previousFrame.Movie != null)
+					//		writer.WriteLine(tab + "hide " + previousFrame.Movie.Alias);
+					//}
 
 					//menu
 					if (chosenFrame.isMenu)
@@ -390,13 +382,10 @@ namespace X_Ren_Py
 						if (chosenFrame.Character != characterListView.Items[0]) character = chosenFrame.Character.Alias + " ";
 						writer.WriteLine(tab + character + quote(chosenFrame.Text));
 					}
-					
-					previousFrame = chosenFrame;
 				}
 				writer.WriteLine(tab + Return + nextLine);
 			}
-
 			writer.Close();
-		}		
+		}
 	}
 }

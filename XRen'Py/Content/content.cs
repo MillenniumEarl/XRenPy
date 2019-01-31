@@ -152,7 +152,7 @@ namespace X_Ren_Py
 					case "X_Ren_Py.XAudio":
 						{
 							currentAudio = sender as XAudio;
-							if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(currentFrame, sender as XAudio);
+							if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(sender as XAudio);
 						};
 						break;
 					case "X_Ren_Py.XMovie":

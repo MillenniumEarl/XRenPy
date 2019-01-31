@@ -101,14 +101,6 @@ namespace X_Ren_Py
 			newaudio.Checkbox.Indeterminate += audio_Indeterminate;
 		}
 
-		private void audio_Indeterminate(object sender, RoutedEventArgs e)
-		{
-			if (waschecked && addorselect) (sender as CheckBox).IsChecked = false;
-
-			//оставим это на таймлайн
-			//else { imageBackground.Source = imageShow(((sender as CheckBox).Tag as XImage).Path); };
-		}
-
 		private void audio_MouseLeave(object sender, MouseEventArgs e)
 		{
 			if (!show)
@@ -124,7 +116,7 @@ namespace X_Ren_Py
 					coverartShow(currentAudio.Path);
 					if (currentAudio.IsChecked == true)
 					{
-						getAudioProperties(currentFrame, currentAudio);
+						getAudioProperties(currentAudio);
 						audioPropsPanel.Visibility = Visibility.Visible;
 					}
 					else audioPropsPanel.Visibility = Visibility.Hidden;
@@ -136,35 +128,93 @@ namespace X_Ren_Py
         {			
 			bool isLooped=false;
             currentAudio = (sender as CheckBox).Tag as XAudio;
-			//аудиослой для таймлайна должен будет быть тут. Если таймлайн вообще будет
-			if (currentAudio.Type == "music ") isLooped = true;
-				if (addorselect) AudioInFrameProps.Add(new AudioProperties() { Frame = currentFrame, Audio = currentAudio, Loop=isLooped });
-            getAudioProperties(currentFrame, currentAudio);
+			getPreviousFrames();
+
+			if (AudioInFrameProps.Any(prop => prop.StopFrame == currentFrame && prop.Audio == currentAudio))
+			{
+				AudioInFrameProps.First(prop => prop.StopFrame == currentFrame && prop.Audio == currentAudio).StopFrame = null;
+				(sender as CheckBox).IsChecked = null;
+			}
+			else
+			{
+				//аудиослой для таймлайна должен будет быть тут. Если таймлайн вообще будет
+				if (currentAudio.Type == "music ")
+				{
+					if (lastMusicChecked != null && lastMusicChecked != currentAudio)
+					{
+						lastMusicChecked.IsChecked = false;
+						if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == lastMusicChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
+					}
+					lastMusicChecked = currentAudio;
+
+					isLooped = true;
+					music.Source = new Uri(currentAudio.Path, UriKind.Absolute);
+				}
+				else if (currentAudio.Type == "sound ")
+				{
+					if (lastSoundChecked != null && lastSoundChecked != currentAudio)
+					{
+						lastSoundChecked.IsChecked = false;
+						if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == lastSoundChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
+					}
+					lastSoundChecked = currentAudio;
+
+					sound.Source = new Uri(currentAudio.Path, UriKind.Absolute);
+				}
+				else
+				{
+					if (lastVoiceChecked != null && lastVoiceChecked != currentAudio)
+					{
+						lastVoiceChecked.IsChecked = false;
+						if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == lastVoiceChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
+					}
+					lastVoiceChecked = currentAudio;
+
+					voice.Source = new Uri(currentAudio.Path, UriKind.Absolute);
+				}
+
+				if (addorselect) AudioInFrameProps.Add(new AudioProperties() { Frame = currentFrame, Audio = currentAudio, Loop = isLooped });
+				getAudioProperties(currentAudio);
+			}
+
 			audioPropsPanel.Visibility = Visibility.Visible;
 			show = true;
 			waschecked = true;
 		}
-        private void audio_Unchecked(object sender, RoutedEventArgs e)
+		private void audio_Indeterminate(object sender, RoutedEventArgs e)
 		{
+			if (waschecked && addorselect) (sender as CheckBox).IsChecked = false;
+
+			//оставим это на таймлайн
+			else
+			{
+				//getPreviousFrames();
+				XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
+				if (selectedAudio.Type == "music ") music.Source = new Uri(selectedAudio.Path);
+				else if (selectedAudio.Type == "sound ") sound.Source = new Uri(selectedAudio.Path);
+				else voice.Source = new Uri(selectedAudio.Path);
+			};
+		}
+		private void audio_Unchecked(object sender, RoutedEventArgs e)
+		{
+			XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
 			if (waschecked)
 			{
-				XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
-
-				//string source = new Uri(selectedAudio.Path).ToString();
 				if (removeorunselect) AudioInFrameProps.Remove(AudioInFrameProps.Find(i => i.Frame == currentFrame && i.Audio == selectedAudio));
-				media.IsExpanded = false;
-				show = false;
 				waschecked = false;
 			}
 			else
 			{
-				XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
-				//string source = new Uri(selectedAudio.Path).ToString();
+				getPreviousFrames();
 				if (removeorunselect) AudioInFrameProps.Find(i => i.Frame == currentFrame && i.Audio == selectedAudio).StopFrame = currentFrame;
-				media.IsExpanded = false;
-				show = false;
-				waschecked = false;
 			}
+
+			if (selectedAudio.Type == "music ") music.Source = null;
+			else if (selectedAudio.Type == "sound ") sound.Source = null;
+			else voice.Source = null;
+
+			audioPropsPanel.Visibility = Visibility.Hidden;
+			show = false;
 		}
         
         private void audioDeleteFromList_Click(object sender, RoutedEventArgs e)
@@ -172,15 +222,10 @@ namespace X_Ren_Py
             foreach (AudioProperties audio in AudioInFrameProps.Where(audio => audio.Audio == sender)) AudioInFrameProps.Remove(audio);
             resourcesSelectedItem_delete();
         }
-		private void stopAudio_Click(object sender, RoutedEventArgs e)
+
+		public void getAudioProperties(XAudio audio)
 		{
-			if ((sender as MenuItem).IsChecked)
-				currentFrame.stopAudio = true;
-			else currentFrame.stopAudio = false;
-		}
-		public void getAudioProperties(XFrame frame, XAudio audio)
-		{
-			AudioProperties property = AudioInFrameProps.Find(prop => prop.Frame == frame && prop.Audio == audio);
+			AudioProperties property = AudioInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Audio == audio);
 			fadeinTextBox.Text = property.FadeIn.ToString();
 			fadeoutTextBox.Text = property.FadeOut.ToString();
 			//queueCheckBox.IsChecked = property.Queue;
@@ -200,40 +245,6 @@ namespace X_Ren_Py
 				mixerButton.Background = Brushes.LightBlue;
 				mixerGrid.Visibility = Visibility.Visible;
 			}
-			//XFrame duplicate = createFrame();
-			//duplicate.Text = currentFrame.Text;
-			//duplicate.isMenu = currentFrame.isMenu;
-			//duplicate.MenuOptions = currentFrame.MenuOptions;
-			//duplicate.Character = currentFrame.Character;
-			////duplicate.BackgroundImage = currentFrame.BackgroundImage;
-			//duplicate.Movie = currentFrame.Movie;
-
-			//List<ImageCharProperties> newimageprops = new List<ImageCharProperties>();
-			////существующую коллекцию нельзя менять во время прохождения по ней, а объединить коллекции проще пока не удалось. Потому придется использовать два перечислителя
-			//foreach (ImageCharProperties i in ImageInFrameProps)
-			//{
-			//	if (i.Frame == currentFrame)
-			//	{
-			//		ImageCharProperties newprop = new ImageCharProperties() { Frame = duplicate, Image = i.Image };
-			//		newimageprops.Add(newprop);
-			//	}
-			//}
-			//foreach (ImageCharProperties i in newimageprops) { ImageInFrameProps.Add(i); }
-
-			//List<AudioProperties> newaudioprops = new List<AudioProperties>();
-			////существующую коллекцию нельзя менять во время прохождения по ней, а объединить коллекции проще пока не удалось. Потому придется использовать два перечислителя
-			//foreach (AudioProperties i in AudioInFrameProps)
-			//{
-			//	if (i.Frame == currentFrame)
-			//	{
-			//		AudioProperties newprop = new AudioProperties() { Frame = duplicate, Audio = i.Audio };
-			//		newaudioprops.Add(newprop);
-			//	}
-			//}
-			//foreach (AudioProperties i in newaudioprops) { AudioInFrameProps.Add(i); }
-
-			//getSelectedList().Items.Insert(getSelectedList().Items.IndexOf(currentFrame) + 1, duplicate);
-			//duplicate.IsSelected = true;
 		}
 	}
 }

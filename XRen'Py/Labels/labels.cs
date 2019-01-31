@@ -13,7 +13,7 @@ namespace X_Ren_Py
 		public Button _Delete = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✗", };
 		public ComboBoxItem comboBox = new ComboBoxItem();
 		public string Text { get { return _Visible.Content.ToString(); } set { _Visible.Content = value; _Editable.Text = value; comboBox.Content = value; } }
-		//public new ListView Content { get; set; }
+
 		public XLabel()
 		{
 			Padding = new Thickness(2, 0, 2, 0);

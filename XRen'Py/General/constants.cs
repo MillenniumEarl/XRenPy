@@ -6,6 +6,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace X_Ren_Py
 {
@@ -97,7 +98,12 @@ namespace X_Ren_Py
 		bool waschecked = false;//если галочка стояла, 1. если нет, 0
 		bool show = false;
 		private XImage lastImageChecked;//для содержания последнего выбранного элемента из списка фоновых картинок
+		private XAudio lastMusicChecked;
+		private XAudio lastSoundChecked;
+		private XAudio lastVoiceChecked;
 		private XMovie lastMovieChecked;//для содержания последнего выбранного элемента из списка фоновых видео
+		
+		DispatcherTimer disptimer = new DispatcherTimer();
 
 		public void initializeAll()
 		{
@@ -190,6 +196,10 @@ namespace X_Ren_Py
 			comboBox_FontText.SelectedItem = selectedfont;
 			comboBox_FontChar.SelectedItem = selectedfont;
 			comboBox_FontInterface.SelectedItem = selectedfont;
+
+			//media:DispatcherTimer
+			disptimer.Tick += new EventHandler(mediaCurrentTime_Tick);
+			disptimer.Interval = new TimeSpan(0, 0, 1);
 		}
 
 		private void createDirectories()

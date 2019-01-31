@@ -12,14 +12,12 @@ namespace X_Ren_Py
 		//string _Content;
 		private string _Text = "";
 		private bool _isMenu = false;
-		private bool _stopAudio = false;
 		private ObservableCollection<XMenuOption> _MenuOptions;
 		private XCharacter _Character;
 		private XMovie _Movie;
 
 		public string Text { get { return _Text; } set { _Text = value; } }
 		public bool isMenu { get { return _isMenu; } set { _isMenu = value; } }
-		public bool stopAudio { get { return _stopAudio; } set { _stopAudio = value; } }
 		public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
 		public XCharacter Character { get { return _Character; } set { _Character = value; } }
 		public XMovie Movie { get { return _Movie; } set { _Movie = value; } }

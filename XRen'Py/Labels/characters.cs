@@ -179,7 +179,9 @@ namespace X_Ren_Py
 				(characterListView.SelectedItem as XCharacter).Icon = image;
 				iconCharacter.Source = imageShow(image.Path);
 			}
-			else MessageBox.Show("No side image selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			else {
+				if (tabControlResources.SelectedIndex != 6) tabControlResources.SelectedIndex -= 6;
+				else MessageBox.Show("No side image selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 
 		private void charactersButton_Click(object sender, RoutedEventArgs e)

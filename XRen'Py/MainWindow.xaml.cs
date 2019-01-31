@@ -56,10 +56,5 @@ namespace X_Ren_Py
 
 			return info;
 		}
-
-		private void listView_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			getSelectedList().SelectedItem = null;
-		}
 	}
 }

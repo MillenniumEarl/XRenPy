@@ -90,22 +90,6 @@ namespace X_Ren_Py
 				}
 		}
 
-		private void exportHideImage(StreamWriter writer, ImageCharProperties property)
-		{
-			string animationType="";
-			if (property.AnimationOutType != 0) animationType = " with " + animationOutTypeComboBox.Items[property.AnimationOutType];
-			writer.WriteLine(tab + "hide " + property.Image.Alias+animationType);
-		}
-
-		private void exportShowImage(StreamWriter writer, ImageCharProperties property)
-		{
-			string align = "";
-			string animationType = "";			
-			if (property.Align != 0) align = " at " + alignComboBox.Items[property.Align];
-			if (property.AnimationInType != 0) animationType = " with " + animationInTypeComboBox.Items[property.AnimationInType];
-			writer.WriteLine(tab + "show " + property.Image.Alias + align + animationType);
-		}
-
 		private void Exit_Click(object sender, RoutedEventArgs e){Close();}
 
 	}
