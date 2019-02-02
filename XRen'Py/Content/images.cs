@@ -132,7 +132,7 @@ namespace X_Ren_Py
 		private void image_Checked(object sender, RoutedEventArgs e)
 		{
 			currentImage = (sender as CheckBox).Tag as XImage;
-			getPreviousFrames();
+			//getPreviousFrames();
 
 			if (currentImage.Parent == backImageListView)
 			{
@@ -173,7 +173,7 @@ namespace X_Ren_Py
 					showImagePropsCharacter(currentImage);
 				}
 			}
-			imagePropsPanel.Visibility = Visibility.Visible;
+			if (addorselect) imagePropsPanel.Visibility = Visibility.Visible;
 			show = true;
 			waschecked = true;
 		}
@@ -182,9 +182,9 @@ namespace X_Ren_Py
 		{
 			if (waschecked&&addorselect) (sender as CheckBox).IsChecked = false;
 			else {
-				getPreviousFrames();
+				//getPreviousFrames();
 				XImage selectedImage = (sender as CheckBox).Tag as XImage;
-				if (currentImage.Parent == backImageListView) imageBackground.Source = imageShow(selectedImage.Path);
+				if (selectedImage.Parent == backImageListView) imageBackground.Source = imageShow(selectedImage.Path);
 				else imagegrid.Children.Insert(imagegrid.Children.IndexOf(imageBorder), ImageInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == selectedImage).Displayable);
 			};
 		}
@@ -211,18 +211,22 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				getPreviousFrames();
+				//getPreviousFrames();
 				if (selectedImage.Parent == backImageListView)
-				{
-					ImageBackProperties imgtostop = BackInFrameProps.Last(i => previousFrames.Contains(i.Frame)&& i.Image == selectedImage);
-					if (removeorunselect) imgtostop.StopFrame = currentFrame;
-					imageBackground.Source = null;
+				{	if (BackInFrameProps.Any(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage))
+					{
+						ImageBackProperties imgtostop = BackInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage);
+						if (removeorunselect) imgtostop.StopFrame = currentFrame;						
+					}
+					imageBackground.Source = null;										
 				}
 				else
-				{
-					ImageCharProperties imgtostop = ImageInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage);
-					if (removeorunselect) imgtostop.StopFrame = currentFrame;
-					imagegrid.Children.Remove(imgtostop.Displayable);
+				{if (ImageInFrameProps.Any(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage))
+					{
+						ImageCharProperties imgtostop = ImageInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage);
+						if (removeorunselect) imgtostop.StopFrame = currentFrame;
+						imagegrid.Children.Remove(imgtostop.Displayable);
+					}
 				}
 			}
 			imagePropsPanel.Visibility = Visibility.Hidden;
@@ -248,13 +252,20 @@ namespace X_Ren_Py
 
 		private BitmapImage imageShow(string path)
 		{
+			BitmapImage DPI = new BitmapImage();
+			DPI.BeginInit();
+			DPI.UriSource = new Uri(path);
+			DPI.EndInit();
+			int pxwdth = Convert.ToInt32(DPI.Width * (DPI.DpiX / 96) * (DPI.DpiX / 96));
+			int pxhght = Convert.ToInt32(DPI.Height * (DPI.DpiY / 96) * (DPI.DpiY / 96));
+
 			BitmapImage bitmapToShow = new BitmapImage();
 			bitmapToShow.BeginInit();
 			bitmapToShow.UriSource = new Uri(path);
 			bitmapToShow.CacheOption = BitmapCacheOption.OnLoad;
+			bitmapToShow.DecodePixelWidth = pxwdth;
+			bitmapToShow.DecodePixelHeight = pxhght;
 			bitmapToShow.EndInit();
-			bitmapToShow.DecodePixelWidth = Convert.ToInt32(bitmapToShow.Width * (bitmapToShow.DpiX / 96) * (bitmapToShow.DpiX / 96));
-			bitmapToShow.DecodePixelHeight = Convert.ToInt32(bitmapToShow.Height * (bitmapToShow.DpiY / 96) * (bitmapToShow.DpiY / 96));
 
 			return bitmapToShow;
 		}

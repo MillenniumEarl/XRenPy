@@ -11,20 +11,18 @@ namespace X_Ren_Py
 	{
 		//string _Content;
 		private string _Text = "";
-		private bool _isMenu = false;
 		private ObservableCollection<XMenuOption> _MenuOptions;
 		private XCharacter _Character;
 		private XMovie _Movie;
 
 		public string Text { get { return _Text; } set { _Text = value; } }
-		public bool isMenu { get { return _isMenu; } set { _isMenu = value; } }
 		public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
 		public XCharacter Character { get { return _Character; } set { _Character = value; } }
 		public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
 
 		public XFrame()
 		{
-			Content = "Frame []";
+			Content = "[]";
 		}
 	}
 
@@ -41,15 +39,15 @@ namespace X_Ren_Py
 		}
 		
 		private void selectFrame_Click(object sender, RoutedEventArgs e)
-		{
-			if (currentFrame!=sender) currentFrame.IsSelected = false;			
+		{			
 			uncheckAll();
 			addorselect = false;
 			currentFrame = sender as XFrame;
-			textBox.Text = currentFrame.Text;
-			characterLabel.Content = currentFrame.Character.Content;
+			getPreviousFrames();
+			textBox.Text = currentFrame.Text;			
+			showCharacter();
 
-			if (!currentFrame.isMenu)
+			if (currentFrame.MenuOptions==null)
 			{
 				menuStack.Visibility = Visibility.Hidden;
 				convertFrameMenu.Header = framemenu;
@@ -62,8 +60,7 @@ namespace X_Ren_Py
 				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions;
 			}
 
-			//ресурсы
-			getPreviousFrames();
+			//ресурсы			
 			//при выборе фрейма сначала проверяется, есть ли пропы ТОЛЬКО предыдущих кадров включая нынешний, откидывается полностью часть пропов со стоп-маркерами в виде предыдущих же кадров
 			//проще говоря, в списке оказываются только те пропы, у которых есть начало, но нет конца до нынешнего фрейма включительно
 			List<ImageBackProperties> backgroundslist = BackInFrameProps.Where(back=>previousFrames.Contains(back.Frame)&&!previousFrames.Contains(back.StopFrame)).ToList();
@@ -90,6 +87,7 @@ namespace X_Ren_Py
 
 			addorselect = true;
 		}
+
 		private void addNextFrame_Click(object sender, RoutedEventArgs e)
 		{
 			XFrame frame = createFrame();
@@ -97,7 +95,6 @@ namespace X_Ren_Py
 
 			if (sender == addMenu)
 			{
-				frame.isMenu = true;
 				frame.MenuOptions = new ObservableCollection<XMenuOption> { createMenuOption(true) };
 			}
 
@@ -115,13 +112,16 @@ namespace X_Ren_Py
 		private void textBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			currentFrame.Text = textBox.Text;
-			currentFrame.Content = "Frame [" + textBox.Text + ']';
+			currentFrame.Content = "[" + textBox.Text + ']';
 		}
 		private XFrame getSelectedFrame() { return getSelectedList().SelectedItem as XFrame; }
 		private ListView getSelectedList() { return tabControlStruct.SelectedContent as ListView; }
 		private void getPreviousFrames()
-		{
-			previousFrames.Clear();
+		{   //предусмотреть, что надо делать, если ПРЕДЫДУЩИЕ фреймы находятся не только в пределах ОДНОЙ метки
+			//построить дерево меток? Тогда надо смотреть в getPreviousFrames все до единого фреймы до самого первого
+			//а это идея. Почему бы и нет. Мы уже находимся в одной из веток, назад пойти не запутаешься
+			if(currentFrame.Parent==getSelectedList())
+				previousFrames.Clear();
 			for (int i = 0; i <= getSelectedList().Items.IndexOf(currentFrame); i++) previousFrames.Add(getSelectedList().Items[i] as XFrame);
 		}
 	}

@@ -36,6 +36,7 @@ namespace X_Ren_Py
 		public XCharacter loadCharacter(string singleLine)
 		{
 			XCharacter newCharacter = new XCharacter();
+			newCharacter.Selected += editableChar_Selected;
 			try
 			{
 				int firstquote = singleLine.IndexOf('"') + 1;
@@ -56,7 +57,7 @@ namespace X_Ren_Py
 					else if (all[prop].StartsWith("what_color")) newCharacter.TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
 					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) newCharacter.TextIsBold = true;
 					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) newCharacter.TextIsItalic = true;
-				}
+				}				
 			}
 			catch (Exception) { MessageBox.Show("Error: Character loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 			return newCharacter;
@@ -67,10 +68,10 @@ namespace X_Ren_Py
 			if (line != "")
 			{
 				if (line.IndexOf('"') == 0) frame.Character = characterListView.Items[0] as XCharacter;
-				else frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' ')));
+				else {frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' '))); }
 
 				frame.Text = line.Substring(line.IndexOf('"')).Trim('"');
-				frame.Content = "Frame [" + frame.Text + ']';
+				frame.Content = "[" + frame.Text + ']';
 			}
 		}
 
@@ -156,20 +157,35 @@ namespace X_Ren_Py
 		}
 
 		private void saveCharacter()
-        {
-            currentFrame.Character = characterListView.SelectedItem as XCharacter;			
-            characterLabel.Content = currentFrame.Character.Content;
+		{
+			currentFrame.Character = characterListView.SelectedItem as XCharacter;
+			characterLabel.Content = currentFrame.Character.Content;
 			if (currentFrame.Character.NameColor != Color.FromArgb(0, 255, 255, 255)) characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor); else { characterLabel.Foreground = new SolidColorBrush(default_ColorHeaders.SelectedColor.Value); }//дефолтный цвет из GUI
-            if (characterNameBold.IsChecked == true) characterLabel.FontWeight = FontWeights.Bold;
-            else characterLabel.FontWeight = FontWeights.Normal;
-            if (characterNameItalic.IsChecked == true) characterLabel.FontStyle = FontStyles.Italic;
-            else characterLabel.FontStyle = FontStyles.Normal;
+			if (characterNameBold.IsChecked == true) characterLabel.FontWeight = FontWeights.Bold;
+			else characterLabel.FontWeight = FontWeights.Normal;
+			if (characterNameItalic.IsChecked == true) characterLabel.FontStyle = FontStyles.Italic;
+			else characterLabel.FontStyle = FontStyles.Normal;
 			if (currentFrame.Character.TextColor != Color.FromArgb(0, 255, 255, 255)) textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor); else { textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value); }//дефолтный цвет из GUI
 			if (characterTextBold.IsChecked == true) textBox.FontWeight = FontWeights.Bold;
-            else textBox.FontWeight = FontWeights.Normal;
-            if (characterTextItalic.IsChecked == true) textBox.FontStyle = FontStyles.Italic;
-            else textBox.FontStyle = FontStyles.Normal;
-        }
+			else textBox.FontWeight = FontWeights.Normal;
+			if (characterTextItalic.IsChecked == true) textBox.FontStyle = FontStyles.Italic;
+			else textBox.FontStyle = FontStyles.Normal;
+		}
+
+		private void showCharacter()
+		{
+			characterLabel.Content = currentFrame.Character.Content;
+			if (currentFrame.Character.NameColor != Color.FromArgb(0, 255, 255, 255)) characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor); else { characterLabel.Foreground = new SolidColorBrush(default_ColorHeaders.SelectedColor.Value); }//дефолтный цвет из GUI
+			if (currentFrame.Character.NameIsBold) characterLabel.FontWeight = FontWeights.Bold;
+			else characterLabel.FontWeight = FontWeights.Normal;
+			if (currentFrame.Character.NameIsItalic) characterLabel.FontStyle = FontStyles.Italic;
+			else characterLabel.FontStyle = FontStyles.Normal;
+			if (currentFrame.Character.TextColor != Color.FromArgb(0, 255, 255, 255)) textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor); else { textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value); }//дефолтный цвет из GUI
+			if (currentFrame.Character.TextIsBold) textBox.FontWeight = FontWeights.Bold;
+			else textBox.FontWeight = FontWeights.Normal;
+			if (currentFrame.Character.TextIsItalic) textBox.FontStyle = FontStyles.Italic;
+			else textBox.FontStyle = FontStyles.Normal;
+		}
 
 		private void characterSideImageConnect_Click(object sender, RoutedEventArgs e)
 		{

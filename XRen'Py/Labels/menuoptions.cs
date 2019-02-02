@@ -84,7 +84,6 @@ namespace X_Ren_Py
 		{
 			if (convertFrameMenu.Header.ToString() == framemenu)
 			{
-				currentFrame.isMenu = true;
 				currentFrame.MenuOptions = new ObservableCollection<XMenuOption> { createMenuOption(true) };
 				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions;
 				convertFrameMenu.Header = menuframe;
@@ -92,7 +91,6 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				currentFrame.isMenu = false;
 				currentFrame.MenuOptions = null;
 				menuOptionsVisualList.ItemsSource = null;
 				convertFrameMenu.Header = framemenu;
