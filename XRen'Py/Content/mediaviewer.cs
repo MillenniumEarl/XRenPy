@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace X_Ren_Py
 {
@@ -77,6 +76,7 @@ namespace X_Ren_Py
 				currentTimeVoice.Content = voice.Position.ToString().Substring(3, 5);
 			}
 		}
+
 		private void mediaCurrentTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			TimeSpan ts = TimeSpan.FromSeconds(e.NewValue);
@@ -107,6 +107,7 @@ namespace X_Ren_Py
 			else if (sender == stopSound) sound.Stop();
 			else voice.Stop();
 		}
+
 		private void movieVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			movieplayer.Volume = volumeSliderMedia.Value / 100;
@@ -114,11 +115,13 @@ namespace X_Ren_Py
 
 		private void media_Unloaded(object sender, RoutedEventArgs e)
 		{
-			if (movieplayer.Source == null && music.Source == null && sound.Source == null && voice.Source == null) disptimer.Stop();			
+			if (movieplayer.Source == null && music.Source == null && sound.Source == null && voice.Source == null) disptimer.Stop();
+			if (sender!=movieplayer) ((sender as MediaElement).Parent as StackPanel).Visibility = Visibility.Collapsed;
 		}
+
 		private void media_Loaded(object sender, RoutedEventArgs e)
 		{
-			disptimer.Start();
+			disptimer.Start();			
 		}
 	}
 }

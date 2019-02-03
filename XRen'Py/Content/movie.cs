@@ -90,6 +90,7 @@ namespace X_Ren_Py
             movieBackground.Source = new Uri(currentMovie.Path);
 			show = true;
         }
+
         private void movie_Unchecked(object sender, RoutedEventArgs e)
         {
             XMovie selectedMovie = (sender as CheckBox).Tag as XMovie;

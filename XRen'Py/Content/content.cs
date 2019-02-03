@@ -5,7 +5,6 @@ using System.Windows.Media;
 using System;
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace X_Ren_Py
 {	
@@ -48,6 +47,7 @@ namespace X_Ren_Py
 			}
 			catch (Exception) { MessageBox.Show("Error: Image loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
+
 	}
     public class XAudio : XContent
 	{
@@ -131,37 +131,29 @@ namespace X_Ren_Py
     
     public partial class MainWindow : Window
     {
-
-		protected void content_Selected(object sender, RoutedEventArgs e)  
-        {
-            show = true;
+		protected void content_Selected(object sender, RoutedEventArgs e)
+		{
+			show = true;
 			if (File.Exists((sender as XContent).Path))
 			{
-				switch (sender.GetType().ToString())
+				if (sender.GetType() == typeof(XImage))
 				{
-					case "X_Ren_Py.XImage":
-						{
-							currentImage = sender as XImage;
-							if ((sender as XImage).IsChecked != false)
-							{
-								if (((sender as XImage).Parent as ListView) == backImageListView) { if (!addorselect) showImagePropsBackground(); }
-								else if (((sender as XImage).Parent as ListView) == imageListView) { if (!addorselect) showImagePropsCharacter(sender as XImage); }
-							}
-						};
-						break;
-					case "X_Ren_Py.XAudio":
-						{
-							currentAudio = sender as XAudio;
-							if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(sender as XAudio);
-						};
-						break;
-					case "X_Ren_Py.XMovie":
-						currentMovie = sender as XMovie;
-						break;
-					default: return;
+					currentImage = sender as XImage;
+					if ((sender as XImage).IsChecked != false)
+					{
+						if (((sender as XImage).Parent as ListView) == backImageListView) { if (!addorselect) showImagePropsBackground(); }
+						else if (((sender as XImage).Parent as ListView) == imageListView) { if (!addorselect) showImagePropsCharacter(sender as XImage); }
+					}
 				}
+				else if (sender.GetType() == typeof(XAudio))
+				{
+					currentAudio = sender as XAudio;
+					if ((sender as XAudio).IsChecked == true) if (!addorselect) getAudioProperties(sender as XAudio);
+				}
+				else if (sender.GetType() == typeof(XMovie)) currentMovie = sender as XMovie;
 			}
-        }
+		}
+        
 
         private void contentCollector(string fromFile, string toFile)
         {
@@ -190,9 +182,9 @@ namespace X_Ren_Py
 			{
 				File.Delete(item.Path);
 				selectedList.Items.Remove(item);
-			}	
-			
+			}				
 		}
+
 		private void uncheckAll()
 		{
 			removeorunselect = false;

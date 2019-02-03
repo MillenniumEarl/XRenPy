@@ -64,8 +64,7 @@ namespace X_Ren_Py
 		SolidColorBrush unusedResourceColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
 		//контекстные меню
-		MenuItem addFrame, addRootFrame, convertFrameMenu, deleteFrame, addMenu, 
-			addImage, deleteImage, reloadImage, addAudio, deleteAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
+		MenuItem addFrame, addRootFrame, convertFrameMenu, deleteFrame, addMenu, addImage, deleteImage, reloadImage, addAudio, deleteAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
 		ContextMenu cmFrame, cmLabel, cmImage, cmAudio, cmMovie, cmIcon;
 
 		//текст для динамических кнопок
@@ -97,8 +96,8 @@ namespace X_Ren_Py
 		bool addorselect = true;//то же самое на случай добавления или показа ресурсов
 		bool waschecked = false;//если галочка стояла, 1. если нет, 0
 		bool show = false;
-		private XImage lastImageChecked;//для содержания последнего выбранного элемента из списка фоновых картинок
-		private XAudio lastMusicChecked;
+		private XImage lastBackChecked;//для содержания последнего выбранного элемента из списка фоновых картинок
+		private XAudio lastMusicChecked;//без возможности поставить звук в очередь нужно использовать это
 		private XAudio lastSoundChecked;
 		private XAudio lastVoiceChecked;
 		private XMovie lastMovieChecked;//для содержания последнего выбранного элемента из списка фоновых видео
@@ -199,7 +198,7 @@ namespace X_Ren_Py
 
 			//media:DispatcherTimer
 			disptimer.Tick += new EventHandler(mediaCurrentTime_Tick);
-			disptimer.Interval = new TimeSpan(0, 0, 1);
+			disptimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
 		}
 
 		private void createDirectories()

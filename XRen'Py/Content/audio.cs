@@ -125,10 +125,9 @@ namespace X_Ren_Py
 		}
 
 		private void audio_Checked(object sender, RoutedEventArgs e)
-        {			
-			bool isLooped=false;
+        {						
             currentAudio = (sender as CheckBox).Tag as XAudio;
-			getPreviousFrames();
+			bool isLooped=false;
 
 			if (AudioInFrameProps.Any(prop => prop.StopFrame == currentFrame && prop.Audio == currentAudio))
 			{
@@ -137,40 +136,24 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				//аудиослой для таймлайна должен будет быть тут. Если таймлайн вообще будет
 				if (currentAudio.Type == "music ")
 				{
-					if (lastMusicChecked != null && lastMusicChecked != currentAudio)
-					{
-						lastMusicChecked.IsChecked = false;
-						if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == lastMusicChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
-					}
-					lastMusicChecked = currentAudio;
-
 					isLooped = true;
-					music.Source = new Uri(currentAudio.Path, UriKind.Absolute);
+					selectOnlyCurrentaudio(lastMusicChecked, currentAudio);
+					lastMusicChecked = currentAudio;					
+					addAudioToLayer(currentAudio.Path, music, panelMusic, labelMusic);
 				}
 				else if (currentAudio.Type == "sound ")
 				{
-					if (lastSoundChecked != null && lastSoundChecked != currentAudio)
-					{
-						lastSoundChecked.IsChecked = false;
-						if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == lastSoundChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
-					}
+					selectOnlyCurrentaudio(lastSoundChecked, currentAudio);
 					lastSoundChecked = currentAudio;
-
-					sound.Source = new Uri(currentAudio.Path, UriKind.Absolute);
+					addAudioToLayer(currentAudio.Path, sound, panelSound, labelSound);
 				}
 				else
 				{
-					if (lastVoiceChecked != null && lastVoiceChecked != currentAudio)
-					{
-						lastVoiceChecked.IsChecked = false;
-						if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == lastVoiceChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
-					}
+					selectOnlyCurrentaudio(lastVoiceChecked, currentAudio);
 					lastVoiceChecked = currentAudio;
-
-					voice.Source = new Uri(currentAudio.Path, UriKind.Absolute);
+					addAudioToLayer(currentAudio.Path, voice, panelVoice, labelVoice);
 				}
 
 				if (addorselect) AudioInFrameProps.Add(new AudioProperties() { Frame = currentFrame, Audio = currentAudio, Loop = isLooped });
@@ -181,20 +164,26 @@ namespace X_Ren_Py
 			show = true;
 			waschecked = true;
 		}
+
 		private void audio_Indeterminate(object sender, RoutedEventArgs e)
 		{
 			if (waschecked && addorselect) (sender as CheckBox).IsChecked = false;
-
-			//оставим это на таймлайн
 			else
 			{
-				//getPreviousFrames();
 				XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
-				if (selectedAudio.Type == "music ") music.Source = new Uri(selectedAudio.Path);
-				else if (selectedAudio.Type == "sound ") sound.Source = new Uri(selectedAudio.Path);
-				else voice.Source = new Uri(selectedAudio.Path);
+				if (selectedAudio.Type == "music ")	addAudioToLayer(selectedAudio.Path, music, panelMusic, labelMusic);
+				else if (selectedAudio.Type == "sound ") addAudioToLayer(selectedAudio.Path, sound, panelSound, labelSound);
+				else addAudioToLayer(selectedAudio.Path, voice, panelVoice, labelVoice);
 			};
 		}
+
+		private void addAudioToLayer(string path, MediaElement audio, StackPanel panel, Label label)
+		{
+			audio.Source = new Uri(path);
+			panel.Visibility = Visibility.Visible;
+			label.Content = currentAudio.Header;
+		}
+
 		private void audio_Unchecked(object sender, RoutedEventArgs e)
 		{
 			XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
@@ -205,19 +194,25 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				getPreviousFrames();
-				if (removeorunselect) AudioInFrameProps.Find(i => i.Frame == currentFrame && i.Audio == selectedAudio).StopFrame = currentFrame;
+				if (removeorunselect) AudioInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Audio == selectedAudio).StopFrame = currentFrame;
 			}
 
-			if (selectedAudio.Type == "music ") music.Source = null;
-			else if (selectedAudio.Type == "sound ") sound.Source = null;
-			else voice.Source = null;
+			if (selectedAudio.Type == "music ")	hideAudioLayer(music, panelMusic, labelMusic);
+			else if (selectedAudio.Type == "sound ") hideAudioLayer(sound, panelSound, labelSound);
+			else hideAudioLayer(voice, panelVoice, labelVoice);
 
 			audioPropsPanel.Visibility = Visibility.Hidden;
 			show = false;
 		}
-        
-        private void audioDeleteFromList_Click(object sender, RoutedEventArgs e)
+
+		private void hideAudioLayer(MediaElement audio, StackPanel panel, Label label)
+		{
+			audio.Source = null;
+			panel.Visibility = Visibility.Collapsed;
+			label.Content = null;
+		}
+
+		private void audioDeleteFromList_Click(object sender, RoutedEventArgs e)
         {
             foreach (AudioProperties audio in AudioInFrameProps.Where(audio => audio.Audio == sender)) AudioInFrameProps.Remove(audio);
             resourcesSelectedItem_delete();
@@ -244,6 +239,15 @@ namespace X_Ren_Py
 			{
 				mixerButton.Background = Brushes.LightBlue;
 				mixerGrid.Visibility = Visibility.Visible;
+			}
+		}
+
+		private void selectOnlyCurrentaudio(XAudio previous, XAudio current)
+		{
+			if (previous != null && previous != current)
+			{
+				if (addorselect) AudioInFrameProps.Last(prop => prop.Audio == previous && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
+				previous.IsChecked = false;
 			}
 		}
 	}

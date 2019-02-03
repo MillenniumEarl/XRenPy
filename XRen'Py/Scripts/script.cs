@@ -28,7 +28,7 @@ namespace X_Ren_Py
 				if (label.StartsWith("label"))
 				{ ListView newLabel = createLabel(label.Substring(6, label.Length - 7)); }
 			}
-			readerlabels.Dispose(); readerlabels.Close(); fs.Dispose(); fs.Close();
+			readerlabels.Dispose(); fs.Dispose();
 
 			fs = new FileStream(projectFolder + "script.rpy", FileMode.Open);
 			StreamReader reader = new StreamReader(fs);
@@ -217,13 +217,14 @@ namespace X_Ren_Py
 							if (buildmenu) buildmenu = false;
 							else singleLine = reader.ReadLine().TrimStart(' ');
 						}
-						else frame.IsSelected = true;
 					}
 				}
 			}
 		}
-		
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private void saveScript()
 		{
 			projectExpander.IsExpanded = false;
@@ -347,16 +348,11 @@ namespace X_Ren_Py
 					}
 
 					//movie
-					//if (chosenFrame.Movie != null)
-					//{
-					//	if (previousFrame.Movie != chosenFrame.Movie)
-					//		writer.WriteLine(tab + "show " + chosenFrame.Movie.Alias);
-					//}
-					//else
-					//{
-					//	if (chosenFrameNumber > 0 && previousFrame.Movie != null)
-					//		writer.WriteLine(tab + "hide " + previousFrame.Movie.Alias);
-					//}
+					if (chosenFrame.Movie != null)
+					{
+						writer.WriteLine(tab + "$ renpy.movie_cutscene(" + quote(chosenFrame.Movie.Content.ToString()) + ")");
+						//полноценное отображение видео не нужно большинству людей
+					}
 
 					//menu
 					if (chosenFrame.MenuOptions != null)

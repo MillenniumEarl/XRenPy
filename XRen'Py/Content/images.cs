@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.IO;
-using System.Collections.Generic;
 
 namespace X_Ren_Py
 {
@@ -132,7 +131,6 @@ namespace X_Ren_Py
 		private void image_Checked(object sender, RoutedEventArgs e)
 		{
 			currentImage = (sender as CheckBox).Tag as XImage;
-			//getPreviousFrames();
 
 			if (currentImage.Parent == backImageListView)
 			{
@@ -144,12 +142,12 @@ namespace X_Ren_Py
 				}
 				else
 				{
-					if (lastImageChecked != null && lastImageChecked != currentImage)
+					if (lastBackChecked != null && lastBackChecked != currentImage)
 					{
-						lastImageChecked.IsChecked = false;
-						if (addorselect) BackInFrameProps.Last(prop => prop.Image == lastImageChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
+						if(addorselect) BackInFrameProps.Last(prop => prop.Image == lastBackChecked && previousFrames.Contains(prop.Frame)).StopFrame = currentFrame;
+						lastBackChecked.IsChecked = false;						
 					}
-					lastImageChecked = currentImage;
+					lastBackChecked = currentImage;
 
 					if (addorselect) BackInFrameProps.Add(new ImageBackProperties() { Frame = currentFrame, Image = currentImage });
 					imageBackground.Source = imageShow(currentImage.Path);
@@ -165,8 +163,7 @@ namespace X_Ren_Py
 				}
 				else
 				{
-					if (addorselect)
-						ImageInFrameProps.Add(new ImageCharProperties() { Frame = currentFrame, Image = currentImage, Displayable = newDisplayable() });
+					if (addorselect) ImageInFrameProps.Add(new ImageCharProperties() { Frame = currentFrame, Image = currentImage, Displayable = newDisplayable() });
 					Image img = ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage).Displayable;
 					img.Source = imageShow(currentImage.Path);
 					imagegrid.Children.Insert(imagegrid.Children.IndexOf(imageBorder), img);
@@ -182,7 +179,6 @@ namespace X_Ren_Py
 		{
 			if (waschecked&&addorselect) (sender as CheckBox).IsChecked = false;
 			else {
-				//getPreviousFrames();
 				XImage selectedImage = (sender as CheckBox).Tag as XImage;
 				if (selectedImage.Parent == backImageListView) imageBackground.Source = imageShow(selectedImage.Path);
 				else imagegrid.Children.Insert(imagegrid.Children.IndexOf(imageBorder), ImageInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == selectedImage).Displayable);
@@ -211,7 +207,6 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				//getPreviousFrames();
 				if (selectedImage.Parent == backImageListView)
 				{	if (BackInFrameProps.Any(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage))
 					{
@@ -252,12 +247,10 @@ namespace X_Ren_Py
 
 		private BitmapImage imageShow(string path)
 		{
-			BitmapImage DPI = new BitmapImage();
-			DPI.BeginInit();
-			DPI.UriSource = new Uri(path);
-			DPI.EndInit();
-			int pxwdth = Convert.ToInt32(DPI.Width * (DPI.DpiX / 96) * (DPI.DpiX / 96));
-			int pxhght = Convert.ToInt32(DPI.Height * (DPI.DpiY / 96) * (DPI.DpiY / 96));
+			System.Drawing.Bitmap DPI = new System.Drawing.Bitmap(path);
+			int pxwdth = Convert.ToInt32(DPI.Width * (DPI.HorizontalResolution / 96));
+			int pxhght = Convert.ToInt32(DPI.Height * (DPI.VerticalResolution / 96));
+			DPI.Dispose();
 
 			BitmapImage bitmapToShow = new BitmapImage();
 			bitmapToShow.BeginInit();
@@ -290,6 +283,7 @@ namespace X_Ren_Py
 			alignLabel.Visibility = Visibility.Collapsed;
 			alignComboBox.Visibility = Visibility.Collapsed;
 		}
+
 		private void alignComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ImageCharProperties img = ImageInFrameProps.Find(prop => prop.Frame == currentFrame && prop.Image == currentImage);
@@ -301,6 +295,7 @@ namespace X_Ren_Py
 				case 2: img.Displayable.HorizontalAlignment = HorizontalAlignment.Right; break;
 			}
 		}
+
 		private void animationTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (sender == animationInTypeComboBox)
