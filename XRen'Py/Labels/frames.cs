@@ -135,7 +135,7 @@ namespace X_Ren_Py
 		{   			
 			XFrame firstframe = currentFrame;
 				for (int i = (currentFrame.Parent as ListView).Items.IndexOf(currentFrame); i >=0; i--) previousFrames.Add((currentFrame.Parent as ListView).Items[i] as XFrame);
-			if ((currentFrame.Tag as XLabel).Text != "start")
+			if ((currentFrame.Tag as XLabel).MenuChoice!=null&&(currentFrame.Tag as XLabel).Text != "start")
 			{ currentFrame = (currentFrame.Tag as XLabel).MenuChoice;
 				getPreviousFrames(); }
 			currentFrame = firstframe;		 
