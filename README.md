@@ -33,14 +33,11 @@ Currently released application features:
 - changing/creating gui.rpy with colors and fonts available (connection as default is in process)
 - you can add your own icon of project
 - content can be reloaded if deleted
+- menu can contain any images or music as any frame and correctly stop it in any other label you want to jump to
 
 Features to add:
 - NVL
 - updater service
-- including newest Ren'Py version to the project (PyTom, hope you can hear me)
-
-Things to solve:
-- unexpected grid behaviour while changing the size of structure and resource blocks
 
 Things to test:
 - design
