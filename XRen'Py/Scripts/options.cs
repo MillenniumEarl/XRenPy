@@ -42,6 +42,7 @@ namespace X_Ren_Py
 				else if (singleLine.StartsWith("define config.window_hide_transition")) dialogHideTransition.SelectedItem = simplifyTransition(value(singleLine));
 				else if (singleLine.StartsWith("define config.window_icon"))			icon.Icon = new Image { Source = imageShow(projectFolder + singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "")) };
 			}
+			fs.Close();
 		}
 		
 		private void saveOptions()
@@ -80,6 +81,7 @@ namespace X_Ren_Py
 					else builder.Add(singleLine);
 				}
 				reader.Close();
+				fs.Close();
 			}
 			else
 			{

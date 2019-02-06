@@ -10,7 +10,34 @@ namespace X_Ren_Py
 {
     public partial class MainWindow : Window
     {
-        private void movieImport_Click(object sender, RoutedEventArgs e)
+		public class XMovie : XContent
+		{
+			//string _Content;
+			string _MaskPath; //путь к маске видео. если она есть
+			public string MaskPath { get { return _MaskPath; } set { _MaskPath = value; } }
+
+			public XMovie() {ContextMenu = cmMovie;}
+			public void loadMovie(string singleLine, string folder)
+			{
+				try
+				{
+					int firstquote = singleLine.IndexOf('"') + 1;
+
+					string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
+					for (int prop = 0; prop < all.Length; prop++)
+					{
+						if (all[prop].StartsWith("play")) Path = all[prop].Substring(5);
+						else if (all[prop].StartsWith("mask")) MaskPath = all[prop].Substring(5);
+					}
+					Header = Path.Substring(singleLine.LastIndexOf('/') + 1);
+					Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
+				}
+				catch (Exception) { MessageBox.Show("Error: Movie loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+
+		}
+
+		private void movieImport_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog vidDialog = new OpenFileDialog() { Filter = vidextensions, Multiselect = true };
 
@@ -54,7 +81,6 @@ namespace X_Ren_Py
 
 		private void movieMouseActions(XMovie newmovie)
 		{
-			newmovie.ContextMenu = cmMovie;
 			newmovie.Selected += content_Selected;
 			newmovie.MouseUp += content_Selected;
 			newmovie.MouseLeave += movie_MouseLeave;

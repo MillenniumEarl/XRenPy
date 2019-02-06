@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.IO;
+using System.Collections.Generic;
 
 namespace X_Ren_Py
 {
@@ -15,6 +16,39 @@ namespace X_Ren_Py
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		public class XImage : XContent
+		{
+			public XImage()	{ContextMenu = cmImage;}
+			public void loadImage(string singleLine, string folder)
+			{
+				try
+				{
+					int firstquote = singleLine.IndexOf('"') + 1;
+					Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
+					Header = Path.Replace(folder, "").Substring(singleLine.LastIndexOf('/') + 1);
+					Alias = singleLine.Substring(6, singleLine.IndexOf('=') - 6).TrimEnd(' ');
+				}
+				catch (Exception) { MessageBox.Show("Error: Image loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+		}
+		public class ImageBackProperties : ContentProperties
+		{
+			private XImage _Image;
+			private byte _AnimationInType;//0-нет анимации
+			private byte _AnimationOutType;//0-нет анимации
+			public XImage Image { get { return _Image; } set { _Image = value; } }
+			public byte AnimationInType { get { return _AnimationInType; } set { _AnimationInType = value; } }
+			public byte AnimationOutType { get { return _AnimationOutType; } set { _AnimationOutType = value; } }
+		}
+		
+		public class ImageCharProperties : ImageBackProperties
+		{
+			private Image _Displayable;
+			private byte _Align;//0 - по умолчанию
+			public Image Displayable { get { return _Displayable; } set { _Displayable = value; } }
+			public byte Align { get { return _Align; } set { _Align = value; } }
+		}
+
 		private void imageImport_Click(object sender, RoutedEventArgs e)
 		{
 			OpenFileDialog imageDialog = new OpenFileDialog() { Filter = imageextensions, Multiselect = true };
@@ -61,7 +95,6 @@ namespace X_Ren_Py
 
 		private void imageMouseActions(XImage newimage)
 		{
-			newimage.ContextMenu = cmImage;
 			newimage.Selected += content_Selected;
 			newimage.MouseUp += content_Selected;
 			newimage.MouseLeave += image_MouseLeave;
@@ -135,9 +168,10 @@ namespace X_Ren_Py
 			if (currentImage.Parent == backImageListView)
 			{
 				//случай, когда эта же картинка имет этот же фрейм как стоп-маркер
-				if (BackInFrameProps.Any(prop => prop.StopFrame == currentFrame && prop.Image == currentImage))
+				if (BackInFrameProps.Any(prop => (prop.StopFrame == currentFrame || (prop.StopFrames!=null&& prop.StopFrames.Intersect(previousFrames)==currentFrame)) && prop.Image == currentImage))
 				{
-					BackInFrameProps.First(prop => prop.StopFrame == currentFrame && prop.Image == currentImage).StopFrame = null;
+					ImageBackProperties back = BackInFrameProps.First(prop => (prop.StopFrame == currentFrame || (prop.StopFrames != null && prop.StopFrames.Intersect(previousFrames) == currentFrame)) && prop.Image == currentImage);
+					if (back.StopFrame == currentFrame) back.StopFrame = null; else back.StopFrames.Remove(currentFrame);
 					(sender as CheckBox).IsChecked = null;
 				}
 				else
@@ -156,9 +190,10 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				if (ImageInFrameProps.Any(prop => prop.StopFrame == currentFrame && prop.Image == currentImage))
+				if (ImageInFrameProps.Any(prop => (prop.StopFrame == currentFrame || (prop.StopFrames != null && prop.StopFrames.Intersect(previousFrames) == currentFrame)) && prop.Image == currentImage))
 				{
-					ImageInFrameProps.First(prop => prop.StopFrame == currentFrame && prop.Image == currentImage).StopFrame = null;
+					ImageCharProperties img= ImageInFrameProps.First(prop => (prop.StopFrame == currentFrame || (prop.StopFrames != null && prop.StopFrames.Intersect(previousFrames) == currentFrame)) && prop.Image == currentImage);
+					if (img.StopFrame == currentFrame) img.StopFrame = null; else img.StopFrames.Remove(currentFrame);
 					(sender as CheckBox).IsChecked = null;
 				}
 				else
@@ -193,15 +228,14 @@ namespace X_Ren_Py
 			{
 				if (selectedImage.Parent == backImageListView)
 				{
-					ImageBackProperties imgtoremove = BackInFrameProps.Find(i => i.Frame == currentFrame && i.Image == selectedImage);
-					if (removeorunselect) BackInFrameProps.Remove(imgtoremove);
+					if (removeorunselect) BackInFrameProps.Remove(BackInFrameProps.First(i => i.Frame == currentFrame && i.Image == selectedImage));
 					imageBackground.Source = null;
 				}
 				else
 				{
-					ImageCharProperties imgtoremove = ImageInFrameProps.Find(i => i.Frame == currentFrame && i.Image == selectedImage);
-					if (removeorunselect) ImageInFrameProps.Remove(imgtoremove);
+					ImageCharProperties imgtoremove = ImageInFrameProps.First(i => i.Frame == currentFrame && i.Image == selectedImage);
 					imagegrid.Children.Remove(imgtoremove.Displayable);
+						if (removeorunselect) ImageInFrameProps.Remove(imgtoremove);
 				}
 				waschecked = false;
 			}
@@ -211,7 +245,7 @@ namespace X_Ren_Py
 				{	if (BackInFrameProps.Any(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage))
 					{
 						ImageBackProperties imgtostop = BackInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage);
-						if (removeorunselect) imgtostop.StopFrame = currentFrame;						
+						if (removeorunselect) if (imgtostop.Frame.MenuOptions==null) imgtostop.StopFrame = currentFrame; else imgtostop.StopFrames.Add(currentFrame);
 					}
 					imageBackground.Source = null;										
 				}
@@ -219,7 +253,7 @@ namespace X_Ren_Py
 				{if (ImageInFrameProps.Any(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage))
 					{
 						ImageCharProperties imgtostop = ImageInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Image == selectedImage);
-						if (removeorunselect) imgtostop.StopFrame = currentFrame;
+						if (removeorunselect) if (imgtostop.Frame.MenuOptions == null) imgtostop.StopFrame = currentFrame; else imgtostop.StopFrames.Add(currentFrame);
 						imagegrid.Children.Remove(imgtostop.Displayable);
 					}
 				}

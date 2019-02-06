@@ -47,6 +47,7 @@ namespace X_Ren_Py
 				else if (singleLine.StartsWith("define gui.notify_text_size")) fontNotifySize.Text = linevalue;
 				else if (singleLine.StartsWith("define gui.title_text_size")) fontTitleNameSize.Text = linevalue;
 			}
+			fs.Close();
 		}
 
 		private void saveGUI()
@@ -84,6 +85,7 @@ namespace X_Ren_Py
 						else builder.Add(singleLine);				
 				}
 				reader.Close();
+				fs.Close();
 			}
 			else
 			{

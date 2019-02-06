@@ -8,10 +8,11 @@ namespace X_Ren_Py
 	{
 		private TextBox _Editable = new TextBox() { MaxLength = 10, Margin = new Thickness(0), Padding = new Thickness(0), Visibility = Visibility.Collapsed };
 		private Label _Visible = new Label() { Padding = new Thickness(3, 1, 3, 1), AllowDrop = true };
-		private ListView _Content = new ListView() { Background = null, Margin = new Thickness(0), Padding = new Thickness(0), SelectionMode = SelectionMode.Single };
+		private ListView _Content = new ListView() { Background = null, Margin = new Thickness(0), Padding = new Thickness(0), SelectionMode = SelectionMode.Single};
 		private Button _Apply = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✓", Visibility = Visibility.Collapsed };
 		public Button _Delete = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✗", };
 		public ComboBoxItem comboBox = new ComboBoxItem();
+		public MainWindow.XFrame MenuChoice;
 		public string Text { get { return _Visible.Content.ToString(); } set { _Visible.Content = value; _Editable.Text = value; comboBox.Content = value; } }
 
 		public XLabel()
@@ -25,7 +26,7 @@ namespace X_Ren_Py
 			_Visible.MouseDoubleClick += label_DoubleClick;
 			_Apply.Click += apply_Click;
 			Header = stack;
-			Content = _Content;
+			Content = _Content;			
 			_Delete.Tag = this;
 			_Visible.Tag = this;
 		}

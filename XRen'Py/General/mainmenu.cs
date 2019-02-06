@@ -3,6 +3,7 @@ using System.Windows;
 using System.IO;
 using Ookii.Dialogs.Wpf;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace X_Ren_Py
 {
@@ -11,20 +12,13 @@ namespace X_Ren_Py
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private void clearAll()
-		{
-			projectExpander.IsExpanded = false;
-			for(int i=2; i<imagegrid.Children.IndexOf(imageBorder);i++) imagegrid.Children.RemoveAt(i);
-			for (int i = 0; i <tabControlStruct.Items.Count; i++) tabControlStruct.Items.RemoveAt(i);
-			foreach (TabItem tab in tabControlResources.Items) (tab.Content as ListView).Items.Clear();
-			ImageInFrameProps.Clear(); AudioInFrameProps.Clear(); menuLabelList.Clear();
-		}
-
 		private void NewProject_Click(object sender, RoutedEventArgs e)
 		{
 			clearAll();
 			//код загрузки нового проекта
+			emptyProject();
 		}
+
 
 		private void LoadProject_Click(object sender, RoutedEventArgs e)
 		{
@@ -38,12 +32,12 @@ namespace X_Ren_Py
 				{
 					projectExpander.IsExpanded = false;
 					projectFolder = selectFolder.SelectedPath.ToString() + game;
-					clearAll();					
+					clearAll();
 					loadScript();
 					loadOptions();
 					loadGUI();
 				}
-				else MessageBox.Show("Not a project folder or some files are missing!", "Incorrect folder", MessageBoxButton.OK, MessageBoxImage.Error);
+				else { MessageBox.Show("Not a project folder or some files are missing!", "Incorrect folder", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 		
 		private void SaveProject_Click(object sender, RoutedEventArgs e)
@@ -92,6 +86,40 @@ namespace X_Ren_Py
 
 		private void Exit_Click(object sender, RoutedEventArgs e){Close();}
 
+		private void clearAll()
+		{
+			projectExpander.IsExpanded = false;
+			uncheckAll();
+			for (int i = 2; i < imagegrid.Children.IndexOf(imageBorder); ) imagegrid.Children.RemoveAt(i);
+			foreach (TabItem tab in tabControlResources.Items) (tab.Content as ListView).Items.Clear();
+			tabControlStruct.Items.Clear();
+			tabControlStruct.Items.Add(addTab);
+			BackInFrameProps.Clear();
+			ImageInFrameProps.Clear();
+			AudioInFrameProps.Clear();
+			menuLabelList.Clear();
+			characterListView.Items.Clear();
+			characterListView.Items.Add(charNone);
+			characterListView.Items.Add(charCentered);
+			characterListView.Items.Add(charExtend);
+			disptimer.Stop();
+			characterLabel.Content = "none";
+			textBox.Text = "";
+			characterLabel.Foreground= new SolidColorBrush(default_ColorHeaders.SelectedColor.Value);
+			textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value);
+		}
+
+		private void emptyProject()
+		{
+			//start			
+			ListView startListView = createLabel("start");
+			XFrame firstFrame = createFrame();
+			startListView.Items.Add(firstFrame);
+			currentFrame = firstFrame;
+			firstFrame.IsSelected = true;
+			//characters
+			characterListView.SelectedIndex = 0;
+		}
 	}
 }
 

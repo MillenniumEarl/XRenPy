@@ -72,11 +72,12 @@ namespace X_Ren_Py
         { XMenuOption newmenuoption = new XMenuOption();
 			newmenuoption.Delete.IsEnabled = !root; 			
 			newmenuoption.MenuAction.ItemsSource = menuActions;
-			newmenuoption.MenuAction.SelectedIndex = 2;
+			newmenuoption.MenuAction.SelectedItem = passAction;
 			newmenuoption.ActionLabel.ItemsSource = menuLabelList;
 			newmenuoption.ActionLabel.SelectedIndex = 0;
 			newmenuoption.Delete.Click += deleteOption_Click;
 			newmenuoption.MouseUp += Link_Click;
+			newmenuoption.Tag = currentFrame;
 			return newmenuoption;
         }
 		
@@ -105,7 +106,6 @@ namespace X_Ren_Py
 
 		private void deleteOption_Click(object sender, RoutedEventArgs e)
         {
-			//currentFrame.MenuOptions.Remove(((sender as Button).Parent as StackPanel).Parent as XMenuOption);
 			currentFrame.MenuOptions.Remove((sender as Button).Tag as XMenuOption);
 		}
 
@@ -114,6 +114,7 @@ namespace X_Ren_Py
 			if (!((sender as XMenuOption).MenuAction.SelectedItem == passAction))
 			{
 				tabControlStruct.SelectedIndex = (sender as XMenuOption).ActionLabel.SelectedIndex;
+				(tabControlStruct.SelectedItem as XLabel).MenuChoice = (sender as XMenuOption).Tag as XFrame;
 				(getSelectedList().Items[0] as XFrame).IsSelected = true;
 			}
 			else try
@@ -124,7 +125,6 @@ namespace X_Ren_Py
 				{
 					MessageBox.Show("No next frames!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				}
-		}
-		
+		}		
 	}
 }

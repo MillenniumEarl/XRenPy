@@ -65,7 +65,7 @@ namespace X_Ren_Py
 
 		//контекстные меню
 		MenuItem addFrame, addRootFrame, convertFrameMenu, deleteFrame, addMenu, addImage, deleteImage, reloadImage, addAudio, deleteAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
-		ContextMenu cmFrame, cmLabel, cmImage, cmAudio, cmMovie, cmIcon;
+		static ContextMenu cmFrame, cmLabel, cmImage, cmAudio, cmMovie, cmIcon;
 
 		//текст для динамических кнопок
 		string framemenu = "Frame➤Menu";
@@ -145,14 +145,8 @@ namespace X_Ren_Py
 			animationInTypeComboBox.ItemsSource = animationIn;
 			animationOutTypeComboBox.ItemsSource = animationOut;
 
-			//start
-			XFrame firstFrame = createFrame();
-			ListView startListView = createLabel("start");
-			startListView.Items.Add(firstFrame);
-			currentFrame = firstFrame;
-			firstFrame.IsSelected = true;
-			//characters
-			characterListView.SelectedIndex = 0;
+			//start and characters
+			emptyProject();
 
 			//options
 			title.Text = "default";
@@ -198,7 +192,7 @@ namespace X_Ren_Py
 
 			//media:DispatcherTimer
 			disptimer.Tick += new EventHandler(mediaCurrentTime_Tick);
-			disptimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
+			disptimer.Interval = new TimeSpan(0, 0, 1);
 		}
 
 		private void createDirectories()

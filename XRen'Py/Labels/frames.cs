@@ -7,48 +7,51 @@ using System.Windows.Controls;
 
 namespace X_Ren_Py
 {
-	public class XFrame : ListViewItem
-	{
-		//string _Content;
-		private string _Text = "";
-		private ObservableCollection<XMenuOption> _MenuOptions;
-		private XCharacter _Character;
-		private XMovie _Movie;
-
-		public string Text { get { return _Text; } set { _Text = value; } }
-		public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
-		public XCharacter Character { get { return _Character; } set { _Character = value; } }
-		public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
-
-		public XFrame()
-		{
-			Content = "[]";
-		}
-	}
-
 	/// <summary>
 	/// Логика взаимодействия для MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		public class XFrame : ListViewItem
+		{
+			//string _Content;
+			private string _Text = "";
+			private ObservableCollection<XMenuOption> _MenuOptions;
+			private XCharacter _Character;
+			private XMovie _Movie;
+
+			public string Text { get { return _Text; } set { _Text = value; } }
+			public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
+			public XCharacter Character { get { return _Character; } set { _Character = value; } }
+			public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
+
+			public XFrame()
+			{
+				Content = "[]"; 
+				ContextMenu = cmFrame;
+			}			
+		}
 		private XFrame createFrame()
 		{
-			XFrame frame = new XFrame() { Character = characterListView.Items[0] as XCharacter, ContextMenu = cmFrame};
+			XFrame frame = new XFrame() { Character = characterListView.Items[0] as XCharacter};
 			frame.Selected += selectFrame_Click;
 			frame.MouseUp += selectFrame_Click;
+			frame.Tag = tabControlStruct.SelectedItem;
 			return frame;
 		}
-		
+
 		private void selectFrame_Click(object sender, RoutedEventArgs e)
-		{			
+		{
 			uncheckAll();
 			addorselect = false;
 			currentFrame = sender as XFrame;
-			getPreviousFrames();
-			textBox.Text = currentFrame.Text;			
+			setPreviousFrames();
+
+			characterListView.SelectedItem = currentFrame.Character;
+			textBox.Text = currentFrame.Text;
 			showCharacter();
 
-			if (currentFrame.MenuOptions==null)
+			if (currentFrame.MenuOptions == null)
 			{
 				menuStack.Visibility = Visibility.Hidden;
 				convertFrameMenu.Header = framemenu;
@@ -64,9 +67,9 @@ namespace X_Ren_Py
 			//ресурсы			
 			//при выборе фрейма сначала проверяется, есть ли пропы ТОЛЬКО предыдущих кадров включая нынешний, откидывается полностью часть пропов со стоп-маркерами в виде предыдущих же кадров
 			//проще говоря, в списке оказываются только те пропы, у которых есть начало, но нет конца до нынешнего фрейма включительно
-			List<ImageBackProperties> backgroundslist = BackInFrameProps.AsParallel().Where(back=>previousFrames.Contains(back.Frame)&&!previousFrames.Contains(back.StopFrame)).ToList();
-			List<ImageCharProperties> imageslist = ImageInFrameProps.AsParallel().Where(img => previousFrames.Contains(img.Frame) && !previousFrames.Contains(img.StopFrame)).ToList();
-			List<AudioProperties> audiolist = AudioInFrameProps.AsParallel().Where(mus => previousFrames.Contains(mus.Frame) && !previousFrames.Contains(mus.StopFrame)).ToList();
+			List<ImageBackProperties> backgroundslist = BackInFrameProps.Where(back => previousFrames.Contains(back.Frame) && ((back.StopFrame == null && back.StopFrames==null) || back.StopFrames.Intersect(previousFrames).Count()==0)).ToList();
+			List<ImageCharProperties> imageslist = ImageInFrameProps.Where(img => previousFrames.Contains(img.Frame) && ((img.StopFrame == null && img.StopFrames == null) || img.StopFrames.Intersect(previousFrames).Count() == 0)).ToList();
+			List<AudioProperties> audiolist = AudioInFrameProps.Where(mus => previousFrames.Contains(mus.Frame) && ((mus.StopFrame == null && mus.StopFrames == null) || mus.StopFrames.Intersect(previousFrames).Count() == 0)).ToList();
 
 			//пропов будет всегда немного, потому по ним искать легче легкого и проще простого.
 			foreach (ImageBackProperties backprops in backgroundslist)
@@ -78,7 +81,7 @@ namespace X_Ren_Py
 			foreach (ImageCharProperties imageprops in imageslist)
 			{
 				if (imageprops.Frame != currentFrame) imageprops.Image.IsChecked = null; else imageprops.Image.IsChecked = true;
-					imageprops.Image.Background = currentFrameResourceColor;
+				imageprops.Image.Background = currentFrameResourceColor;
 			}
 			foreach (AudioProperties audprops in audiolist)
 			{
@@ -121,13 +124,21 @@ namespace X_Ren_Py
 		private XFrame getSelectedFrame() { return getSelectedList().SelectedItem as XFrame; }
 		private ListView getSelectedList() { return tabControlStruct.SelectedContent as ListView; }
 
+		private void setPreviousFrames()
+		{
+			previousFrames.Clear();
+			getPreviousFrames();
+			previousFrames.Reverse();
+		}
+
 		private void getPreviousFrames()
-		{   //предусмотреть, что надо делать, если ПРЕДЫДУЩИЕ фреймы находятся не только в пределах ОДНОЙ метки
-			//построить дерево меток? Тогда надо смотреть в getPreviousFrames все до единого фреймы до самого первого
-			//а это идея. Почему бы и нет. Мы уже находимся в одной из веток, назад пойти не запутаешься
-			if(currentFrame.Parent==getSelectedList())
-				previousFrames.Clear();
-			for (int i = 0; i <= getSelectedList().Items.IndexOf(currentFrame); i++) previousFrames.Add(getSelectedList().Items[i] as XFrame);
+		{   			
+			XFrame firstframe = currentFrame;
+				for (int i = (currentFrame.Parent as ListView).Items.IndexOf(currentFrame); i >=0; i--) previousFrames.Add((currentFrame.Parent as ListView).Items[i] as XFrame);
+			if ((currentFrame.Tag as XLabel).Text != "start")
+			{ currentFrame = (currentFrame.Tag as XLabel).MenuChoice;
+				getPreviousFrames(); }
+			currentFrame = firstframe;		 
 		}
 	}
 }

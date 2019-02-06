@@ -12,7 +12,41 @@ namespace X_Ren_Py
 {
     public partial class MainWindow : Window
     {
-        private void audioImport_Click(object sender, RoutedEventArgs e)
+		public class XAudio : XContent
+		{
+			private string _Type = "music ";
+			public string Type { get { return _Type; } set { _Type = value; } }
+
+			public XAudio() { ContextMenu = cmAudio; }
+			public void loadAudio(string singleLine, string folder)
+			{
+				try
+				{
+					int firstquote = singleLine.IndexOf('"') + 1;
+					Path = folder + singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote);
+					Header = Path.Substring(singleLine.LastIndexOf('/') + 1);
+					Alias = singleLine.Substring(13, singleLine.IndexOf('=') - 13).TrimEnd(' ');
+				}
+				catch (Exception) { MessageBox.Show("Error: Audio loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+			}
+		}
+
+		public class AudioProperties : ContentProperties
+		{
+			private XAudio _Audio;
+			private float _FadeIn;
+			private float _FadeOut;
+			//private bool _Queue = false;//0-не в очереди на проигрывание
+			private bool _Loop = false;
+
+			public XAudio Audio { get { return _Audio; } set { _Audio = value; } }
+			public float FadeIn { get { return _FadeIn; } set { _FadeIn = value; } }
+			public float FadeOut { get { return _FadeOut; } set { _FadeOut = value; } }
+			//public bool Queue { get { return _Queue; } set { _Queue = value; } }
+			public bool Loop { get { return _Loop; } set { _Loop = value; } }
+		}
+
+		private void audioImport_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog musDialog = new OpenFileDialog() { Filter = audioextensions, Multiselect = true };
 
@@ -91,7 +125,6 @@ namespace X_Ren_Py
 
 		private void audioMouseActions(XAudio newaudio)
 		{
-			newaudio.ContextMenu = cmAudio;
 			newaudio.Selected += content_Selected;
 			newaudio.MouseUp += content_Selected;
 			newaudio.MouseLeave += audio_MouseLeave;
@@ -129,9 +162,10 @@ namespace X_Ren_Py
             currentAudio = (sender as CheckBox).Tag as XAudio;
 			bool isLooped=false;
 
-			if (AudioInFrameProps.Any(prop => prop.StopFrame == currentFrame && prop.Audio == currentAudio))
+			if (AudioInFrameProps.Any(prop => (prop.StopFrame == currentFrame || (prop.StopFrames != null && prop.StopFrames.Intersect(previousFrames) == currentFrame)) && prop.Audio == currentAudio))
 			{
-				AudioInFrameProps.First(prop => prop.StopFrame == currentFrame && prop.Audio == currentAudio).StopFrame = null;
+				AudioProperties audio = AudioInFrameProps.First(prop => (prop.StopFrame == currentFrame || (prop.StopFrames != null && prop.StopFrames.Intersect(previousFrames) == currentFrame)) && prop.Audio == currentAudio);
+				if (audio.StopFrame == currentFrame) audio.StopFrame = null; else audio.StopFrames.Remove(currentFrame);
 				(sender as CheckBox).IsChecked = null;
 			}
 			else
@@ -177,13 +211,6 @@ namespace X_Ren_Py
 			};
 		}
 
-		private void addAudioToLayer(string path, MediaElement audio, StackPanel panel, Label label)
-		{
-			audio.Source = new Uri(path);
-			panel.Visibility = Visibility.Visible;
-			label.Content = currentAudio.Header;
-		}
-
 		private void audio_Unchecked(object sender, RoutedEventArgs e)
 		{
 			XAudio selectedAudio = (sender as CheckBox).Tag as XAudio;
@@ -194,7 +221,8 @@ namespace X_Ren_Py
 			}
 			else
 			{
-				if (removeorunselect) AudioInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Audio == selectedAudio).StopFrame = currentFrame;
+				AudioProperties audio = AudioInFrameProps.Last(i => previousFrames.Contains(i.Frame) && i.Audio == selectedAudio);
+				if (removeorunselect) if (audio.Frame.MenuOptions == null) audio.StopFrame = currentFrame; else audio.StopFrames.Add(currentFrame);
 			}
 
 			if (selectedAudio.Type == "music ")	hideAudioLayer(music, panelMusic, labelMusic);
@@ -203,6 +231,13 @@ namespace X_Ren_Py
 
 			audioPropsPanel.Visibility = Visibility.Hidden;
 			show = false;
+		}
+
+		private void addAudioToLayer(string path, MediaElement audio, StackPanel panel, Label label)
+		{
+			audio.Source = new Uri(path);
+			panel.Visibility = Visibility.Visible;
+			label.Content = currentAudio.Header;
 		}
 
 		private void hideAudioLayer(MediaElement audio, StackPanel panel, Label label)

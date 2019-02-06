@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace X_Ren_Py
 {
@@ -70,7 +68,7 @@ namespace X_Ren_Py
 					else
 					{
 						XMovie movie = new XMovie();
-						movie.loadMovie(singleLine, projectFolder + "images\\");
+						movie.loadMovie(singleLine, projectFolder + "movies\\");
 						movieMouseActions(movie);
 						movieListView.Items.Add(movie);
 					}
@@ -78,16 +76,22 @@ namespace X_Ren_Py
 				else if (singleLine.StartsWith("label"))
 				{
 					XLabel selectedLabel = tabControlStruct.Items.OfType<XLabel>().First(label => label.Text == singleLine.Substring(6, singleLine.Length - 7));
-					XFrame frame = createFrame();
+					selectedLabel.IsSelected = true;
+					XFrame frame;
 					bool buildmenu = false;
-					previousFrames.Clear();
+					bool firstframe = true;
+
 					singleLine = reader.ReadLine().Trim(' ');
 
 					while (singleLine != "return" && !reader.EndOfStream)
 					{
 						frame = createFrame();
-						List<string> framebody = new List<string> { };
-						
+						currentFrame = frame;
+						(selectedLabel.Content as ListView).Items.Add(frame);
+						if (firstframe) { setPreviousFrames(); firstframe = false; }
+						else previousFrames.Add(frame);
+
+						List<string> framebody = new List<string> { };						
 
 						while (singleLine != "return" && !reader.EndOfStream)
 						{
@@ -104,19 +108,22 @@ namespace X_Ren_Py
 								singleLine = reader.ReadLine().Trim(' ');
 								if (singleLine.StartsWith("jump"))
 								{
-									newmenuoption.MenuAction.SelectedIndex = 0;
+									newmenuoption.MenuAction.SelectedItem = jumpAction;
 									newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == singleLine.Substring(singleLine.IndexOf(' ') + 1)));
+									(tabControlStruct.Items[newmenuoption.ActionLabel.SelectedIndex] as XLabel).MenuChoice=frame;
 								}
 								else if (singleLine.StartsWith("call"))
 								{
-									newmenuoption.MenuAction.SelectedIndex = 1;
+									newmenuoption.MenuAction.SelectedItem = callAction;
 									newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == singleLine.Substring(singleLine.IndexOf(' ') + 1)));
+									(tabControlStruct.Items[newmenuoption.ActionLabel.SelectedIndex] as XLabel).MenuChoice = frame;
 								}
-								else newmenuoption.MenuAction.SelectedIndex = 2;
+								else newmenuoption.MenuAction.SelectedItem=passAction;
 								frame.MenuOptions.Add(newmenuoption);
 							}
 							else if (Regex.IsMatch(singleLine, @"[\S\s]*""[\S\s]*""$"))
 							{
+								if (buildmenu&&frame.MenuOptions.Count!=0) break;
 								loadText(frame, singleLine);
 								if (!buildmenu) break;
 							}
@@ -136,8 +143,20 @@ namespace X_Ren_Py
 								XImage selectedImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
 								ImageBackProperties BackProp = new ImageBackProperties() { Frame = frame, Image = selectedImage };
 								if (all.Length > 2) if (all[2] == "with") BackProp.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-								if (BackInFrameProps.Any(prop => previousFrames.Contains(prop.Frame)))
-									BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame)).StopFrame = frame;
+								//секция поиска
+								if (BackInFrameProps.Any(prop => previousFrames.Contains(prop.Frame) && !previousFrames.Contains(prop.StopFrame)))
+								{
+									ImageBackProperties previous = BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && !previousFrames.Contains(prop.StopFrame));
+									//а вдруг меню, а мы неподготовлены? надо расставить все нужные метки
+									if (previous.Frame.MenuOptions == null)
+										previous.StopFrame = frame;
+									else
+									{
+										if (previous.StopFrames == null)
+											previous.StopFrames = new List<XFrame> { };
+										previous.StopFrames.Add(frame);
+									};
+								}//усьо
 								BackInFrameProps.Add(BackProp);
 							}
 							else if (framebody[line].StartsWith("show"))
@@ -160,8 +179,6 @@ namespace X_Ren_Py
 									if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
 									else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
 								}
-								//if (ImageInFrameProps.Any(prop => previousFrames.Contains(prop.Frame) && prop.Image == selectedImage))
-								//	ImageInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == selectedImage).StopFrame = frame;
 								ImageInFrameProps.Add(props);
 							}
 							else if (framebody[line].StartsWith("hide"))
@@ -169,24 +186,45 @@ namespace X_Ren_Py
 								string[] all = framebody[line].Split(' ');
 								if (backImageListView.Items.OfType<XImage>().Any(prop => prop.Alias == all[1]))
 								{
-									ImageBackProperties BackProp = BackInFrameProps.Last(prop => prop.Image.Alias == all[1]);
+									ImageBackProperties previous = BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image.Alias == all[1]);
 									if (all.Length > 2) if (all[2] == "with")
-											BackProp.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-									BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == backImageListView.Items.OfType<XImage>().First(img => img.Alias == all[1])).StopFrame = frame;
+											previous.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));									
+									if (previous.Frame.MenuOptions == null)
+										previous.StopFrame = frame;
+									else
+									{
+										if (previous.StopFrames == null)
+											previous.StopFrames = new List<XFrame> { };
+										previous.StopFrames.Add(frame);
+									};
 								}
-								//по нынешней логике, надо найти первый элемент с этой же картинкой, остальные просто игнорируются
 								else
 								{
-									ImageCharProperties CharProp = ImageInFrameProps.Last(prop => prop.Image.Alias == all[1]);
+									ImageCharProperties previous = ImageInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image.Alias == all[1]);
 									if (all.Length > 2) if (all[2] == "with")
-											CharProp.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-									BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image == imageListView.Items.OfType<XImage>().First(img => img.Alias == all[1])).StopFrame = frame;
+											previous.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+									if (previous.Frame.MenuOptions == null)
+										previous.StopFrame = frame;
+									else
+									{
+										if (previous.StopFrames == null)
+											previous.StopFrames = new List<XFrame> { };
+										previous.StopFrames.Add(frame);
+									};
 								}
 							}
 							else if (framebody[line].StartsWith("stop"))
 							{
 								string type = framebody[line].Substring(5) + " ";
-								AudioInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Audio.Type == type).StopFrame = frame;
+								AudioProperties previous=AudioInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Audio.Type == type);
+								if (previous.Frame.MenuOptions == null)
+									previous.StopFrame = frame;
+								else
+								{
+									if (previous.StopFrames == null)
+										previous.StopFrames = new List<XFrame> { };
+									previous.StopFrames.Add(frame);
+								};
 							}
 							else if (framebody[line].StartsWith("play"))
 							{
@@ -208,10 +246,7 @@ namespace X_Ren_Py
 								AudioInFrameProps.Add(props);
 							}
 						}
-
-						(selectedLabel.Content as ListView).Items.Add(frame);
-						previousFrames.Add(frame);
-
+						
 						if (singleLine != "return")
 						{
 							if (buildmenu) buildmenu = false;
@@ -220,6 +255,8 @@ namespace X_Ren_Py
 					}
 				}
 			}
+			previousFrames.Clear();
+			fs.Close();
 		}
 
 		/// <summary>
@@ -274,7 +311,7 @@ namespace X_Ren_Py
 			//end init
 			//labels	
 
-			for (int chosenLabelNumber = 1; chosenLabelNumber < tabControlStruct.Items.Count; chosenLabelNumber++)
+			for (int chosenLabelNumber = 0; chosenLabelNumber < tabControlStruct.Items.Count-1; chosenLabelNumber++)
 			{
 				writer.WriteLine(nextLine + label + (tabControlStruct.Items[chosenLabelNumber] as XLabel).Text + ':');
 
@@ -351,16 +388,16 @@ namespace X_Ren_Py
 					if (chosenFrame.Movie != null)
 					{
 						writer.WriteLine(tab + "$ renpy.movie_cutscene(" + quote(chosenFrame.Movie.Content.ToString()) + ")");
-						//полноценное отображение видео не нужно большинству людей
 					}
 
 					//menu
 					if (chosenFrame.MenuOptions != null)
-					{
-						string optionLabel = "";
+					{						
 						writer.WriteLine(tab + "menu:");
+						if (chosenFrame.Text != "") writer.WriteLine(tab + tab + quote(chosenFrame.Text)); 
 						foreach (XMenuOption option in chosenFrame.MenuOptions)
 						{
+							string optionLabel = "";
 							writer.WriteLine(tab + tab + quote(option.Choice) + ':');
 							if (option.MenuAction.SelectedItem != passAction) optionLabel = " " + (option.ActionLabel.SelectedItem as ComboBoxItem).Content.ToString();
 							writer.WriteLine(tab + tab + tab + (option.MenuAction.SelectedItem as ComboBoxItem).Content + optionLabel);
@@ -374,9 +411,10 @@ namespace X_Ren_Py
 						writer.WriteLine(tab + character + quote(chosenFrame.Text));
 					}
 				}
-				writer.WriteLine(tab + Return + nextLine);
+				writer.WriteLine(tab + Return);
 			}
 			writer.Close();
+			fs.Close();
 		}
 	}
 }

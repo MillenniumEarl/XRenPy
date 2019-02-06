@@ -8,7 +8,6 @@ namespace X_Ren_Py
 {
 	public class XCharacter : ListViewItem
 	{
-		//private string _Content;
 		private string _Alias;
 		private bool _NameIsBold=false;
 		private bool _NameIsItalic = false;
@@ -16,7 +15,7 @@ namespace X_Ren_Py
 		private bool _TextIsItalic = false;
 		private Color _NameColor;
 		private Color _TextColor;
-		private XImage _Icon;
+		private MainWindow.XImage _Icon;
 		public string Alias { get { return _Alias; } set { _Alias = value; } }
 
 		public void ContentToAlias() { _Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
@@ -26,7 +25,7 @@ namespace X_Ren_Py
 		public bool NameIsItalic { get { return _NameIsItalic; } set { _NameIsItalic = value; } }
 		public bool TextIsBold { get { return _TextIsBold; } set { _TextIsBold = value; } }
 		public bool TextIsItalic { get { return _TextIsItalic; } set { _TextIsItalic = value; } }
-		public XImage Icon { get { return _Icon; } set { _Icon = value; } }
+		public MainWindow.XImage Icon { get { return _Icon; } set { _Icon = value; } }
 		public string IconSource { get { return _Icon.Path; } }
 
 	}
@@ -42,8 +41,8 @@ namespace X_Ren_Py
 				int firstquote = singleLine.IndexOf('"') + 1;
 				newCharacter.Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
 				newCharacter.Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
-				string[] all = singleLine.Substring(firstquote, singleLine.LastIndexOf('"') - firstquote).Replace("\"", "").Replace(" ", "").Split(',');
-				for (int prop = 0; prop < all.Length; prop++)
+				string[] all = singleLine.Substring(firstquote).Replace("\"", "").Replace(" ", "").Split(',');
+				for (int prop = 1; prop < all.Length; prop++)
 				{
 					if (all[prop].StartsWith("image"))
 					{
@@ -156,20 +155,10 @@ namespace X_Ren_Py
 			editCharacter.IsEnabled = false;
 		}
 
-		private void saveCharacter()
+		private void selectCharacter_Click(object sender, RoutedEventArgs e)
 		{
 			currentFrame.Character = characterListView.SelectedItem as XCharacter;
-			characterLabel.Content = currentFrame.Character.Content;
-			if (currentFrame.Character.NameColor != Color.FromArgb(0, 255, 255, 255)) characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor); else { characterLabel.Foreground = new SolidColorBrush(default_ColorHeaders.SelectedColor.Value); }//дефолтный цвет из GUI
-			if (characterNameBold.IsChecked == true) characterLabel.FontWeight = FontWeights.Bold;
-			else characterLabel.FontWeight = FontWeights.Normal;
-			if (characterNameItalic.IsChecked == true) characterLabel.FontStyle = FontStyles.Italic;
-			else characterLabel.FontStyle = FontStyles.Normal;
-			if (currentFrame.Character.TextColor != Color.FromArgb(0, 255, 255, 255)) textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor); else { textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value); }//дефолтный цвет из GUI
-			if (characterTextBold.IsChecked == true) textBox.FontWeight = FontWeights.Bold;
-			else textBox.FontWeight = FontWeights.Normal;
-			if (characterTextItalic.IsChecked == true) textBox.FontStyle = FontStyles.Italic;
-			else textBox.FontStyle = FontStyles.Normal;
+			showCharacter();
 		}
 
 		private void showCharacter()
@@ -197,7 +186,7 @@ namespace X_Ren_Py
 			}
 			else {
 				if (tabControlResources.SelectedIndex != 6) tabControlResources.SelectedIndex -= 6;
-				else MessageBox.Show("No side image selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+				else MessageBox.Show("No side image selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 
 		private void charactersButton_Click(object sender, RoutedEventArgs e)
@@ -205,14 +194,12 @@ namespace X_Ren_Py
 			if (charactersButton.Background == Brushes.LightBlue)
 			{
 				charactersButton.Background = new SolidColorBrush(Color.FromArgb(102, 255, 255, 255));
-				CharactersGrid.Visibility = Visibility.Collapsed;
-				saveCharacter();
+				CharactersGrid.Visibility = Visibility.Collapsed;				
 			}
 			else
 			{
 				charactersButton.Background = Brushes.LightBlue;
-				CharactersGrid.Visibility = Visibility.Visible;
-				characterListView.SelectedItem = currentFrame.Character;
+				CharactersGrid.Visibility = Visibility.Visible;			
 			}
 		}
 	}
