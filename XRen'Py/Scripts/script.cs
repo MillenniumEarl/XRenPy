@@ -250,7 +250,7 @@ namespace X_Ren_Py
 						if (singleLine != "return")
 						{
 							if (buildmenu) buildmenu = false;
-							else singleLine = reader.ReadLine().TrimStart(' ');
+							else { frame.IsSelected = true; singleLine = reader.ReadLine().TrimStart(' '); }
 						}
 					}
 				}

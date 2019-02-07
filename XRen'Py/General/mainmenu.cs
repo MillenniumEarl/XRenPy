@@ -111,6 +111,7 @@ namespace X_Ren_Py
 
 		private void emptyProject()
 		{
+			projectFolder = Environment.CurrentDirectory + @"/temp" + game;
 			//start			
 			ListView startListView = createLabel("start");
 			XFrame firstFrame = createFrame();

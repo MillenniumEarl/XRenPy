@@ -15,13 +15,13 @@ namespace X_Ren_Py
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		string projectFolder;
 		static string game = @"/game/";
 		string script = game + @"script.rpy";
 		string options = game + @"options.rpy";
 		string screens = game + @"screens.rpy";
 		string gui = game + @"gui.rpy";
-
-		string projectFolder = Environment.CurrentDirectory + @"/temp" + game;
+		
 		string imagesFolder = @"images/";
 		string musicFolder = @"music/";
 		string soundsFolder = @"sounds/";
@@ -145,7 +145,7 @@ namespace X_Ren_Py
 			animationInTypeComboBox.ItemsSource = animationIn;
 			animationOutTypeComboBox.ItemsSource = animationOut;
 
-			//start and characters
+			//project folder, start and characters
 			emptyProject();
 
 			//options

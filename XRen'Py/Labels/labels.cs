@@ -7,7 +7,7 @@ namespace X_Ren_Py
 	public class XLabel : TabItem
 	{
 		private TextBox _Editable = new TextBox() { MaxLength = 10, Margin = new Thickness(0), Padding = new Thickness(0), Visibility = Visibility.Collapsed };
-		private Label _Visible = new Label() { Padding = new Thickness(3, 1, 3, 1), AllowDrop = true };
+		public Label _Visible = new Label() { Padding = new Thickness(3, 1, 3, 1), AllowDrop = true };
 		private ListView _Content = new ListView() { Background = null, Margin = new Thickness(0), Padding = new Thickness(0), SelectionMode = SelectionMode.Single};
 		private Button _Apply = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✓", Visibility = Visibility.Collapsed };
 		public Button _Delete = new Button() { Padding = new Thickness(0), Width = 14, FontWeight = FontWeights.Bold, Content = "✗", };
@@ -73,6 +73,16 @@ namespace X_Ren_Py
 				labelbody.Items.Add(frame);
 				frame.IsSelected = true;
 		}
+		private void selectLabel_Click(object sender, RoutedEventArgs e)
+		{
+			if (currentFrame.Tag != tabControlStruct.SelectedItem)
+			if ((tabControlStruct.SelectedContent as ListView).SelectedItem != null)
+			{XFrame frame=(tabControlStruct.SelectedContent as ListView).SelectedItem as XFrame;
+				frame.IsSelected = false;
+				frame.IsSelected = true;
+			}
+			else ((tabControlStruct.SelectedContent as ListView).Items[0] as XFrame).IsSelected = true;
+		}
 
 		private void deleteLabel_Click(object sender, RoutedEventArgs e)
 		{
@@ -88,6 +98,7 @@ namespace X_Ren_Py
 				label._Delete.Visibility = Visibility.Collapsed;				
 			}
 			else label._Delete.Click += deleteLabel_Click;
+			label._Visible.MouseUp += selectLabel_Click;
 			tabControlStruct.Items.Insert(tabControlStruct.Items.IndexOf(addTab), label);
 			(label.Content as ListView).ContextMenu = cmLabel;
 			label.IsSelected = true; 
