@@ -15,7 +15,7 @@ namespace X_Ren_Py
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		string projectFolder;
+		string projectFolder = Environment.CurrentDirectory + @"/temp" + game;
 		static string game = @"/game/";
 		string script = game + @"script.rpy";
 		string options = game + @"options.rpy";
