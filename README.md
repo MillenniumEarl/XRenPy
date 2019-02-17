@@ -1,6 +1,6 @@
 # XRen'Py
 ![Screenshot](preview.png)
-eXtended Ren'Py - visual editor for Ren'Py 7 (WIP)
+eXtended Ren'Py - visual editor for Ren'Py 7 (beta)
 
 - Currently only Windows
 - This application allows developers to create simple Ren'Py game without any knowledge of Python and Ren'Py scripting.
