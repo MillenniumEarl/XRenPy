@@ -100,5 +100,15 @@ Clicking on pencil button again will hide the inner choice actions and make the 
 When the menu option in this state, clicking on choice will apply the action and select next frame (pass) or the label you wanted it to go to.
 **Note that call action will not send you to previous label after it's done but will affect the final game.**
 
+### Saving project
+Clicking on Save button will save current project in selected folder.
+Clicking on Save As button will open the window to save the project there and saves the game there.
+
+### Using Ren'Py
+To create and build the game you have to use Ren'Py. Launcher of Ren'Py gives you ability to compile the project you're creating with XRen'Py.
+**Note that XRen'Py is not connected in any way to Ren'Py and to start/build the game you need the game folder to be in the projects folder that was set in Ren'Py.**
+Here is the guide about it:
+https://www.renpy.org/doc/html/quickstart.html#releasing-your-game
+
 That's all you need to know to start using XRen'Py!
 
