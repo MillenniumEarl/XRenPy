@@ -1,4 +1,4 @@
-# XRen'Py: How to make game
+# XRen'Py: How to make a game
 
 ## Getting started
 XRen'Py is a tool for fast prototyping of visual novels and creating simple visual novels using Ren'Py. It covers the basic functionality of Ren'Py visual novel engine.
