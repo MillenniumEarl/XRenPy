@@ -1,7 +1,7 @@
-# XREN'PY: How to make game
+# XRen'Py: How to make game
 
 ## Getting started
-XRen'Py is a tool for fast prototyping of visual novels. It covers the basic functionality of Ren'Py novel engine.
+XRen'Py is a tool for fast prototyping of visual novels and creating simple visual novels using Ren'Py. It covers the basic functionality of Ren'Py visual novel engine.
 Now if you want to start creating games with XRen'Py you better have:
 - Latest Ren'Py 7, you can get it here: https://www.renpy.org/latest.html
 This is not necessary to run the program, but obviously it is needed to create a game.
@@ -22,7 +22,9 @@ Image folder is the most basic folder in Ren'Py. In Ren'Py it contains image res
 In downloaded binaries, select necessary version based on your PC OS version (x86 or x64) and run XRen'Py.exe. You can run x86 files if you are not sure.
 
 ## Graphic user interface
-Program is divided on project block which consists of main menu and options block, structure block and resources block, and view block.
+Program is divided on:
+- project block at the left side of window which consists of main menu and options block at the top left corner, structure block and resources block below it,
+- view block at the right side of window.
 **Project resource block** is upper part of your script.rpy called init block. It contains all the content you need to create a game.
 It includes background images, character images, music, sound or voice files, and also movies as cutscenes and side images.
 **Project structure block** is lower part of your script.rpy. It contains the collection of labels that represent the branches of script.
