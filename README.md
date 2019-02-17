@@ -1,4 +1,4 @@
-# XRenPy
+# XRen'Py
 ![Screenshot](preview.png)
 eXtended Ren'Py - visual editor for Ren'Py 7 (WIP)
 
@@ -27,18 +27,10 @@ Currently released application features:
 - images alignment and animation controls
 - audio fades controls with value check, point or comma inside, up to 9.9 seconds floating point and 999 seconds integer of fade 
 - view block - visual representation of the prototype of the future game, contains six buttons for converting menu to frame and backwards, adding next empty frame, duplicating current frame, GUI control and two control buttons to move to next or previous frame
-- view block and project block size customizing, 
+- view block and project block size customizing
 - mostly working saving, saving as and loading projects
 - changing/creating options.rpy with all available options except build options
 - changing/creating gui.rpy with colors and fonts available (connection as default is in process)
 - you can add your own icon of project
 - content can be reloaded if deleted
 - menu can contain any images or music as any frame and correctly stop it in any other label you want to jump to
-
-Features to add:
-- NVL
-- updater service
-
-Things to test:
-- design
-- any small project
