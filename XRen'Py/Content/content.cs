@@ -13,38 +13,29 @@ namespace X_Ren_Py
     {
 		public class XContent:ListViewItem
     {
-		protected string _Alias;
-		protected string _Path;
-
-        protected CheckBox _CheckBox = new CheckBox() { Margin = new Thickness(0), Padding = new Thickness(0), IsThreeState=true };
-        protected Label _Label = new Label() { Margin = new Thickness(1, 0, 1, 0), Padding = new Thickness(1, 0, 1, 0) };
-
-		public string Alias { get { return _Alias; } set { _Alias = value; } }
-		public string Path { get { return _Path; } set { _Path = value; } }
-
-		public bool? IsChecked { get { return _CheckBox.IsChecked; } set { _CheckBox.IsChecked = value; } }
-        public CheckBox Checkbox { get { return _CheckBox; } set { _CheckBox = value; } }
-        public string Header { get { return _Label.Content.ToString(); } set { _Label.Content = value; _Alias = value.ToLower().Substring(0, value.LastIndexOf('.')).Replace(" ","").Replace("-", ""); } }
-		public Brush TextColor { get { return _Label.Foreground; } set { _Label.Foreground = value; } }
+            private Label Label = new Label() { Margin = new Thickness(1, 0, 1, 0), Padding = new Thickness(1, 0, 1, 0) };
+            public string Alias { get; set; }
+            public string Path { get; set; }
+            public bool? IsChecked { get { return Checkbox.IsChecked; } set { Checkbox.IsChecked = value; } }
+            public CheckBox Checkbox { get; set; } = new CheckBox() { Margin = new Thickness(0), Padding = new Thickness(0), IsThreeState = true };
+            public string Header { get { return Label.Content.ToString(); } set { Label.Content = value; Alias = value.ToLower().Substring(0, value.LastIndexOf('.')).Replace(" ","").Replace("-", ""); } }
+		    public Brush TextColor { get { return Label.Foreground; } set { Label.Foreground = value; } }
 		
 		public XContent()
 		{			
 			StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal};
-			stack.Children.Add(_CheckBox);
-			stack.Children.Add(_Label);
+			stack.Children.Add(Checkbox);
+			stack.Children.Add(Label);
 			Content = stack;
 			Checkbox.Tag = this;    
         }     
     }
 		public class ContentProperties
 		{
-			private XFrame _Frame;
-			private XFrame _StopFrame;
-			private List<XFrame> _StopFrames;
-			public XFrame Frame { get { return _Frame; } set { _Frame = value; } }
-			public XFrame StopFrame { get { return _StopFrame; } set { _StopFrame = value; } }
-			public List<XFrame> StopFrames { get { return _StopFrames; } set { _StopFrames = value; } }
-		}
+            public XFrame Frame { get; set; }
+            public XFrame StopFrame { get; set; }
+            public List<XFrame> StopFrames { get; set; }
+        }
 
 		protected void content_Selected(object sender, RoutedEventArgs e)
 		{

@@ -14,10 +14,9 @@ namespace X_Ren_Py
     {
 		public class XAudio : XContent
 		{
-			private string _Type = "music ";
-			public string Type { get { return _Type; } set { _Type = value; } }
+            public string Type { get; set; } = "music ";
 
-			public XAudio() { ContextMenu = cmAudio; }
+            public XAudio() { ContextMenu = cmAudio; }
 			public void loadAudio(string singleLine, string folder)
 			{
 				try
@@ -33,18 +32,12 @@ namespace X_Ren_Py
 
 		public class AudioProperties : ContentProperties
 		{
-			private XAudio _Audio;
-			private float _FadeIn;
-			private float _FadeOut;
-			//private bool _Queue = false;//0-не в очереди на проигрывание
-			private bool _Loop = false;
-
-			public XAudio Audio { get { return _Audio; } set { _Audio = value; } }
-			public float FadeIn { get { return _FadeIn; } set { _FadeIn = value; } }
-			public float FadeOut { get { return _FadeOut; } set { _FadeOut = value; } }
-			//public bool Queue { get { return _Queue; } set { _Queue = value; } }
-			public bool Loop { get { return _Loop; } set { _Loop = value; } }
-		}
+            public XAudio Audio { get; set; }
+            public float FadeIn { get; set; }
+            public float FadeOut { get; set; }
+            //public bool Queue { get { return _Queue; } set { _Queue = value; } }
+            public bool Loop { get; set; } = false;
+        }
 
 		private void audioImport_Click(object sender, RoutedEventArgs e)
         {

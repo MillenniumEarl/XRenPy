@@ -78,6 +78,7 @@ namespace X_Ren_Py
 		XImage currentImage;
 		XAudio currentAudio;
 		XMovie currentMovie;
+        XCharacter currentCharacter;//надо поставить его первое значение как charNone
 		List<XFrame> previousFrames = new List<XFrame> { };
 		List<ComboBoxItem> fonts;
 		List<ComboBoxItem> menuActions = new List<ComboBoxItem> { };
@@ -124,7 +125,6 @@ namespace X_Ren_Py
 			addIcon = new MenuItem() { Header = "Add icon" }; addIcon.Click += imageImport_Click;
 			reloadIcon = new MenuItem() { Header = "Reload icon" }; reloadIcon.Click += imageReload_Click;
 			deleteIcon = new MenuItem() { Header = "Delete icon" }; deleteIcon.Click += imageDeleteFromList_Click;
-
 
 			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] {addRootFrame, convertFrameMenu, deleteFrame} };
 			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, addMenu} };

@@ -112,15 +112,17 @@ namespace X_Ren_Py
 		private void emptyProject()
 		{
 			projectFolder = Environment.CurrentDirectory + @"/temp" + game;
-			//start			
+			//characters
+			characterListView.SelectedItem=charNone;
+            currentCharacter = charNone;
+            //start			
 			ListView startListView = createLabel("start");
 			XFrame firstFrame = createFrame();
 			startListView.Items.Add(firstFrame);
 			currentFrame = firstFrame;
 			firstFrame.IsSelected = true;
-			//characters
-			characterListView.SelectedIndex = 0;
-		}
+
+        }
 	}
 }
 

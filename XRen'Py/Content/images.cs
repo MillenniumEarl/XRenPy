@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.IO;
-using System.Collections.Generic;
 
 namespace X_Ren_Py
 {
@@ -33,21 +32,16 @@ namespace X_Ren_Py
 		}
 		public class ImageBackProperties : ContentProperties
 		{
-			private XImage _Image;
-			private byte _AnimationInType;//0-нет анимации
-			private byte _AnimationOutType;//0-нет анимации
-			public XImage Image { get { return _Image; } set { _Image = value; } }
-			public byte AnimationInType { get { return _AnimationInType; } set { _AnimationInType = value; } }
-			public byte AnimationOutType { get { return _AnimationOutType; } set { _AnimationOutType = value; } }
-		}
+            public XImage Image { get; set; }
+            public byte AnimationInType { get; set; }
+            public byte AnimationOutType { get; set; }
+        }
 		
 		public class ImageCharProperties : ImageBackProperties
 		{
-			private Image _Displayable;
-			private byte _Align;//0 - по умолчанию
-			public Image Displayable { get { return _Displayable; } set { _Displayable = value; } }
-			public byte Align { get { return _Align; } set { _Align = value; } }
-		}
+            public Image Displayable { get; set; }
+            public byte Align { get; set; }
+        }
 
 		private void imageImport_Click(object sender, RoutedEventArgs e)
 		{

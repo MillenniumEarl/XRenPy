@@ -9,20 +9,18 @@ namespace X_Ren_Py
 {
 	public class XMenuOption : ListViewItem
 	{
-		private Label _Href = new Label() { Width = 540, FontSize = 22, Padding = new Thickness(5), HorizontalAlignment = HorizontalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, Visibility = Visibility.Collapsed };
+		private Label _Href = new Label() { Foreground=Brushes.White, Width = 540, FontSize = 22, Padding = new Thickness(5), HorizontalAlignment = HorizontalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, Visibility = Visibility.Collapsed };
 		private TextBox _Choice = new TextBox() { Width = 300, FontSize = 22, Text = "Menu option", Padding = new Thickness(5) };
-		private ComboBox _Action = new ComboBox() { Width = 80, FontSize = 22, Padding = new Thickness(5) };
-		private ComboBox _Label = new ComboBox() { Width = 160, FontSize = 22, Padding = new Thickness(5) };
-		private Button Edit = new Button() { Background = Brushes.LightBlue, FontSize = 22, Padding = new Thickness(5), Content = "✏" };
+        private Button Edit = new Button() { Background = Brushes.LightBlue, FontSize = 22, Padding = new Thickness(5), Content = "✏" };
 		public Button Delete = new Button() { FontSize = 22, Padding = new Thickness(5), Content = "🗑" };
 		public string Href { get { return _Href.Content.ToString(); } }
 		public string Choice { get { return _Choice.Text; } set { _Choice.Text = value; _Href.Content = value; } }
-		public ComboBox MenuAction { get { return _Action; } set { _Action = value; } }
-		public ComboBox ActionLabel { get { return _Label; } set { _Label = value; } }
+        public ComboBox MenuAction { get; set; } = new ComboBox() { Width = 80, FontSize = 22, Padding = new Thickness(5) };
+        public ComboBox ActionLabel { get; set; } = new ComboBox() { Width = 160, FontSize = 22, Padding = new Thickness(5) };        
 
-		public XMenuOption()
+        public XMenuOption()
 		{
-			StackPanel stack = new StackPanel();
+            StackPanel stack = new StackPanel();
 			stack.Margin = new Thickness(5);
 			stack.HorizontalAlignment = HorizontalAlignment.Stretch;
 			stack.Orientation = Orientation.Horizontal;
@@ -31,14 +29,45 @@ namespace X_Ren_Py
 			stack.Children.Add(Edit);
 			stack.Children.Add(_Href);
 			stack.Children.Add(_Choice);
-			stack.Children.Add(_Action);
+			stack.Children.Add(MenuAction);
 			stack.Children.Add(ActionLabel);
 			stack.Children.Add(Delete);
 			Content = stack;
 			Delete.Tag = this;
-		}
+            Background = new LinearGradientBrush
+            {
+                GradientStops = new GradientStopCollection
+                {
+                    new GradientStop(Color.FromArgb(0,0,0,0), 0),
+                    new GradientStop(Brushes.Black.Color, 0.2),
+                    new GradientStop(Brushes.Black.Color, 0.8),
+                    new GradientStop(Color.FromArgb(0,0,0,0), 1)
+                }
+            };
+            MouseEnter += XMenuOption_MouseEnter;
+            MouseLeave += XMenuOption_MouseLeave;
+            Margin = new Thickness(5);
+        }
 
-		private void Edit_Click(object sender, RoutedEventArgs e)
+        private void XMenuOption_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Edit.Background != Brushes.LightBlue)
+            {
+                Edit.Visibility = Visibility.Hidden;
+                Delete.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void XMenuOption_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Edit.Background != Brushes.LightBlue)
+            {
+                Edit.Visibility = Visibility.Visible;
+                Delete.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
 		{
 			if (Edit.Background == Brushes.LightBlue)
 			{

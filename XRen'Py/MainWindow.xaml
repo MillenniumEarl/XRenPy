@@ -195,7 +195,7 @@
                 <MediaElement x:Name="movieBackground" Height="720" Width="1280" LoadedBehavior="Pause"/>
                 <Border x:Name="imageBorder" BorderBrush="Black" BorderThickness="1"/>
                 <StackPanel x:Name="menuStack" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Collapsed">
-                    <ListView x:Name="menuOptionsVisualList" Height="Auto" Background="#66FFFFFF"/>
+                    <ListView x:Name="menuOptionsVisualList" Height="Auto" Background="{x:Null}" BorderBrush="{x:Null}"/>
                     <Button x:Name="addOptionButton" Click="addOption_Click" Content="+" FontSize="24" Padding="0" Background="#66FFFFFF"/>
                 </StackPanel>
                 <Label x:Name="characterLabel" Content="Character" Foreground="#FF99CCFF" VerticalAlignment="Bottom" Height="38" VerticalContentAlignment="Center" FontSize="30" Margin="240,0,0,190" FontFamily="DejaVu Sans" HorizontalAlignment="Left" Width="545">
@@ -225,8 +225,8 @@
         <Button x:Name="mixerButton" Grid.Column="1" Content="Audio mixer" BorderBrush="{x:Null}" FontSize="18" Click="audioMixer_Click" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#66FFFFFF" RenderTransformOrigin="0.5,0.5" Margin="5,0,0,5"/>
         <Button x:Name="GUIButton" Grid.Column="1" Content="GUI" Background="#66FFFFFF" BorderBrush="{x:Null}" FontSize="18" Click="GUIButton_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,5,5,0"/>
         <Button x:Name="addFrameButton" Grid.Column="1" Content="Add frame" Background="#66FFFFFF" BorderBrush="{x:Null}" FontSize="18" Click="addNextFrame_Click" HorizontalAlignment="Right" Width="100" Height="100" VerticalAlignment="Bottom" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,0,5,5"/>
-        <Button x:Name="prevFrame" Grid.Column="1" Content="≪" HorizontalAlignment="Left" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="5,105,0,105"/>
-        <Button x:Name="nextFrame" Grid.Column="1" Content="≫" HorizontalAlignment="Right" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="0,105,5,105"/>
+        <Button x:Name="prevFrame" Grid.Column="1" Content="⏴" HorizontalAlignment="Left" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="5,105,0,105"/>
+        <Button x:Name="nextFrame" Grid.Column="1" Content="⏵" HorizontalAlignment="Right" Width="66" BorderBrush="{x:Null}" Foreground="Black" Background="#33FFFFFF" Click="PrevNext_Click" FontSize="72" Padding="-1,0,0,0" Margin="0,105,5,105"/>
         <Grid x:Name="CharactersGrid" Background="#7FFFFFFF" Margin="110,10,0,0" Grid.Column="1" Width="300" HorizontalAlignment="Left" Height="328" VerticalAlignment="Top" Visibility="Collapsed">
             <Rectangle Fill="White" Stroke="Black" Margin="5"/>
             <ListView x:Name="characterListView" FontSize="12" HorizontalAlignment="Left" Margin="10,10,0,10" Width="139">

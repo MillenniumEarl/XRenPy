@@ -12,11 +12,9 @@ namespace X_Ren_Py
     {
 		public class XMovie : XContent
 		{
-			//string _Content;
-			string _MaskPath; //путь к маске видео. если она есть
-			public string MaskPath { get { return _MaskPath; } set { _MaskPath = value; } }
+            public string MaskPath { get; set; }
 
-			public XMovie() {ContextMenu = cmMovie;}
+            public XMovie() {ContextMenu = cmMovie;}
 			public void loadMovie(string singleLine, string folder)
 			{
 				try

@@ -14,18 +14,12 @@ namespace X_Ren_Py
 	{
 		public class XFrame : ListViewItem
 		{
-			//string _Content;
-			private string _Text = "";
-			private ObservableCollection<XMenuOption> _MenuOptions;
-			private XCharacter _Character;
-			private XMovie _Movie;
+            public string Text { get; set; } = "";
+            public ObservableCollection<XMenuOption> MenuOptions { get; set; }
+            public XCharacter Character { get; set; }
+            public XMovie Movie { get; set; }
 
-			public string Text { get { return _Text; } set { _Text = value; } }
-			public ObservableCollection<XMenuOption> MenuOptions { get { return _MenuOptions; } set { _MenuOptions = value; } }
-			public XCharacter Character { get { return _Character; } set { _Character = value; } }
-			public XMovie Movie { get { return _Movie; } set { _Movie = value; } }
-
-			public XFrame()
+            public XFrame()
 			{
 				Content = "[]"; 
 				ContextMenu = cmFrame;
@@ -33,7 +27,7 @@ namespace X_Ren_Py
 		}
 		private XFrame createFrame()
 		{
-			XFrame frame = new XFrame() { Character = characterListView.Items[0] as XCharacter};
+			XFrame frame = new XFrame() { Character = currentCharacter};
 			frame.Selected += selectFrame_Click;
 			frame.MouseUp += selectFrame_Click;
 			frame.Tag = tabControlStruct.SelectedItem;
@@ -48,7 +42,8 @@ namespace X_Ren_Py
 			setPreviousFrames();
 
 			characterListView.SelectedItem = currentFrame.Character;
-			textBox.Text = currentFrame.Text;
+            currentCharacter = currentFrame.Character;
+            textBox.Text = currentFrame.Text;
 			showCharacter();
 
 			if (currentFrame.MenuOptions == null)

@@ -8,25 +8,16 @@ namespace X_Ren_Py
 {
 	public class XCharacter : ListViewItem
 	{
-		private string _Alias;
-		private bool _NameIsBold=false;
-		private bool _NameIsItalic = false;
-		private bool _TextIsBold = false;
-		private bool _TextIsItalic = false;
-		private Color _NameColor;
-		private Color _TextColor;
-		private MainWindow.XImage _Icon;
-		public string Alias { get { return _Alias; } set { _Alias = value; } }
-
-		public void ContentToAlias() { _Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
-		public Color NameColor { get { return _NameColor; } set { _NameColor = value; } }
-		public Color TextColor { get { return _TextColor; } set { _TextColor = value; } }
-		public bool NameIsBold { get { return _NameIsBold; } set { _NameIsBold = value; } }
-		public bool NameIsItalic { get { return _NameIsItalic; } set { _NameIsItalic = value; } }
-		public bool TextIsBold { get { return _TextIsBold; } set { _TextIsBold = value; } }
-		public bool TextIsItalic { get { return _TextIsItalic; } set { _TextIsItalic = value; } }
-		public MainWindow.XImage Icon { get { return _Icon; } set { _Icon = value; } }
-		public string IconSource { get { return _Icon.Path; } }
+        public string Alias { get; set; }
+        public void ContentToAlias() { Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
+        public Color NameColor { get; set; }
+        public Color TextColor { get; set; }
+        public bool NameIsBold { get; set; } = false;
+        public bool NameIsItalic { get; set; } = false;
+        public bool TextIsBold { get; set; } = false;
+        public bool TextIsItalic { get; set; } = false;
+        public MainWindow.XImage Icon { get; set; }
+        public string IconSource { get { return Icon.Path; } }
 
 	}
 
@@ -131,8 +122,8 @@ namespace X_Ren_Py
             if (characterTextItalic.IsChecked == true) character.TextIsItalic = true;
             else character.TextIsItalic = false;
 			if (iconCharacter.Source!=null) character.Icon = sideListView.Items.OfType<XImage>().First(sideimage => (new Uri(sideimage.Path).ToString() == iconCharacter.Source.ToString()));
-			if (charText_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor); else character.Background = null;
-			if (charName_colorPicker.SelectedColor != Color.FromArgb(0, 255, 255, 255)) character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor); else character.Foreground = Brushes.Black;
+			if (charText_colorPicker.SelectedColor != Brushes.Transparent.Color) character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor); else character.Background = null;
+			if (charName_colorPicker.SelectedColor != Brushes.Transparent.Color) character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor); else character.Foreground = Brushes.Black;
 		}
 
         private void editableChar_Selected(object sender, RoutedEventArgs e)
@@ -157,19 +148,20 @@ namespace X_Ren_Py
 
 		private void selectCharacter_Click(object sender, RoutedEventArgs e)
 		{
-			currentFrame.Character = characterListView.SelectedItem as XCharacter;
-			showCharacter();
+            currentCharacter = characterListView.SelectedItem as XCharacter;
+            currentFrame.Character = currentCharacter;
+            showCharacter();
 		}
 
 		private void showCharacter()
 		{
 			characterLabel.Content = currentFrame.Character.Content;
-			if (currentFrame.Character.NameColor != Color.FromArgb(0, 255, 255, 255)) characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor); else { characterLabel.Foreground = new SolidColorBrush(default_ColorHeaders.SelectedColor.Value); }//дефолтный цвет из GUI
+			if (currentFrame.Character.NameColor != Brushes.Transparent.Color) characterLabel.Foreground = new SolidColorBrush(currentFrame.Character.NameColor); else { characterLabel.Foreground = new SolidColorBrush(default_ColorHeaders.SelectedColor.Value); }//дефолтный цвет из GUI
 			if (currentFrame.Character.NameIsBold) characterLabel.FontWeight = FontWeights.Bold;
 			else characterLabel.FontWeight = FontWeights.Normal;
 			if (currentFrame.Character.NameIsItalic) characterLabel.FontStyle = FontStyles.Italic;
 			else characterLabel.FontStyle = FontStyles.Normal;
-			if (currentFrame.Character.TextColor != Color.FromArgb(0, 255, 255, 255)) textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor); else { textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value); }//дефолтный цвет из GUI
+			if (currentFrame.Character.TextColor != Brushes.Transparent.Color) textBox.Foreground = new SolidColorBrush(currentFrame.Character.TextColor); else { textBox.Foreground = new SolidColorBrush(default_ColorText.SelectedColor.Value); }//дефолтный цвет из GUI
 			if (currentFrame.Character.TextIsBold) textBox.FontWeight = FontWeights.Bold;
 			else textBox.FontWeight = FontWeights.Normal;
 			if (currentFrame.Character.TextIsItalic) textBox.FontStyle = FontStyles.Italic;
