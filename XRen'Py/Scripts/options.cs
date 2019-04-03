@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.Linq;
 using UnidecodeSharpFork;
 
 namespace X_Ren_Py
@@ -28,9 +29,9 @@ namespace X_Ren_Py
 				else if (singleLine.StartsWith("define config.version"))				version.Text = singleLine.Substring(singleLine.IndexOf('"') + 1, singleLine.LastIndexOf('"') - (singleLine.IndexOf('"') + 1));
 				else if (singleLine.StartsWith("define gui.about"))						about.Text = singleLine.Substring(singleLine.IndexOf("\"\"\"") + 3);
 				else if (singleLine.StartsWith("define build.name"))					buildName.Content = singleLine.Substring(singleLine.IndexOf('"')).Replace("\"", "");
-				else if (singleLine.StartsWith("define config.has_sound"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsSound.IsChecked = true; else containsSound.IsChecked = false; }
-				else if (singleLine.StartsWith("define config.has_music"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsMusic.IsChecked = true; else containsMusic.IsChecked = false; }
-				else if (singleLine.StartsWith("define config.has_voice"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice.IsChecked = true; else containsVoice.IsChecked = false; }
+				else if (singleLine.StartsWith("define config.has_sound"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsSound = true; else containsSound = false; }
+				else if (singleLine.StartsWith("define config.has_music"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsMusic = true; else containsMusic = false; }
+				else if (singleLine.StartsWith("define config.has_voice"))				{ if (singleLine.Substring(singleLine.Length - 5).TrimStart(' ') == "True") containsVoice = true; else containsVoice = false; }
 				else if (singleLine.StartsWith("default preferences.text_cps"))			textShowSpeed.Text = value(singleLine);
 				else if (singleLine.StartsWith("default preferences.afm_time"))			autoReaderLatency.Text = value(singleLine);
 				else if (singleLine.StartsWith("define config.enter_transition"))		gameOpenTransition.SelectedItem = simplifyTransition(value(singleLine));
@@ -46,8 +47,12 @@ namespace X_Ren_Py
 		}
 		
 		private void saveOptions()
-		{			
-			List<string> builder= new List<string> { };
+		{
+            containsMusic = AudioInFrameProps.Any(prop => prop.Audio.Type == "music ");
+            containsSound = AudioInFrameProps.Any(prop => prop.Audio.Type == "sound ");
+            containsVoice = AudioInFrameProps.Any(prop => prop.Audio.Type == "voice ");
+
+            List<string> builder= new List<string> { };
 
 			if (File.Exists(projectFolder + "options.rpy"))
 			{
@@ -63,9 +68,9 @@ namespace X_Ren_Py
 					else if (singleLine.StartsWith("define config.version")) builder.Add("define config.version = " + quote(version.Text));
 					else if (singleLine.StartsWith("define gui.about")) builder.Add("define gui.about = _p(\"\"\"" + about.Text);
 					else if (singleLine.StartsWith("define build.name")) builder.Add("define build.name = " + quote(buildName.Content.ToString()));
-					else if (singleLine.StartsWith("define config.has_sound")) { string sound = "True"; if (containsSound.IsChecked == false) sound = "False"; builder.Add("define config.has_sound = " + sound); }
-					else if (singleLine.StartsWith("define config.has_music")) { string music = "True"; if (containsMusic.IsChecked == false) music = "False"; builder.Add("define config.has_music = " + music); }
-					else if (singleLine.StartsWith("define config.has_voice")) { string voice = "True"; if (containsVoice.IsChecked == false) voice = "False"; builder.Add("define config.has_voice = " + voice); }
+					else if (singleLine.StartsWith("define config.has_sound")) { string sound = "True"; if (containsSound == false) sound = "False"; builder.Add("define config.has_sound = " + sound); }
+					else if (singleLine.StartsWith("define config.has_music")) { string music = "True"; if (containsMusic == false) music = "False"; builder.Add("define config.has_music = " + music); }
+					else if (singleLine.StartsWith("define config.has_voice")) { string voice = "True"; if (containsVoice == false) voice = "False"; builder.Add("define config.has_voice = " + voice); }
 					else if (singleLine.StartsWith("default preferences.text_cps")) builder.Add("default preferences.text_cps = " + textShowSpeed.Text);
 					else if (singleLine.StartsWith("default preferences.afm_time")) builder.Add("default preferences.afm_time = " + autoReaderLatency.Text);
 					else if (singleLine.StartsWith("define config.enter_transition")) builder.Add("define config.enter_transition = " + gameOpenTransition.SelectedItem);
@@ -92,9 +97,9 @@ namespace X_Ren_Py
 				builder.Add("define gui.about = _p(\"\"\"" + about.Text);
 				builder.Add("\"\"\")");
 				builder.Add("define build.name = " + quote(buildName.Content.ToString()));
-				string sound = "True"; if (containsSound.IsChecked == false) sound = "False"; builder.Add("define config.has_sound = " + sound);
-				string music = "True"; if (containsMusic.IsChecked == false) music = "False"; builder.Add("define config.has_music = " + music);
-				string voice = "True"; if (containsVoice.IsChecked == false) voice = "False"; builder.Add("define config.has_voice = " + voice);
+				string sound = "True"; if (containsSound == false) sound = "False"; builder.Add("define config.has_sound = " + sound);
+				string music = "True"; if (containsMusic == false) music = "False"; builder.Add("define config.has_music = " + music);
+				string voice = "True"; if (containsVoice == false) voice = "False"; builder.Add("define config.has_voice = " + voice);
 				builder.Add("default preferences.text_cps = " + textShowSpeed.Text);
 				builder.Add("default preferences.afm_time = " + autoReaderLatency.Text);
 				builder.Add("define config.enter_transition = " + gameOpenTransition.SelectedItem);

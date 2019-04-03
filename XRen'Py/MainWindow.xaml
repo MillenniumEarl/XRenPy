@@ -144,31 +144,31 @@
                     <CheckBox x:Name="titleVisible" Content="Show name" HorizontalAlignment="Left" Margin="15,54,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
                     <Label Content="Version" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" Padding="5,0" Height="20"/>
                     <TextBox x:Name="version" Margin="59,79,63,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" Text="1.0" />
-                    <CheckBox x:Name="containsMusic" Content="Enable music mixer" HorizontalAlignment="Left" Margin="15,104,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
+                    <!--<CheckBox x:Name="containsMusic" Content="Enable music mixer" HorizontalAlignment="Left" Margin="15,104,0,0" VerticalAlignment="Top" FontSize="12" IsChecked="True" />
                     <CheckBox x:Name="containsSound" Content="Enable sound mixer" HorizontalAlignment="Left" Margin="15,119,0,0" VerticalAlignment="Top" FontSize="12" />
-                    <CheckBox x:Name="containsVoice" Content="Enable voice mixer" HorizontalAlignment="Left" Margin="15,134,0,0" VerticalAlignment="Top" FontSize="12" />
-                    <Label Content="Text showing speed" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,154,0,0" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
-                    <TextBox x:Name="textShowSpeed" Margin="150,154,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
-                    <Label Content="Auto reader latency" HorizontalAlignment="Left" Margin="10,179,0,0" VerticalAlignment="Top" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
-                    <TextBox x:Name="autoReaderLatency" Margin="150,179,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="10" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
-                    <xctk:WatermarkTextBox x:Name="about" Watermark="About this  game" Margin="10,400,10,10" FontSize="12"/>
-                    <Label Content="Transitions" HorizontalAlignment="Left" Margin="10,204,0,0" VerticalAlignment="Top" FontSize="12" Height="16" Padding="10,0,5,0" FontStyle="Italic"/>
-                    <Label Content="Run game" HorizontalAlignment="Left" Margin="10,225,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="gameOpenTransition" HorizontalAlignment="Left" Margin="101,225,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
-                    <Label Content="Exit game" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="gameExitTransition" HorizontalAlignment="Left" Margin="101,250,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
-                    <Label Content="Begin playing" HorizontalAlignment="Left" Margin="10,275,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="gameStartTransition" HorizontalAlignment="Left" Margin="101,275,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
-                    <Label Content="End playing" HorizontalAlignment="Left" Margin="10,325,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="gameEndTransition" HorizontalAlignment="Left" Margin="101,325,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <CheckBox x:Name="containsVoice" Content="Enable voice mixer" HorizontalAlignment="Left" Margin="15,134,0,0" VerticalAlignment="Top" FontSize="12" />-->
+                    <Label Content="Text showing speed" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,124,0,0" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
+                    <TextBox x:Name="textShowSpeed" Margin="150,124,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
+                    <Label Content="Auto reader latency" HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" FontSize="12" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
+                    <TextBox x:Name="autoReaderLatency" Margin="150,149,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" Text="10" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="4" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="40" FontSize="12" VerticalContentAlignment="Center" />
+                    <xctk:WatermarkTextBox x:Name="about" Watermark="About this  game" Margin="10,370,10,10" FontSize="12"/>
+                    <Label Content="Transitions" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top" FontSize="12" Height="16" Padding="10,0,5,0" FontStyle="Italic"/>
+                    <Label Content="Run game" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameOpenTransition" HorizontalAlignment="Left" Margin="101,195,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="Exit game" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameExitTransition" HorizontalAlignment="Left" Margin="101,220,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="Begin playing" HorizontalAlignment="Left" Margin="10,245,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameStartTransition" HorizontalAlignment="Left" Margin="101,245,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="End playing" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameEndTransition" HorizontalAlignment="Left" Margin="101,295,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
                     <xctk:IconButton x:Name="icon" HorizontalAlignment="Left" Margin="142,51,0,0" VerticalAlignment="Top" Width="48" Height="48" Background="{x:Null}" Click="icon_Click"/>
                     <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="109,51,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
-                    <Label Content="Dialog show" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="dialogShowTransition" HorizontalAlignment="Left" Margin="101,350,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
-                    <Label Content="Dialog hide" HorizontalAlignment="Left" Margin="11,375,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="dialogHideTransition" HorizontalAlignment="Left" Margin="101,375,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
-                    <Label Content="Ingame" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
-                    <ComboBox x:Name="gameIntraTransition" HorizontalAlignment="Left" Margin="101,300,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="Dialog show" HorizontalAlignment="Left" Margin="10,320,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="dialogShowTransition" HorizontalAlignment="Left" Margin="101,320,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="Dialog hide" HorizontalAlignment="Left" Margin="11,345,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="dialogHideTransition" HorizontalAlignment="Left" Margin="101,345,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
+                    <Label Content="Ingame" HorizontalAlignment="Left" Margin="10,270,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0"/>
+                    <ComboBox x:Name="gameIntraTransition" HorizontalAlignment="Left" Margin="101,270,0,0" VerticalAlignment="Top" Width="89" Height="20" FontSize="12" Padding="6,0,5,0"/>
                 </Grid>
             </Expander>
             <Expander x:Name="projectExpander" Header="Project" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Expanded="mainexp_Expanded" Height="Auto" Width="Auto" Grid.ColumnSpan="2" Grid.RowSpan="2" Padding="5,0,0,0">
@@ -238,9 +238,9 @@
             <Image x:Name="iconCharacter" HorizontalAlignment="Left" Margin="154,10,0,0" VerticalAlignment="Top" Width="64" Height="64" Stretch="UniformToFill"/>
             <Label Content="Icon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,12,0,0" FontSize="12" Padding="5,0" VerticalContentAlignment="Center" Height="20"/>
             <Button x:Name="characterSideImageConnect" Content="Connect" HorizontalAlignment="Left" Margin="223,54,0,0" VerticalAlignment="Top" Width="66" Grid.IsSharedSizeScope="True" Click="characterSideImageConnect_Click"/>
-            
+
             <Label FontSize="12" Content="Character name" HorizontalAlignment="Left" Margin="154,76,0,0" VerticalAlignment="Top" Width="135" Height="20" VerticalContentAlignment="Center" Padding="5,0"/>
-            <TextBox x:Name="characterName" FontSize="12" Height="20" Margin="154,96,9,0" TextWrapping="Wrap" VerticalAlignment="Top"/>            
+            <TextBox x:Name="characterName" FontSize="12" Height="20" Margin="154,96,9,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
             <Label FontSize="12" Content="Name style" HorizontalAlignment="Left" Margin="154,121,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
             <CheckBox x:Name="characterNameBold" FontSize="12" Content="Bold" HorizontalAlignment="Left" Margin="154,142,0,0" VerticalAlignment="Top"/>
             <CheckBox x:Name="characterNameItalic" FontSize="12" Content="Italic" HorizontalAlignment="Left" Margin="203,142,0,0" VerticalAlignment="Top"/>

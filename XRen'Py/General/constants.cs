@@ -78,7 +78,7 @@ namespace X_Ren_Py
 		XImage currentImage;
 		XAudio currentAudio;
 		XMovie currentMovie;
-        XCharacter currentCharacter;//надо поставить его первое значение как charNone
+        XCharacter currentCharacter;
 		List<XFrame> previousFrames = new List<XFrame> { };
 		List<ComboBoxItem> fonts;
 		List<ComboBoxItem> menuActions = new List<ComboBoxItem> { };
@@ -97,7 +97,11 @@ namespace X_Ren_Py
 		bool addorselect = true;//то же самое на случай добавления или показа ресурсов
 		bool waschecked = false;//если галочка стояла, 1. если нет, 0
 		bool show = false;
-		private XImage lastBackChecked;//для содержания последнего выбранного элемента из списка фоновых картинок
+        bool containsMusic = false;
+        bool containsSound = false;
+        bool containsVoice = false;
+
+        private XImage lastBackChecked;//для содержания последнего выбранного элемента из списка фоновых картинок
 		private XAudio lastMusicChecked;//без возможности поставить звук в очередь нужно использовать это
 		private XAudio lastSoundChecked;
 		private XAudio lastVoiceChecked;
