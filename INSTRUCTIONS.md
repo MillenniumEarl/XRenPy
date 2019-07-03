@@ -55,14 +55,15 @@ To add new frame click right mouse button on current label or "add frame" button
 Select frame that you want to edit and write any text in the text box in view block. Simple, isn't it?
 
 ### Using characters
-Ren'Py has predefined characters such as none, centered and extend. 
-none means that text is spoken by narrator, centered makes all the text be in the center of screen and extend makes he text shown phrase by phrase.
+Ren'Py has predefined characters such as none, centered, extend and nvl. 
+none means that text is spoken by narrator, centered makes all the text be in the center of screen, extend makes he text shown phrase by phrase, nvl makes the wall of text be shown on the whole screen.
 In XRen'Py these characters are not editable but usable.
 **Note that selection of these characters doesn't affect (yet) view block text box positioning and character label visibility.**
 To add your own character simply type his name, select the style his name and text will be shown with and colors, then click Add.
 **You can also add an icon of this character - it affects the game as the result but doesn't affect the view block.**
 Remember that default colors are defined in GUI and used when selecting Transparent. 
 To use character in the current frame click on any character in the list and click Select.
+While adding a new frame the character from the currently used frame stays in the new frame so you don't have to select the same character few times.
 
 ### Resource management
 To add new resource click right mouse button on current tab in resource block and select Add.
