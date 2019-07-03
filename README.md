@@ -11,6 +11,7 @@ Now it is possible to intuitively create and export to Ren'Py project:
 - Kinetic novels
 - Sound novels
 - Simple ADV novels
+- NVL novels
 
 Currently released application features:
 - project structure block with labels containing frames and customizable size
@@ -34,3 +35,4 @@ Currently released application features:
 - you can add your own icon of project
 - content can be reloaded if deleted
 - menu can contain any images or music as any frame and correctly stop it in any other label you want to jump to
+- selection of character right in view block
