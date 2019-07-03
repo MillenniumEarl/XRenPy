@@ -41,7 +41,7 @@ namespace X_Ren_Py
 					if (singleLine.Contains("Character"))
 					{
 						XCharacter character = loadCharacter(singleLine);
-						characterListView.Items.Add(character);
+						characterList.Add(character);
 					}
 					else if (singleLine.Contains("audio."))
 					{
@@ -294,18 +294,19 @@ namespace X_Ren_Py
 			}
 
 			writer.WriteLine(Characters);
-			for (int i = 3; i < characterListView.Items.Count; i++)
+			for (int i = 4; i < characterList.Count; i++)
 			{
-				XCharacter chosenCharacter = characterListView.Items[i] as XCharacter;
-				string icon = "", color = "", bold = "", italic = "", what_color = "", what_bold = "", what_italic = "";
-				if (chosenCharacter.Icon != null) { icon = ", image" + eQuote(chosenCharacter.Alias); writer.WriteLine("image side " + chosenCharacter.Alias + eQuote(chosenCharacter.Content.ToString())); }
-				if (chosenCharacter.NameColor.ToString() != "") color = ", color" + eQuote(chosenCharacter.NameColor.ToString().Remove(1, 2));
-				if (chosenCharacter.NameIsBold) bold = ", who_bold=True";
+				XCharacter chosenCharacter = characterList[i] as XCharacter;
+				string icon = "", color = "", nvl="", bold = "", italic = "", what_color = "", what_bold = "", what_italic = "";
+				if (chosenCharacter.IsNvl) nvl = ", kind=nvl";
+                if (chosenCharacter.Icon != null) { icon = ", image" + eQuote(chosenCharacter.Alias); writer.WriteLine("image side " + chosenCharacter.Alias + eQuote(chosenCharacter.Content.ToString())); }
+				if (chosenCharacter.NameColor.ToString() != "") color = ", color" + eQuote(chosenCharacter.NameColor.ToString().Remove(1, 2));                
+                if (chosenCharacter.NameIsBold) bold = ", who_bold=True";
 				if (chosenCharacter.NameIsItalic) italic = ", who_italic=True";
 				if (chosenCharacter.TextColor.ToString() != "") what_color = ", what_color" + eQuote(chosenCharacter.TextColor.ToString().Remove(1, 2));
 				if (chosenCharacter.TextIsBold) what_bold = ", what_bold=True";
 				if (chosenCharacter.TextIsItalic) what_italic = ", what_italic=True";
-				writer.WriteLine(define + chosenCharacter.Alias + character + quote(chosenCharacter.Content.ToString()) + icon + color + bold + italic + what_color + what_bold + what_italic + ")");
+				writer.WriteLine(define + chosenCharacter.Alias + character + quote(chosenCharacter.Content.ToString()) + nvl + icon + color + bold + italic + what_color + what_bold + what_italic + ")");
 			}
 
 			//end init
@@ -407,7 +408,7 @@ namespace X_Ren_Py
 					{
 						//Character and text
 						string character = "";
-						if (chosenFrame.Character != characterListView.Items[0]) character = chosenFrame.Character.Alias + " ";
+						if (chosenFrame.Character != charNone) character = chosenFrame.Character.Alias + " ";
 						writer.WriteLine(tab + character + quote(chosenFrame.Text));
 					}
 				}

@@ -9,30 +9,41 @@ namespace X_Ren_Py
 	public class XCharacter : ListViewItem
 	{
         public string Alias { get; set; }
-        public void ContentToAlias() { Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", ""); }
-        public Color NameColor { get; set; }
-        public Color TextColor { get; set; }
+        public void ContentToAlias()
+        {
+            Alias = Content.ToString().ToLower().Replace(" ", "").Replace("-", "").Replace("\'", "");
+            CharView.Content = Content;
+        }
+        public Color NameColor { get; set; } = Brushes.Transparent.Color;
+        public Color TextColor { get; set; } = Brushes.Transparent.Color;
         public bool NameIsBold { get; set; } = false;
         public bool NameIsItalic { get; set; } = false;
         public bool TextIsBold { get; set; } = false;
         public bool TextIsItalic { get; set; } = false;
+        public bool IsNvl { get; set; } = false;
         public MainWindow.XImage Icon { get; set; }
+        public ComboBoxItem CharView { get; set; } = new ComboBoxItem { };
         public string IconSource { get { return Icon.Path; } }
 
-	}
+        public XCharacter()
+        {
+            CharView.Tag = this;
+        }
+        
+    }    
 
 	public partial class MainWindow : Window
 	{
-		public XCharacter loadCharacter(string singleLine)
+        public XCharacter loadCharacter(string singleLine)
 		{
 			XCharacter newCharacter = new XCharacter();
-			newCharacter.Selected += editableChar_Selected;
+			newCharacter.Selected += editableChar_Selected;            
 			try
 			{
 				int firstquote = singleLine.IndexOf('"') + 1;
 				newCharacter.Content = singleLine.Substring(firstquote, singleLine.IndexOf('"', firstquote) - firstquote);
 				newCharacter.Alias = singleLine.Substring(7, singleLine.IndexOf('=') - 7).TrimEnd(' ');
-				string[] all = singleLine.Substring(firstquote).Replace("\"", "").Replace(" ", "").Split(',');
+                string[] all = singleLine.Substring(firstquote).Replace("\"", "").Replace(" ", "").Split(',');
 				for (int prop = 1; prop < all.Length; prop++)
 				{
 					if (all[prop].StartsWith("image"))
@@ -41,13 +52,14 @@ namespace X_Ren_Py
 						int length = singleLine.LastIndexOf('.') - indexIn;
 						newCharacter.Icon = sideListView.Items.OfType<XImage>().First(icon => (icon.Path.Substring(indexIn, length) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"", "")));
 					}
-					else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
+                    else if (all[prop].StartsWith("kind") && all[prop].Contains("nvl")) newCharacter.IsNvl = true;
+                    else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
 					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) newCharacter.NameIsBold = true;
 					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) newCharacter.NameIsItalic = true;
 					else if (all[prop].StartsWith("what_color")) newCharacter.TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
 					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) newCharacter.TextIsBold = true;
 					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) newCharacter.TextIsItalic = true;
-				}				
+				}
 			}
 			catch (Exception) { MessageBox.Show("Error: Character loading", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 			return newCharacter;
@@ -57,8 +69,8 @@ namespace X_Ren_Py
 		{
 			if (line != "")
 			{
-				if (line.IndexOf('"') == 0) frame.Character = characterListView.Items[0] as XCharacter;
-				else {frame.Character = characterListView.Items.OfType<XCharacter>().First(item => item.Alias == line.Substring(0, line.IndexOf(' '))); }
+                if (line.IndexOf('"') == 0) frame.Character = charNone;
+				else {frame.Character = characterList.First(item => item.Alias == line.Substring(0, line.IndexOf(' '))); }
 
 				frame.Text = line.Substring(line.IndexOf('"')).Trim('"');
 				frame.Content = "[" + frame.Text + ']';
@@ -71,13 +83,13 @@ namespace X_Ren_Py
                 try
                 {
                     bool exist = false;
-					foreach (XCharacter item in characterListView.Items)
+					foreach (XCharacter item in characterList)
 					{
 						if (item.Content.ToString() == characterName.Text)
 						{
 							if (MessageBox.Show("Already in use! Replace the character?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
 							{
-								characterProperties(item);
+								characterSetProperties(item);
 								exist = true;
 								break;
 							}
@@ -86,9 +98,10 @@ namespace X_Ren_Py
 					if (!exist)
 					{
 						XCharacter character = new XCharacter() { };
-						characterProperties(character);
+						characterSetProperties(character);
 						character.Selected += editableChar_Selected;
-						characterListView.Items.Add(character);
+						characterList.Add(character);
+                        characterSelector.Items.Add(character.CharView);
 					}
                 }
                 catch (Exception) { MessageBox.Show("Some fields are empty!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -102,17 +115,19 @@ namespace X_Ren_Py
             if (characterListView.SelectedItem != null)
             {
                 XCharacter edit = characterListView.SelectedItem as XCharacter;
-                characterProperties(edit);
+                characterSetProperties(edit);
+                if ((characterSelector.SelectedItem as ComboBoxItem).Tag == edit) characterLabel.Content = edit.Content;
             }
             else MessageBox.Show("No character is selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private void characterProperties(XCharacter character)
+        private void characterSetProperties(XCharacter character)
         {
             character.Content = characterName.Text;
-			character.ContentToAlias();
-			try	{ character.NameColor = (Color)charName_colorPicker.SelectedColor; } catch (Exception) { };
-			try { character.TextColor = (Color)charText_colorPicker.SelectedColor; } catch (Exception) { };
+			character.ContentToAlias();            
+            if (characterNvl.IsChecked == true) character.IsNvl = true;
+            try	{ character.NameColor = (Color)charName_colorPicker.SelectedColor; } catch (Exception) { };
+			try { character.TextColor = (Color)charText_colorPicker.SelectedColor; } catch (Exception) { };            
             if (characterNameBold.IsChecked == true) character.NameIsBold = true;
             else character.NameIsBold = false;
             if (characterNameItalic.IsChecked == true) character.NameIsItalic = true;
@@ -124,20 +139,22 @@ namespace X_Ren_Py
 			if (iconCharacter.Source!=null) character.Icon = sideListView.Items.OfType<XImage>().First(sideimage => (new Uri(sideimage.Path).ToString() == iconCharacter.Source.ToString()));
 			if (charText_colorPicker.SelectedColor != Brushes.Transparent.Color) character.Background = new SolidColorBrush((Color)charText_colorPicker.SelectedColor); else character.Background = null;
 			if (charName_colorPicker.SelectedColor != Brushes.Transparent.Color) character.Foreground = new SolidColorBrush((Color)charName_colorPicker.SelectedColor); else character.Foreground = Brushes.Black;
-		}
+        }
 
         private void editableChar_Selected(object sender, RoutedEventArgs e)
         {
+            XCharacter character = sender as XCharacter;
 			iconCharacter.Source = null;
 			editCharacter.IsEnabled = true;
-			characterName.Text = (sender as XCharacter).Content.ToString();
-            charName_colorPicker.SelectedColor = (sender as XCharacter).NameColor;
-            charText_colorPicker.SelectedColor = (sender as XCharacter).TextColor;
-            characterNameBold.IsChecked = (sender as XCharacter).NameIsBold;
-            characterNameItalic.IsChecked = (sender as XCharacter).NameIsItalic;
-            characterTextBold.IsChecked = (sender as XCharacter).TextIsBold;
-            characterTextItalic.IsChecked = (sender as XCharacter).TextIsItalic;
-			if((sender as XCharacter).Icon != null) iconCharacter.Source = imageShow((sender as XCharacter).IconSource);
+			characterName.Text = character.Content.ToString();
+            charName_colorPicker.SelectedColor = character.NameColor;
+            charText_colorPicker.SelectedColor = character.TextColor;
+            characterNvl.IsChecked=character.IsNvl;
+            characterNameBold.IsChecked = character.NameIsBold;
+            characterNameItalic.IsChecked = character.NameIsItalic;
+            characterTextBold.IsChecked = character.TextIsBold;
+            characterTextItalic.IsChecked = character.TextIsItalic;
+			if(character.Icon != null) iconCharacter.Source = imageShow(character.IconSource);
 		}
 
 		private void uneditableCharacter_Selected(object sender, RoutedEventArgs e)
@@ -146,12 +163,12 @@ namespace X_Ren_Py
 			editCharacter.IsEnabled = false;
 		}
 
-		private void selectCharacter_Click(object sender, RoutedEventArgs e)
-		{
-            currentCharacter = characterListView.SelectedItem as XCharacter;
-            currentFrame.Character = currentCharacter;
-            showCharacter();
-		}
+		//private void selectCharacter_Click(object sender, RoutedEventArgs e)//вот тут
+		//{
+  //          currentCharacter = characterListView.SelectedItem as XCharacter;
+  //          currentFrame.Character = currentCharacter;
+  //          showCharacter();
+		//}
 
 		private void showCharacter()
 		{
@@ -194,5 +211,14 @@ namespace X_Ren_Py
 				CharactersGrid.Visibility = Visibility.Visible;			
 			}
 		}
-	}
+
+        private void CharacterSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem character = (sender as ComboBox).SelectedItem as ComboBoxItem;
+            characterLabel.Content = character.Content.ToString();
+            currentFrame.Character = character.Tag as XCharacter;
+            currentCharacter = currentFrame.Character;
+            showCharacter();
+        }
+    }
 }

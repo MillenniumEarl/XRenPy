@@ -42,6 +42,7 @@ namespace X_Ren_Py
 			setPreviousFrames();
 
 			characterListView.SelectedItem = currentFrame.Character;
+            characterSelector.SelectedItem = currentFrame.Character;
             currentCharacter = currentFrame.Character;
             textBox.Text = currentFrame.Text;
 			showCharacter();

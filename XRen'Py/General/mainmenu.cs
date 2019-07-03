@@ -98,10 +98,7 @@ namespace X_Ren_Py
 			ImageInFrameProps.Clear();
 			AudioInFrameProps.Clear();
 			menuLabelList.Clear();
-			characterListView.Items.Clear();
-			characterListView.Items.Add(charNone);
-			characterListView.Items.Add(charCentered);
-			characterListView.Items.Add(charExtend);
+			characterList.Clear();
 			disptimer.Stop();
 			characterLabel.Content = "none";
 			textBox.Text = "";
@@ -112,16 +109,20 @@ namespace X_Ren_Py
 		private void emptyProject()
 		{
 			projectFolder = Environment.CurrentDirectory + @"/temp" + game;
-			//characters
-			characterListView.SelectedItem=charNone;
+            //characters
+            characterList.Add(charNone);
+            characterList.Add(charNvl);
+            characterList.Add(charCentered);
+            characterList.Add(charExtend);
+            characterListView.SelectedItem=charNone;
+            characterSelector.SelectedItem = charNone;
             currentCharacter = charNone;
             //start			
-			ListView startListView = createLabel("start");
+            ListView startListView = createLabel("start");
 			XFrame firstFrame = createFrame();
 			startListView.Items.Add(firstFrame);
 			currentFrame = firstFrame;
 			firstFrame.IsSelected = true;
-
         }
 	}
 }

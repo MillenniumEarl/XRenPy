@@ -89,8 +89,13 @@ namespace X_Ren_Py
 		{"None","dissolve","fade","pixellate","move","moveoutright","moveoutleft","moveouttop","moveoutbottom","easeoutright","easeoutleft","easeouttop","easeoutbottom","zoomout","zoominout",
 			"vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideawayleft","slideawayright","slideawayup","slideawaydown","pushright","pushleft","pushtop","pushbottom","irisout" };
 		ObservableCollection<ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
+        XCharacter charNone = new XCharacter { Background=new SolidColorBrush(Color.FromArgb(255,240,240,240)), Content = "none", Alias = "none" };
+        XCharacter charNvl = new XCharacter { Background = new SolidColorBrush(Color.FromArgb(255, 230, 230, 230)), Content = "nvl", Alias = "nvl" };
+        XCharacter charCentered = new XCharacter { Background = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220)), Content = "centered", Alias = "centered" };
+        XCharacter charExtend = new XCharacter { Background = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220)), Content = "extend", Alias = "extend" };
+        ObservableCollection<XCharacter> characterList = new ObservableCollection<XCharacter> { };
 
-		List<ImageBackProperties> BackInFrameProps = new List<ImageBackProperties> { };
+        List<ImageBackProperties> BackInFrameProps = new List<ImageBackProperties> { };
 		List<ImageCharProperties> ImageInFrameProps = new List<ImageCharProperties> { };
 		List<AudioProperties> AudioInFrameProps = new List<AudioProperties> { };
 		bool removeorunselect = true;//переключатель удаления взаимосвязей выделенных ресурсов. При выборе фрейма их не надо удалять, потому 0, при снятии галочки вручную - 1
@@ -148,9 +153,21 @@ namespace X_Ren_Py
 			//image animations
 			animationInTypeComboBox.ItemsSource = animationIn;
 			animationOutTypeComboBox.ItemsSource = animationOut;
+            
+            charNone.Selected += uneditableCharacter_Selected;
+            charNvl.Selected += uneditableCharacter_Selected;
+            charCentered.Selected += uneditableCharacter_Selected;
+            charExtend.Selected += uneditableCharacter_Selected;
+            characterSelector.Items.Add(charNone.CharView);
+            characterSelector.Items.Add(charNvl.CharView);
+            characterSelector.Items.Add(charCentered.CharView);
+            characterSelector.Items.Add(charExtend.CharView);
 
-			//project folder, start and characters
-			emptyProject();
+            characterListView.ItemsSource = characterList;
+            //characterSelector.ItemsSource = characterListView.Items;
+
+            //project folder, start and characters
+            emptyProject();
 
 			//options
 			title.Text = "default";
