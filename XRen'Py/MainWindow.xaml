@@ -25,7 +25,7 @@
                 </LinearGradientBrush>
             </GridSplitter.Background>
         </GridSplitter>
-        <Label x:Name="log" Padding="2" Background="#FFF0F0F0" Height="22" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="1" Content="If you found an issue, contact me at iamzerochaotic@gmail.com"/>
+        <Label x:Name="log" Padding="2" Background="#FFF0F0F0" Height="22" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="1" Content="If you found an issue, contact me at github.com/ZeroChaotic/XRenPy/issues"/>
         <Grid x:Name="leftGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="7*" MinWidth="105"/>
@@ -181,6 +181,8 @@
                         <Button x:Name="projLoad" Content="Load project" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="LoadProject_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                         <Button x:Name="projSave" Content="Save project" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="SaveProject_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                         <Button x:Name="projSaveAs" Content="Save as..." Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="SaveProjectAS_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+                        <Separator/>
+                        <Button x:Name="tutorial" Content="Tutorial" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0"  Click="Tutorial_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
                         <!--<Button x:Name="projWizard" Content="Book2Script" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="LoadProject_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>-->
                         <Separator/>
                         <Button x:Name="Exit" Content="Exit XRen'Py" Height="36" FontSize="24" Background="{x:Null}" BorderBrush="{x:Null}" Padding="5,0" Click="Exit_Click" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
@@ -197,7 +199,7 @@
                     <ListView x:Name="menuOptionsVisualList" Height="Auto" Background="{x:Null}" BorderBrush="{x:Null}"/>
                     <Button x:Name="addOptionButton" Click="addOption_Click" Content="+" FontSize="24" Padding="0" Background="#66FFFFFF"/>
                 </StackPanel>
-                
+
                 <Label x:Name="characterLabel" Content="Character" Foreground="#FF99CCFF" VerticalAlignment="Bottom" Height="38" VerticalContentAlignment="Center" FontSize="30" Margin="240,0,0,190" FontFamily="DejaVu Sans" HorizontalAlignment="Left" Width="545">
                     <Label.Background>
                         <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
@@ -322,13 +324,13 @@
                 <TabItem Header="Fonts">
                     <Grid>
                         <Label FontSize="12" Content="Text" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0" Margin="0,20,170,0"/>
-                        <ComboBox x:Name="comboBox_FontText" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" Padding="6,0,5,0" FontSize="16" Height="22" Margin="0,20,0,0"/>
+                        <ComboBox x:Name="comboBox_FontText" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" Padding="6,0,5,0" FontSize="16" Height="22" Margin="0,20,0,0" SelectionChanged="ComboBox_FontText_SelectionChanged"/>
                         <Label FontSize="12" Content="Characters" Margin="0,42,170,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
-                        <ComboBox x:Name="comboBox_FontChar" Margin="0,42,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" FontSize="16" Padding="6,0,5,0" Height="22"/>
+                        <ComboBox x:Name="comboBox_FontChar" Margin="0,42,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170" FontSize="16" Padding="6,0,5,0" Height="22" SelectionChanged="ComboBox_FontChar_SelectionChanged"/>
                         <Label FontSize="12" Content="Interface" Margin="0,64,170,0" VerticalAlignment="Top" Height="22" VerticalContentAlignment="Center" Padding="5,0"/>
                         <ComboBox x:Name="comboBox_FontInterface" Margin="0,64,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="170"  Height="22" Padding="6,0,5,0" FontSize="16"/>
                         <Label Content="Text" HorizontalAlignment="Left" Margin="0,107,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="fontTextSize" Margin="66,107,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="22" />
+                        <TextBox x:Name="fontTextSize" Margin="66,107,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="22" TextChanged="FontTextSize_TextChanged" />
                         <Label Content="Interface" HorizontalAlignment="Left" Margin="0,132,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
                         <TextBox x:Name="fontInterfaceSize" Margin="66,132,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="22" />
                         <Label Content="Label" HorizontalAlignment="Left" Margin="0,157,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
@@ -338,7 +340,7 @@
                         <Label FontSize="12" Content="Size, pt" HorizontalAlignment="Left" Margin="1,91,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
                         <Label FontSize="12" Content="Font" HorizontalAlignment="Left" Margin="1,4,0,0" VerticalAlignment="Top" Width="137" Height="16" VerticalContentAlignment="Center" Padding="5,0" FontStyle="Italic"/>
                         <Label Content="Character name" HorizontalAlignment="Left" Margin="111,107,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="fontCharacterNameSize" Margin="214,107,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="30" />
+                        <TextBox x:Name="fontCharacterNameSize" Margin="214,107,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="30" TextChanged="FontCharacterNameSize_TextChanged" />
                         <Label Content="Title" HorizontalAlignment="Left" Margin="111,157,0,0" VerticalAlignment="Top" FontSize="12" Height="20" Padding="5,0" VerticalContentAlignment="Center"/>
                         <TextBox x:Name="fontTitleNameSize" Margin="214,157,0,0" PreviewTextInput="digitTextBox_PreviewTextInput" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" MaxLines="1" MaxLength="3" Height="20" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="30" Text="50" />
                     </Grid>
@@ -390,5 +392,20 @@
                 </StackPanel>
             </Grid>
         </Expander>
+        <Grid Grid.ColumnSpan="2" Visibility="Collapsed">
+            <Label Content="Let's make a simple game!" FontSize="48" HorizontalAlignment="Left" Margin="337,313,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="The game creation starts here." FontSize="24" HorizontalAlignment="Left" Margin="149,95,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="Game consists of labels, which contain frames." FontSize="24" HorizontalAlignment="Left" Margin="149,95,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="Label start and first frame already exist." FontSize="24" HorizontalAlignment="Left" Margin="149,95,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="You can write something in this frame by clicking on it in the selected label..." FontSize="18" HorizontalAlignment="Left" Margin="149,95,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="...and writing down some text here." FontSize="24" HorizontalAlignment="Left" Margin="561,605,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="Text will be saved to the frame right when you type it." FontSize="24" HorizontalAlignment="Left" Margin="561,605,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="Click on this bar to select the character who will speak the text." FontSize="24" HorizontalAlignment="Left" Margin="511,467,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="Edit the characters here." FontSize="24" HorizontalAlignment="Left" Margin="428,10,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="You can add or edit any playable character here." FontSize="24" HorizontalAlignment="Left" Margin="428,261,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="Some of them are predefined and not editable." FontSize="24" HorizontalAlignment="Left" Margin="428,261,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+            <Label Content="In the Resources tab you can manage frame content with right mouse button." FontSize="18" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top" Background="White" BorderBrush="#7FFFFFFF" BorderThickness="5"/>
+        
+        </Grid>
     </Grid>
 </Window>

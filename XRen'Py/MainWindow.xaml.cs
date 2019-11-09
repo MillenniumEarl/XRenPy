@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 using PerMonitorDPI;
 
 namespace X_Ren_Py
@@ -56,6 +58,35 @@ namespace X_Ren_Py
 
 			return info;
 		}
-        
+
+        private void Tutorial_Click(object sender, RoutedEventArgs e)
+        {
+            projectExpander.IsExpanded = false;
+            
+        }
+
+        private void ComboBox_FontText_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            textBox.FontFamily = (comboBox_FontText.SelectedItem as ComboBoxItem).FontFamily;
+            textBox.FontStretch = (comboBox_FontText.SelectedItem as ComboBoxItem).FontStretch;
+            textBox.FontStyle = (comboBox_FontText.SelectedItem as ComboBoxItem).FontStyle;
+        }
+
+        private void ComboBox_FontChar_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            characterLabel.FontFamily = (comboBox_FontChar.SelectedItem as ComboBoxItem).FontFamily;
+            characterLabel.FontStretch = (comboBox_FontChar.SelectedItem as ComboBoxItem).FontStretch;
+            characterLabel.FontStyle = (comboBox_FontChar.SelectedItem as ComboBoxItem).FontStyle;
+        }
+
+        private void FontCharacterNameSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            characterSelector.FontSize = Convert.ToDouble(fontCharacterNameSize.Text);
+        }
+
+        private void FontTextSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            textBox.FontSize = Convert.ToDouble(fontTextSize.Text);
+        }
     }
 }

@@ -89,7 +89,8 @@ namespace X_Ren_Py
 		{"None","dissolve","fade","pixellate","move","moveoutright","moveoutleft","moveouttop","moveoutbottom","easeoutright","easeoutleft","easeouttop","easeoutbottom","zoomout","zoominout",
 			"vpunch","hpunch","blinds","squares","wipeleft","wiperight","wipeup","wipedown","slideawayleft","slideawayright","slideawayup","slideawaydown","pushright","pushleft","pushtop","pushbottom","irisout" };
 		ObservableCollection<ComboBoxItem> menuLabelList = new ObservableCollection<ComboBoxItem> { };
-        XCharacter charNone = new XCharacter { Background=new SolidColorBrush(Color.FromArgb(255,240,240,240)), Content = "none", Alias = "none" };
+        
+        XCharacter charNone = new XCharacter { Background=new SolidColorBrush(Color.FromArgb(255,240,240,240)), Content = "none", Alias = "none"};
         XCharacter charNvl = new XCharacter { Background = new SolidColorBrush(Color.FromArgb(255, 230, 230, 230)), Content = "nvl", Alias = "nvl" };
         XCharacter charCentered = new XCharacter { Background = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220)), Content = "centered", Alias = "centered" };
         XCharacter charExtend = new XCharacter { Background = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220)), Content = "extend", Alias = "extend" };
@@ -158,6 +159,10 @@ namespace X_Ren_Py
             charNvl.Selected += uneditableCharacter_Selected;
             charCentered.Selected += uneditableCharacter_Selected;
             charExtend.Selected += uneditableCharacter_Selected;
+            charNone.CharView.Content = "none";
+            charNvl.CharView.Content = "nvl";
+            charCentered.CharView.Content = "centered";
+            charExtend.CharView.Content = "extend";
             characterSelector.Items.Add(charNone.CharView);
             characterSelector.Items.Add(charNvl.CharView);
             characterSelector.Items.Add(charCentered.CharView);
