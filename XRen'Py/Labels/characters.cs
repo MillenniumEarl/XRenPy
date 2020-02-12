@@ -194,7 +194,7 @@ namespace X_Ren_Py
 				iconCharacter.Source = imageShow(image.Path);
 			}
 			else {
-				if (tabControlResources.SelectedIndex != 6) tabControlResources.SelectedIndex -= 6;
+				if (tabControlResources.SelectedIndex != 6) tabControlResources.SelectedIndex = 6;
 				else MessageBox.Show("No side image selected!", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}
 
