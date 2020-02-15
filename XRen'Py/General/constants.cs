@@ -64,12 +64,8 @@ namespace X_Ren_Py
 		SolidColorBrush unusedResourceColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
 		//контекстные меню
-		MenuItem addFrame, addRootFrame, convertFrameMenu, deleteFrame, addMenu, addImage, deleteImage, reloadImage, addAudio, deleteAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
+		MenuItem addFrame, addRootFrame, convertToFrame, convertToMenu, convertToPause, deleteFrame, addMenu, addPause, addImage, deleteImage, reloadImage, addAudio, deleteAudio, reloadAudio, addMovie, deleteMovie, reloadMovie, addIcon, reloadIcon, deleteIcon;
 		static ContextMenu cmFrame, cmLabel, cmImage, cmAudio, cmMovie, cmIcon;
-
-		//текст для динамических кнопок
-		string framemenu = "Frame➤Menu";
-		string menuframe = "Menu➤Frame";
 
 		//общие для всех элементы комбобоксов
 		ComboBoxItem jumpAction, callAction, passAction;
@@ -120,10 +116,13 @@ namespace X_Ren_Py
 			//contextMenus
 			addFrame = new MenuItem() { Header = "Add empty frame" }; addFrame.Click += addNextFrame_Click;
 			addRootFrame = new MenuItem() { Header = "Add empty frame" }; addRootFrame.Click += addNextFrame_Click;
-			convertFrameMenu = new MenuItem() { }; convertFrameMenu.Click += convertFrameMenu_Click;
-			deleteFrame = new MenuItem() { Header = "Delete frame/menu" }; deleteFrame.Click += deleteFrame_Click;
+			convertToFrame = new MenuItem() { Header = "➤Frame" }; convertToFrame.Click += convertToFrame_Click;
+            convertToMenu = new MenuItem() { Header = "➤Menu" }; convertToMenu.Click += convertToMenu_Click;
+            convertToPause = new MenuItem() { Header = "➤Pause" }; convertToPause.Click += convertToPause_Click;
+            deleteFrame = new MenuItem() { Header = "Delete frame/menu" }; deleteFrame.Click += deleteFrame_Click;
 			addMenu = new MenuItem() { Header = "Add menu" }; addMenu.Click += addNextFrame_Click;
-			addImage = new MenuItem() { Header = "Add image" }; addImage.Click += imageImport_Click;
+            addPause = new MenuItem() { Header = "Add pause" }; addPause.Click += addNextFrame_Click;
+            addImage = new MenuItem() { Header = "Add image" }; addImage.Click += imageImport_Click;
 			reloadImage = new MenuItem() { Header = "Reload image" }; reloadImage.Click += imageReload_Click;
 			deleteImage = new MenuItem() { Header = "Delete image" }; deleteImage.Click += imageDeleteFromList_Click;
 			addAudio = new MenuItem() { Header = "Add audio" }; addAudio.Click += audioImport_Click;
@@ -136,8 +135,8 @@ namespace X_Ren_Py
 			reloadIcon = new MenuItem() { Header = "Reload icon" }; reloadIcon.Click += imageReload_Click;
 			deleteIcon = new MenuItem() { Header = "Delete icon" }; deleteIcon.Click += imageDeleteFromList_Click;
 
-			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] {addRootFrame, convertFrameMenu, deleteFrame} };
-			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, addMenu} };
+			cmFrame = new ContextMenu { ItemsSource = new MenuItem[] {addRootFrame, convertToFrame, convertToMenu, convertToPause, deleteFrame} };
+			cmLabel = new ContextMenu { ItemsSource = new MenuItem[] { addFrame, addMenu, addPause} };
 			cmImage = new ContextMenu { ItemsSource = new MenuItem[] { addImage, reloadImage, deleteImage } };
 			cmAudio = new ContextMenu { ItemsSource = new MenuItem[] { addAudio, reloadAudio, deleteAudio } };
 			cmMovie = new ContextMenu { ItemsSource = new MenuItem[] { addMovie, reloadMovie, deleteMovie } };

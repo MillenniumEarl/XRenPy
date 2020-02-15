@@ -104,5 +104,31 @@ namespace X_Ren_Py
 			}
 			removeorunselect = true;
 		}
-	}
+
+        private void disableAll()
+        {
+            removeorunselect = false;
+            foreach (TabItem tab in tabControlResources.Items)
+            {
+                foreach (XContent resource in (tab.Content as ListView).Items)
+                {
+                    resource.IsEnabled = false;
+                }
+            }
+            removeorunselect = true;
+        }
+
+        private void enableAll()
+        {
+            removeorunselect = false;
+            foreach (TabItem tab in tabControlResources.Items)
+            {
+                foreach (XContent resource in (tab.Content as ListView).Items)
+                {
+                    resource.IsEnabled = true;
+                }
+            }
+            removeorunselect = true;
+        }
+    }
 }

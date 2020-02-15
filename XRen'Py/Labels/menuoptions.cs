@@ -109,26 +109,8 @@ namespace X_Ren_Py
 			newmenuoption.Tag = currentFrame;
 			return newmenuoption;
         }
-		
-		private void convertFrameMenu_Click(object sender, RoutedEventArgs e)
-		{
-			if (convertFrameMenu.Header.ToString() == framemenu)
-			{
-				currentFrame.MenuOptions = new ObservableCollection<XMenuOption> { createMenuOption(true) };
-				menuOptionsVisualList.ItemsSource = currentFrame.MenuOptions;
-				convertFrameMenu.Header = menuframe;
-				menuStack.Visibility = Visibility.Visible;
-			}
-			else
-			{
-				currentFrame.MenuOptions = null;
-				menuOptionsVisualList.ItemsSource = null;
-				convertFrameMenu.Header = framemenu;
-				menuStack.Visibility = Visibility.Collapsed;
-			}
-		}
 
-		private void addOption_Click(object sender, RoutedEventArgs e)
+        private void addOption_Click(object sender, RoutedEventArgs e)
 		{					
 			currentFrame.MenuOptions.Add(createMenuOption(false));
 		}
