@@ -53,10 +53,10 @@ namespace X_Ren_Py
 						newCharacter.Icon = sideListView.Items.OfType<XImage>().First(icon => (icon.Path.Substring(indexIn, length) == all[prop].Substring(all[prop].IndexOf('"')).Replace("\"", "")));
 					}
                     else if (all[prop].StartsWith("kind") && all[prop].Contains("nvl")) newCharacter.IsNvl = true;
-                    else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6));
+                    else if (all[prop].StartsWith("color")) newCharacter.NameColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(6).TrimEnd(')'));
 					else if (all[prop].StartsWith("who_bold") && all[prop].Contains("True")) newCharacter.NameIsBold = true;
 					else if (all[prop].StartsWith("who_italic") && all[prop].Contains("True")) newCharacter.NameIsItalic = true;
-					else if (all[prop].StartsWith("what_color")) newCharacter.TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11));
+					else if (all[prop].StartsWith("what_color")) newCharacter.TextColor = (Color)ColorConverter.ConvertFromString(all[prop].Substring(11).TrimEnd(')'));
 					else if (all[prop].StartsWith("what_bold") && all[prop].Contains("True")) newCharacter.TextIsBold = true;
 					else if (all[prop].StartsWith("what_italic") && all[prop].Contains("True")) newCharacter.TextIsItalic = true;
 				}

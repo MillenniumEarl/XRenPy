@@ -29,13 +29,24 @@ namespace X_Ren_Py
 				if (File.Exists(selectFolder.SelectedPath.ToString() + script) &&
 				File.Exists(selectFolder.SelectedPath.ToString() + options) &&
 				File.Exists(selectFolder.SelectedPath.ToString() + gui))
-				{
-					projectExpander.IsExpanded = false;
-					projectFolder = selectFolder.SelectedPath.ToString() + game;
-					clearAll();
-					loadScript();
-					loadOptions();
-					loadGUI();
+                {
+                    MainWindow mainwindow = this;
+                    MainWindow newwindow = new MainWindow();
+                    try
+                    {
+                        newwindow.projectExpander.IsExpanded = false;
+                        newwindow.projectFolder = selectFolder.SelectedPath.ToString() + game;
+                        newwindow.clearAll();
+                        newwindow.loadScript();
+                        newwindow.loadOptions();
+                        newwindow.loadGUI();
+                        Close();
+                        newwindow.Activate();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Can't load the project!", "Incompatible files", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
 				}
 				else { MessageBox.Show("Not a project folder or some files are missing!", "Incorrect folder", MessageBoxButton.OK, MessageBoxImage.Error); }
 		}

@@ -53,7 +53,7 @@ namespace X_Ren_Py
 				}
 				else if (singleLine.StartsWith("image"))
 				{
-					if (!singleLine.Contains("Movie"))
+					if (!singleLine.Contains("Movie("))
 					{
 						XImage image = new XImage();
 						image.loadImage(singleLine, projectFolder + "images\\");
@@ -85,126 +85,142 @@ namespace X_Ren_Py
 
 					while (singleLine != "return" && !reader.EndOfStream)
 					{
-						frame = createFrame();
-						currentFrame = frame;
-						(selectedLabel.Content as ListView).Items.Add(frame);
-						if (firstframe) { setPreviousFrames(); firstframe = false; }
-						else previousFrames.Add(frame);
+                        if (singleLine!="")
+                        {
+                            frame = createFrame();
+                            currentFrame = frame;
+                            (selectedLabel.Content as ListView).Items.Add(frame);
+                            if (firstframe) { setPreviousFrames(); firstframe = false; }
+                            else previousFrames.Add(frame);
 
-						List<string> framebody = new List<string> { };						
+                            List<string> framebody = new List<string> { };
 
-						while (singleLine != "return" && !reader.EndOfStream)
-						{
-							if (singleLine.StartsWith("menu"))
-							{
-								buildmenu = true;
-								frame.MenuOptions = new ObservableCollection<XMenuOption> { };
-							}
-							else if (Regex.IsMatch(singleLine, @"[\S\s]*""[\S\s]*"":$"))
-							{
-								XMenuOption newmenuoption = createMenuOption(frame.MenuOptions.Count == 0);
-								newmenuoption.Choice = value(singleLine);
-
-								singleLine = reader.ReadLine().Trim(' ');
-								if (singleLine.StartsWith("jump"))
-								{
-									newmenuoption.MenuAction.SelectedItem = jumpAction;
-									newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == singleLine.Substring(singleLine.IndexOf(' ') + 1)));
-									(tabControlStruct.Items[newmenuoption.ActionLabel.SelectedIndex] as XLabel).MenuChoice=frame;
-								}
-								else if (singleLine.StartsWith("call"))
-								{
-									newmenuoption.MenuAction.SelectedItem = callAction;
-									newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == singleLine.Substring(singleLine.IndexOf(' ') + 1)));
-									(tabControlStruct.Items[newmenuoption.ActionLabel.SelectedIndex] as XLabel).MenuChoice = frame;
-								}
-								else newmenuoption.MenuAction.SelectedItem=passAction;
-								frame.MenuOptions.Add(newmenuoption);
-							}
-							else if (Regex.IsMatch(singleLine, @"[\S\s]*""[\S\s]*""$"))
-							{
-								if (buildmenu&&frame.MenuOptions.Count!=0) break;
-								loadText(frame, singleLine);
-								if (!buildmenu) break;
-							}
-							else
-							{
-								if (!buildmenu) framebody.Add(singleLine);
-								else break;
-							}
-							singleLine = reader.ReadLine().Trim(' ');
-						}
-
-						for (int line = 0; line < framebody.Count; line++)
-						{
-                            if (framebody[line].StartsWith("pause"))
-                                frame.PauseFrame = true;
-                            else if (framebody[line].StartsWith("scene"))
+                            while (singleLine != "return" && !reader.EndOfStream)
                             {
-                                string[] all = framebody[line].Split(' ');
-                                XImage selectedImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
-                                ImageBackProperties BackProp = new ImageBackProperties() { Frame = frame, Image = selectedImage };
-                                if (all.Length > 2) if (all[2] == "with") BackProp.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-                                //секция поиска
-                                if (BackInFrameProps.Any(prop => previousFrames.Contains(prop.Frame) && !previousFrames.Contains(prop.StopFrame)))
+                                if (singleLine.StartsWith("menu"))
                                 {
-                                    ImageBackProperties previous = BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && !previousFrames.Contains(prop.StopFrame));
-                                    //а вдруг меню, а мы неподготовлены? надо расставить все нужные метки
-                                    if (previous.Frame.MenuOptions == null)
-                                        previous.StopFrame = frame;
-                                    else
-                                    {
-                                        if (previous.StopFrames == null)
-                                            previous.StopFrames = new List<XFrame> { };
-                                        previous.StopFrames.Add(frame);
-                                    };
-                                }//усьо
-                                BackInFrameProps.Add(BackProp);
-                            }
-                            else if (framebody[line].StartsWith("show"))
-                            {
-                                string[] all = framebody[line].Split(' ');
-                                XImage selectedImage;
-                                if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
-                                {
-                                    selectedImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
-                                    backImageListView.Items.Remove(selectedImage);
-                                    imageListView.Items.Add(selectedImage);
+                                    buildmenu = true;
+                                    frame.MenuOptions = new ObservableCollection<XMenuOption> { };
                                 }
-                                else selectedImage = imageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
-
-                                ImageCharProperties props = new ImageCharProperties() { Frame = frame, Image = selectedImage, Displayable = newDisplayable() };
-                                props.Displayable.Source = imageShow(selectedImage.Path);
-
-                                for (int i = 2; i < all.Length; i++)
+                                else if (Regex.IsMatch(singleLine, @"[\S\s]*""[\S\s]*"":$"))
                                 {
-                                    if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
-                                    else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
-                                }
-                                ImageInFrameProps.Add(props);
-                            }
-                            else if (framebody[line].StartsWith("hide"))
-                            {
-                                string[] all = framebody[line].Split(' ');
-                                if (backImageListView.Items.OfType<XImage>().Any(prop => prop.Alias == all[1]))
-                                {
-                                    ImageBackProperties previous = BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image.Alias == all[1]);
-                                    if (all.Length > 2) if (all[2] == "with")
-                                            previous.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
-                                    if (previous.Frame.MenuOptions == null)
-                                        previous.StopFrame = frame;
-                                    else
+                                    XMenuOption newmenuoption = createMenuOption(frame.MenuOptions.Count == 0);
+                                    newmenuoption.Choice = value(singleLine);
+
+                                    singleLine = reader.ReadLine().Trim(' ');
+                                    if (singleLine.StartsWith("jump"))
                                     {
-                                        if (previous.StopFrames == null)
-                                            previous.StopFrames = new List<XFrame> { };
-                                        previous.StopFrames.Add(frame);
-                                    };
+                                        newmenuoption.MenuAction.SelectedItem = jumpAction;
+                                        newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == singleLine.Substring(singleLine.IndexOf(' ') + 1)));
+                                        (tabControlStruct.Items[newmenuoption.ActionLabel.SelectedIndex] as XLabel).MenuChoice = frame;
+                                    }
+                                    else if (singleLine.StartsWith("call"))
+                                    {
+                                        newmenuoption.MenuAction.SelectedItem = callAction;
+                                        newmenuoption.ActionLabel.SelectedIndex = menuLabelList.IndexOf(menuLabelList.First(label => label.Content.ToString() == singleLine.Substring(singleLine.IndexOf(' ') + 1)));
+                                        (tabControlStruct.Items[newmenuoption.ActionLabel.SelectedIndex] as XLabel).MenuChoice = frame;
+                                    }
+                                    else newmenuoption.MenuAction.SelectedItem = passAction;
+                                    frame.MenuOptions.Add(newmenuoption);
+                                }
+                                else if (Regex.IsMatch(singleLine, @"[\S\s]*""[\S\s]*""$"))
+                                {
+                                    if (buildmenu && frame.MenuOptions.Count != 0) break;
+                                    loadText(frame, singleLine);
+                                    if (!buildmenu) break;
                                 }
                                 else
                                 {
-                                    ImageCharProperties previous = ImageInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image.Alias == all[1]);
-                                    if (all.Length > 2) if (all[2] == "with")
-                                            previous.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+                                    if (!buildmenu) framebody.Add(singleLine);
+                                    else break;
+                                }
+                                singleLine = reader.ReadLine().Trim(' ');
+                            }
+
+                            for (int line = 0; line < framebody.Count; line++)
+                            {
+                                if (framebody[line].StartsWith("pause"))
+                                    frame.PauseFrame = true;
+                                else if (framebody[line].StartsWith("scene"))
+                                {
+                                    string[] all = framebody[line].Split(' ');
+                                    XImage selectedImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+                                    ImageBackProperties BackProp = new ImageBackProperties() { Frame = frame, Image = selectedImage };
+                                    if (all.Length > 2) if (all[2] == "with") BackProp.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+                                    //секция поиска
+                                    if (BackInFrameProps.Any(prop => previousFrames.Contains(prop.Frame) && !previousFrames.Contains(prop.StopFrame)))
+                                    {
+                                        ImageBackProperties previous = BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && !previousFrames.Contains(prop.StopFrame));
+                                        //а вдруг меню, а мы неподготовлены? надо расставить все нужные метки
+                                        if (previous.Frame.MenuOptions == null)
+                                            previous.StopFrame = frame;
+                                        else
+                                        {
+                                            if (previous.StopFrames == null)
+                                                previous.StopFrames = new List<XFrame> { };
+                                            previous.StopFrames.Add(frame);
+                                        };
+                                    }//усьо
+                                    BackInFrameProps.Add(BackProp);
+                                }
+                                else if (framebody[line].StartsWith("show"))
+                                {
+                                    string[] all = framebody[line].Split(' ');
+                                    XImage selectedImage;
+                                    if (backImageListView.Items.OfType<XImage>().Any(item => item.Alias == all[1]))
+                                    {
+                                        selectedImage = backImageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+                                        backImageListView.Items.Remove(selectedImage);
+                                        imageListView.Items.Add(selectedImage);
+                                    }
+                                    else selectedImage = imageListView.Items.OfType<XImage>().First(item => item.Alias == all[1]);
+
+                                    ImageCharProperties props = new ImageCharProperties() { Frame = frame, Image = selectedImage, Displayable = newDisplayable() };
+                                    props.Displayable.Source = imageShow(selectedImage.Path);
+
+                                    for (int i = 2; i < all.Length; i++)
+                                    {
+                                        if (all[i] == "with") props.AnimationInType = (byte)animationInTypeComboBox.Items.IndexOf(animationInTypeComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
+                                        else if (all[i] == "at") props.Align = (byte)alignComboBox.Items.IndexOf(alignComboBox.Items.OfType<string>().First(item => item == all[i + 1]));
+                                    }
+                                    ImageInFrameProps.Add(props);
+                                }
+                                else if (framebody[line].StartsWith("hide"))
+                                {
+                                    string[] all = framebody[line].Split(' ');
+                                    if (backImageListView.Items.OfType<XImage>().Any(prop => prop.Alias == all[1]))
+                                    {
+                                        ImageBackProperties previous = BackInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image.Alias == all[1]);
+                                        if (all.Length > 2) if (all[2] == "with")
+                                                previous.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+                                        if (previous.Frame.MenuOptions == null)
+                                            previous.StopFrame = frame;
+                                        else
+                                        {
+                                            if (previous.StopFrames == null)
+                                                previous.StopFrames = new List<XFrame> { };
+                                            previous.StopFrames.Add(frame);
+                                        };
+                                    }
+                                    else
+                                    {
+                                        ImageCharProperties previous = ImageInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Image.Alias == all[1]);
+                                        if (all.Length > 2) if (all[2] == "with")
+                                                previous.AnimationOutType = (byte)animationOutTypeComboBox.Items.IndexOf(animationOutTypeComboBox.Items.OfType<string>().First(item => item == all[3]));
+                                        if (previous.Frame.MenuOptions == null)
+                                            previous.StopFrame = frame;
+                                        else
+                                        {
+                                            if (previous.StopFrames == null)
+                                                previous.StopFrames = new List<XFrame> { };
+                                            previous.StopFrames.Add(frame);
+                                        };
+                                    }
+                                }
+                                else if (framebody[line].StartsWith("stop"))
+                                {
+                                    string type = framebody[line].Substring(5) + " ";
+                                    AudioProperties previous = AudioInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Audio.Type == type);
                                     if (previous.Frame.MenuOptions == null)
                                         previous.StopFrame = frame;
                                     else
@@ -214,46 +230,33 @@ namespace X_Ren_Py
                                         previous.StopFrames.Add(frame);
                                     };
                                 }
-                            }
-                            else if (framebody[line].StartsWith("stop"))
-                            {
-                                string type = framebody[line].Substring(5) + " ";
-                                AudioProperties previous = AudioInFrameProps.Last(prop => previousFrames.Contains(prop.Frame) && prop.Audio.Type == type);
-                                if (previous.Frame.MenuOptions == null)
-                                    previous.StopFrame = frame;
-                                else
+                                else if (framebody[line].StartsWith("play"))
                                 {
-                                    if (previous.StopFrames == null)
-                                        previous.StopFrames = new List<XFrame> { };
-                                    previous.StopFrames.Add(frame);
-                                };
-                            }
-                            else if (framebody[line].StartsWith("play"))
-                            {
-                                string[] all = framebody[line].Split(' ');
-                                XAudio audio = musicListView.Items.OfType<XAudio>().First(item => item.Alias == all[2]);
-                                if (all[1] != "music")
-                                {
-                                    musicListView.Items.Remove(audio);
-                                    if (all[1] == "sound") soundListView.Items.Add(audio);
-                                    else voiceListView.Items.Add(audio);
+                                    string[] all = framebody[line].Split(' ');
+                                    XAudio audio = musicListView.Items.OfType<XAudio>().First(item => item.Alias == all[2]);
+                                    if (all[1] != "music")
+                                    {
+                                        musicListView.Items.Remove(audio);
+                                        if (all[1] == "sound") soundListView.Items.Add(audio);
+                                        else voiceListView.Items.Add(audio);
+                                    }
+                                    AudioProperties props = new AudioProperties() { Frame = frame, Audio = audio };
+                                    for (int i = 2; i < all.Length; i++)
+                                    {
+                                        if (all[i] == "fadein") props.FadeIn = float.Parse(all[i + 1]);
+                                        else if (all[i] == "fadeout") props.FadeOut = float.Parse(all[i + 1]);
+                                        else if (all[i] == "noloop") props.Loop = false;
+                                    }
+                                    AudioInFrameProps.Add(props);
                                 }
-                                AudioProperties props = new AudioProperties() { Frame = frame, Audio = audio };
-                                for (int i = 2; i < all.Length; i++)
-                                {
-                                    if (all[i] == "fadein") props.FadeIn = float.Parse(all[i + 1]);
-                                    else if (all[i] == "fadeout") props.FadeOut = float.Parse(all[i + 1]);
-                                    else if (all[i] == "noloop") props.Loop = false;
-                                }
-                                AudioInFrameProps.Add(props);
                             }
-						}
-						
-						if (singleLine != "return")
-						{
-							if (buildmenu) buildmenu = false;
-							else { frame.IsSelected = true; singleLine = reader.ReadLine().TrimStart(' '); }
-						}
+
+                            if (singleLine != "return")
+                            {
+                                if (buildmenu) buildmenu = false;
+                                else { frame.IsSelected = true; singleLine = reader.ReadLine().TrimStart(' '); }
+                            } 
+                        }
 					}
 				}
 			}
