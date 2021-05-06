@@ -41,6 +41,7 @@ namespace X_Ren_Py
                         newwindow.loadOptions();
                         newwindow.loadGUI();
                         Close();
+                        newwindow.Show();
                         newwindow.Activate();
                     }
                     catch (Exception)
